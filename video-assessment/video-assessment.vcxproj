@@ -1,0 +1,266 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{7FD42DF7-442E-479A-BA76-D0022F99702A}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>video-assessment</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="../../../../libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="../../../../libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="../../../../libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="../../../../libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>bin\</OutDir>
+    <IntDir>obj\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)_debug</TargetName>
+    <LinkIncremental>true</LinkIncremental>
+    <GenerateManifest>true</GenerateManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>bin\</OutDir>
+    <IntDir>obj\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)_debug</TargetName>
+    <LinkIncremental>true</LinkIncremental>
+    <GenerateManifest>true</GenerateManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>bin\</OutDir>
+    <IntDir>obj\$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>bin\</OutDir>
+    <IntDir>obj\$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\..\addons\ofxCv\libs\ofxCv\include;..\..\..\..\addons\ofxCv\libs\CLD\include\CLD;..\..\..\..\addons\ofxCv\src;..\..\..\..\addons\ofxGui\src;..\..\..\..\addons\ofxOpenCv\libs;..\..\..\..\addons\ofxOpenCv\libs\opencv;..\..\..\..\addons\ofxOpenCv\libs\opencv\include;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\calib3d;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\contrib;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\core;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\features2d;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\flann;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu\device;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu\device\detail;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\highgui;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\imgproc;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\legacy;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ml;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\nonfree;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\objdetect;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\photo;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\stitching;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\stitching\detail;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\superres;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ts;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\videostab;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\emscripten;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\Win32;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\Win32\Debug;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\Win32\Release;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\x64;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\x64\Debug;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\x64\Release;..\..\..\..\addons\ofxOpenCv\libs\opencv\license;..\..\..\..\addons\ofxOpenCv\src;..\..\..\..\addons\ofxXmlSettings\libs;..\..\..\..\addons\ofxXmlSettings\src;
+C:\of_v0.9.3_vs_release\addons\ofxSaliencyMap\src</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <AdditionalDependencies>%(AdditionalDependencies);opencv_calib3d249d.lib;opencv_contrib249d.lib;opencv_core249d.lib;opencv_features2d249d.lib;opencv_flann249d.lib;opencv_gpu249d.lib;opencv_highgui249d.lib;opencv_imgproc249d.lib;opencv_legacy249d.lib;opencv_ml249d.lib;opencv_nonfree249d.lib;opencv_objdetect249d.lib;opencv_photo249d.lib;opencv_stitching249d.lib;opencv_superres249d.lib;opencv_ts249d.lib;opencv_video249d.lib;opencv_videostab249d.lib;zlibd.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\Win32\Debug</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\..\addons\ofxGui\src;..\..\..\..\addons\ofxXmlSettings\libs;..\..\..\..\addons\ofxXmlSettings\src;C:\opencv-3.2.0\build\install\include\opencv2;C:\opencv-3.2.0\build\install\include\opencv;C:\opencv-3.2.0\build\install\include;json\src;json</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <AdditionalDependencies>opencv_aruco320d.lib;opencv_bgsegm320d.lib;opencv_bioinspired320d.lib;opencv_calib3d320d.lib;opencv_ccalib320d.lib;opencv_core320d.lib;opencv_datasets320d.lib;opencv_dnn320d.lib;opencv_dpm320d.lib;opencv_face320d.lib;opencv_features2d320d.lib;opencv_flann320d.lib;opencv_fuzzy320d.lib;opencv_highgui320d.lib;opencv_imgcodecs320d.lib;opencv_imgproc320d.lib;opencv_line_descriptor320d.lib;opencv_ml320d.lib;opencv_objdetect320d.lib;opencv_optflow320d.lib;opencv_phase_unwrapping320d.lib;opencv_photo320d.lib;opencv_plot320d.lib;opencv_reg320d.lib;opencv_rgbd320d.lib;opencv_saliency320d.lib;opencv_shape320d.lib;opencv_stereo320d.lib;opencv_stitching320d.lib;opencv_structured_light320d.lib;opencv_superres320d.lib;opencv_surface_matching320d.lib;opencv_text320d.lib;opencv_tracking320d.lib;opencv_video320d.lib;opencv_videoio320d.lib;opencv_videostab320d.lib;opencv_xfeatures2d320d.lib;opencv_ximgproc320d.lib;opencv_xobjdetect320d.lib;opencv_xphoto320d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\opencv-3.2.0\build\install\x64\vc14\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\..\addons\ofxCv\libs\ofxCv\include;..\..\..\..\addons\ofxCv\libs\CLD\include\CLD;..\..\..\..\addons\ofxCv\src;..\..\..\..\addons\ofxGui\src;..\..\..\..\addons\ofxOpenCv\libs;..\..\..\..\addons\ofxOpenCv\libs\opencv;..\..\..\..\addons\ofxOpenCv\libs\opencv\include;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\calib3d;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\contrib;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\core;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\features2d;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\flann;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu\device;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu\device\detail;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\highgui;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\imgproc;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\legacy;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ml;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\nonfree;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\objdetect;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\photo;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\stitching;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\stitching\detail;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\superres;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ts;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\videostab;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\emscripten;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\Win32;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\Win32\Debug;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\Win32\Release;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\x64;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\x64\Debug;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\x64\Release;..\..\..\..\addons\ofxOpenCv\libs\opencv\license;..\..\..\..\addons\ofxOpenCv\src;..\..\..\..\addons\ofxXmlSettings\libs;..\..\..\..\addons\ofxXmlSettings\src;
+C:\of_v0.9.3_vs_release\addons\ofxSaliencyMap\src</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <AdditionalDependencies>%(AdditionalDependencies);opencv_calib3d249.lib;opencv_contrib249.lib;opencv_core249.lib;opencv_features2d249.lib;opencv_flann249.lib;opencv_gpu249.lib;opencv_highgui249.lib;opencv_imgproc249.lib;opencv_legacy249.lib;opencv_ml249.lib;opencv_nonfree249.lib;opencv_objdetect249.lib;opencv_photo249.lib;opencv_stitching249.lib;opencv_superres249.lib;opencv_ts249.lib;opencv_video249.lib;opencv_videostab249.lib;zlib.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\Win32\Release</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>json;json\src;%(AdditionalIncludeDirectories);src;..\..\..\..\addons\ofxGui\src;..\..\..\..\addons\ofxXmlSettings\libs;..\..\..\..\addons\ofxXmlSettings\src;C:\opencv-3.2.0\build\install\include\opencv2;C:\opencv-3.2.0\build\install\include\opencv;C:\opencv-3.2.0\build\install\include</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <Link>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <AdditionalDependencies>opencv_aruco320.lib;opencv_bgsegm320.lib;opencv_bioinspired320.lib;opencv_calib3d320.lib;opencv_ccalib320.lib;opencv_core320.lib;opencv_datasets320.lib;opencv_dnn320.lib;opencv_dpm320.lib;opencv_face320.lib;opencv_features2d320.lib;opencv_flann320.lib;opencv_fuzzy320.lib;opencv_highgui320.lib;opencv_imgcodecs320.lib;opencv_imgproc320.lib;opencv_line_descriptor320.lib;opencv_ml320.lib;opencv_objdetect320.lib;opencv_optflow320.lib;opencv_phase_unwrapping320.lib;opencv_photo320.lib;opencv_plot320.lib;opencv_reg320.lib;opencv_rgbd320.lib;opencv_saliency320.lib;opencv_shape320.lib;opencv_stereo320.lib;opencv_stitching320.lib;opencv_structured_light320.lib;opencv_superres320.lib;opencv_surface_matching320.lib;opencv_text320.lib;opencv_tracking320.lib;opencv_video320.lib;opencv_videoio320.lib;opencv_videostab320.lib;opencv_xfeatures2d320.lib;opencv_ximgproc320.lib;opencv_xobjdetect320.lib;opencv_xphoto320.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\opencv-3.2.0\build\install\x64\vc14\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent />
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\extractor.cpp" />
+    <ClCompile Include="src\mlclass.cpp" />
+    <ClCompile Include="src\processing.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\ofApp.cpp" />
+    <ClCompile Include="src\ButtonManager.cpp" />
+    <ClCompile Include="src\ButtonPanel.cpp" />
+    <ClCompile Include="src\File.cpp" />
+    <ClCompile Include="src\filtersPanel.cpp" />
+    <ClCompile Include="src\FlashItem.cpp" />
+    <ClCompile Include="src\fontstash.c" />
+    <ClCompile Include="src\Gallery.cpp" />
+    <ClCompile Include="src\ImageFile.cpp" />
+    <ClCompile Include="src\ListItem.cpp" />
+    <ClCompile Include="src\metadataPanel.cpp" />
+    <ClCompile Include="src\ofxFontStash.cpp" />
+    <ClCompile Include="src\SelectionItem.cpp" />
+    <ClCompile Include="src\SimpleButton.cpp" />
+    <ClCompile Include="src\SliderItem.cpp" />
+    <ClCompile Include="src\stb_truetype.c" />
+    <ClCompile Include="src\ToggleItem.cpp" />
+    <ClCompile Include="src\VideoFile.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxGui\src\ofxBaseGui.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxGui\src\ofxButton.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxGui\src\ofxGuiGroup.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxGui\src\ofxLabel.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxGui\src\ofxPanel.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxGui\src\ofxSlider.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxGui\src\ofxSliderGroup.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxGui\src\ofxToggle.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxXmlSettings\libs\tinyxml.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxXmlSettings\libs\tinyxmlerror.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxXmlSettings\libs\tinyxmlparser.cpp" />
+    <ClCompile Include="src\utility.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\extractor.h" />
+    <ClInclude Include="src\mlclass.h" />
+    <ClInclude Include="src\processing.h" />
+    <ClInclude Include="src\ofApp.h" />
+    <ClInclude Include="src\ButtonManager.h" />
+    <ClInclude Include="src\ButtonPanel.h" />
+    <ClInclude Include="src\File.h" />
+    <ClInclude Include="src\filtersPanel.h" />
+    <ClInclude Include="src\FlashItem.h" />
+    <ClInclude Include="src\fontstash.h" />
+    <ClInclude Include="src\Gallery.h" />
+    <ClInclude Include="src\ImageFile.h" />
+    <ClInclude Include="src\ListItem.h" />
+    <ClInclude Include="src\metadataPanel.h" />
+    <ClInclude Include="src\ofxButtons.h" />
+    <ClInclude Include="src\ofxFontStash.h" />
+    <ClInclude Include="src\SelectionItem.h" />
+    <ClInclude Include="src\SimpleButton.h" />
+    <ClInclude Include="src\SliderItem.h" />
+    <ClInclude Include="src\stb_truetype.h" />
+    <ClInclude Include="src\ToggleItem.h" />
+    <ClInclude Include="src\VideoFile.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxGui\src\ofxBaseGui.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxGui\src\ofxButton.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxGui\src\ofxGui.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxGui\src\ofxGuiGroup.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxGui\src\ofxLabel.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxGui\src\ofxPanel.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxGui\src\ofxSlider.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxGui\src\ofxSliderGroup.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxGui\src\ofxToggle.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxXmlSettings\libs\tinyxml.h" />
+    <ClInclude Include="src\utility.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
+      <Project>{5837595d-aca9-485c-8e76-729040ce4b0b}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="icon.rc">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/D_DEBUG %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/D_DEBUG %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(OF_ROOT)\libs\openFrameworksCompiled\project\vs</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="icon.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
