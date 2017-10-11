@@ -1,0 +1,2 @@
+red_ratio,green_ratio,blue_ratio,focus,luminance,luminance_std,dif_hues,faces,faces_area,smiles,rule_of_thirds,static_saliency,shackiness,motion_mag,fg_area,shadow_area,bg_area,camera_move,focus_diff
+0.424141,0.348515,0.227344,0.1342,0.460798,0.0128846,0.0266533,0.0202312,0.000655219,0,0.00418225,0.184962,0.0606936,0.0428907,0.520624,0.133738,0.342748,0.0115607,0.0913133
