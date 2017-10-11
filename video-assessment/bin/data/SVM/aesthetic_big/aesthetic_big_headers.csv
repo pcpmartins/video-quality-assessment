@@ -1,3 +1,0 @@
-1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19
-red_ratio,green_ratio,blue_ratio,focus,luminance,luminance_std,dif_hues,faces,faces_area,smiles,rule_of_thirds,static_saliency,shackiness,motion_mag,fg_area,shadow_area,bg_area,camera_move,focus_diff
-0.3471,0.332409,0.320492,1,0.460774,0.0887127,0.0536942,0.0254316,0.000952315,0,0.00318869,0.183538,0,0,0.196853,0.0602502,0.742743,0.037762,0.104131
