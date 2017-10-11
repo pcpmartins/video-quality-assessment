@@ -4,7 +4,7 @@
 using namespace std;
 
 
-void printRankedNames(vector<File> rankedFiles, string name = "") {
+void printRankedNames(vector<VideoFile> rankedFiles, string name = "") {
 	cout << "\n///////" << name << ": " << rankedFiles.size() << "\\\\\\\\\\\\" << endl;
 	for (File f : rankedFiles) {
 		cout << f.name << endl;
@@ -26,7 +26,7 @@ void filtersPanel::draw()
 
 }
 
-void filtersPanel::filter(File files[], int length, int choosenFileIndex)
+void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 {
 	float colorSimilarity = 0.0, edgeSimilarity = 0.0, entropySimilarity = 0.0, motionSimilarity = 0.0;
 	int nsim = 0;
@@ -297,7 +297,7 @@ void filtersPanel::filter(File files[], int length, int choosenFileIndex)
 	sortVector.clear();
 }
 
-void filtersPanel::ranking(vector<File> &files)
+void filtersPanel::ranking(vector<VideoFile> &files)
 {
 	int length = files.size();
 	if (length > 0) {
@@ -332,6 +332,9 @@ void filtersPanel::setup()
 	normalBP_static_saliency = 0;
 	normalBP_ranksum = 0;
 	normalBP_shadow = 0;
+	normalBP_humanFace = false;		//Default human face filter is off
+	normalBP_predict = false;		//Initialize to false
+	normalBP_interest_1 = false;		//Initialize to false
 
 	resetFilterValues = false;
 	sortBP_ON = false;
@@ -365,7 +368,7 @@ void filtersPanel::setup()
 	normalBP = buttons.addButtonPanel("FILTER");
 	normalBP->addFlashItem("Clear values", resetFilterValues);
 	normalBP->addSliderItem("Rating          ", 0, 5, normalBP_rateP);
-	normalBP->addSliderItem("Objective index ", 0, 0.1, normalBP_ranksum);
+	normalBP->addSliderItem("Objective index ", 0, 0.5, normalBP_ranksum);
 	//normalBP->addListItem("Color:");
 	normalBP->addSliderItem("Red             ", 0, 1, normalBP_redRatioP);
 	normalBP->addSliderItem("Green           ", 0, 1, normalBP_greenRatioP);
@@ -376,31 +379,20 @@ void filtersPanel::setup()
 	normalBP->addSliderItem("Sharpness       ", 0, 1, normalBP_sharpness);
 	normalBP->addSliderItem("Diff. hues      ", 0, 1, normalBP_dif_hues);
 	normalBP->addSliderItem("static saliency ", 0, 0.3, normalBP_static_saliency);
-	normalBP_humanFace = false;		//Default human face filter is off
 	normalBP->addToggleItem("Human face", normalBP_humanFace);
 	normalBP->addSliderItem("Avg faces       ", 0, 1, normalBP_avgFaces);
 	normalBP->addSliderItem("Faces area      ", 0, 0.4, normalBP_faceArea);
 	normalBP->addSliderItem("Rule of thirds  ", 0, 0.3, normalBP_rule3);
-	normalBP->addSliderItem("Smiles          ", 0, 0.4, normalBP_smiles);
+	normalBP->addSliderItem("Smiles          ", 0, 0.5, normalBP_smiles);
 	normalBP->addSliderItem("Foreground area ", 0, 0.2, normalBP_fgArea);
 	normalBP->addSliderItem("Shadow          ", 0, 0.3, normalBP_shadow);
 	normalBP->addSliderItem("Focus diff.     ", 0, 1, normalBP_focus_dif);
-	normalBP->addSliderItem("Motion          ", 0, 0.3, normalBP_motion);
+	normalBP->addSliderItem("Motion          ", 0, 0.5, normalBP_motion);
 	normalBP->addSliderItem("Abruptness      ", 0, 1, normalBP_abruptness);
 	normalBP->addSliderItem("Shakiness       ", 0, 0.5, normalBP_shake);
 
-	normalBP_predict = false;		//Initialize to false
 	normalBP->addToggleItem("Aesthetics", normalBP_predict);
-	normalBP_interest_1 = false;		//Initialize to false
 	normalBP->addToggleItem("Interest", normalBP_interest_1);
-
-	//normalBP->addToggleItem("Medium Interest", normalBP_interest_2);
-	//normalBP_interest_2 = false;		//Initialize to false
-	//normalBP->addToggleItem("Min Interest", normalBP_interest_3);
-	//normalBP_interest_3 = false;		//Initialize to false
-
-	//normalBP->addListItem(" ");		//Space between rest filters and ON/OFF switch 
-	//normalBP->addToggleItem("FILTER ON", normalBP_ON);
 
 	//Sortpanel
 	sortBP = buttons.addButtonPanel("SORT");
@@ -428,9 +420,7 @@ void filtersPanel::setup()
 	sortBP->addSelectionItem("Similarity", sortBP_sortType, SORT_21);
 	sortBP->addListItem(" ");
 	sortBP->addFlashItem("APPLY SORT", sortBP_ON);
-	//sortBP->addToggleItem("SORT ON", sortBP_ON);		//Run the ranking function 
 	sortBP_sortType = 0;
-	//sortBP_ON = false;				//Default ranking is off
 
 
 	//indexing panel
@@ -520,14 +510,8 @@ bool filtersPanel::isRankingON()
 {
 	return sortBP_ON;
 }
-/*
-bool filtersPanel::isSimilarityON()
-{
-	return similarityBP_ON;
-}
-*/
 
-void filtersPanel::sortFiles(vector<File> &files, int length)
+void filtersPanel::sortFiles(vector<VideoFile> &files, int length)
 {
 
 	if (length > 1) {
@@ -620,7 +604,7 @@ void filtersPanel::sortFiles(vector<File> &files, int length)
 	}
 }
 
-void filtersPanel::hideUnrankedFiles(vector<File> rankedFiles, File allFiles[], int allLength)
+void filtersPanel::hideUnrankedFiles(vector<VideoFile> rankedFiles, VideoFile allFiles[], int allLength)
 {
 	//All files visibiliy is set to false. Now we can look only for ranked files and set them on true
 	for (int i = 0; i < allLength; ++i) {

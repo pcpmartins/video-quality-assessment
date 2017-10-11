@@ -7,18 +7,31 @@ metadataPanel::metadataPanel()
 metadataPanel::~metadataPanel()
 {
 }
-
+/*
 void metadataPanel::getData(const ImageFile * img)
 {
 	metadataString = createCommonString(img);
 	color1 = getColor1(img);
 	color2 = getColor2(img);
 }
-
+*/
 void metadataPanel::getData(const VideoFile * vid)
 {
-	metadataString = createCommonString(vid);
-	metadataString += "                   Foreground area: " + toString(vid->fgArea) + "\n";
+	metadataString = "\n   File name: " + vid->name + vid->extension + "\n";	
+	metadataString += "   Resolution: " + std::to_string(vid->resX) + " x " + std::to_string(vid->resY) + "\n";
+	metadataString += "   Objective index: " + toString(vid->ranksum) + "\n\n";
+	metadataString += "   Orientation:" + std::to_string(vid->ehGlobal) + "  Color Ratio " + "      Luminance: " + toString(vid->luminance) + "\n";
+	metadataString += "    " + std::to_string(vid->eh1) + "   " + std::to_string(vid->eh2) + "   " + std::to_string(vid->eh3) + "   " +
+		std::to_string(vid->eh4) + "       R: " + toString(vid->redRatio)  + "           Dif. hues: " + toString(vid->dif_hues) + "\n";
+	metadataString += "    " + std::to_string(vid->eh5) + "   " + std::to_string(vid->eh6) + "   " + std::to_string(vid->eh7) + "   " +
+		std::to_string(vid->eh8) + "       G: " + toString(vid->greenRatio) + "           Sharpness: " + toString(vid->sharpness) + "\n";
+	metadataString += "    " + std::to_string(vid->eh9) + "   " + std::to_string(vid->eh10) + "   " + std::to_string(vid->eh11) + "   " +
+		std::to_string(vid->eh12) + "       B: " + toString(vid->blueRatio) +"           Entropy: " + std::to_string(vid->entropy) + "\n";
+	metadataString += "    " + std::to_string(vid->eh13) + "   " + std::to_string(vid->eh14) + "   " + std::to_string(vid->eh15) + "   " +
+		std::to_string(vid->eh16) +"\n";
+	metadataString += "\n";
+	metadataString += "                                                  Luminance_std: " + toString(vid->luminance_std) + "\n";
+	metadataString += "                                                  Foreground area: " + toString(vid->fgArea) + "\n";
 	metadataString += "    Avg faces: " + toString(vid->avgFaces) +
 		"                     Focus diff: " + toString(vid->focus_dif) + "\n";
 	metadataString += "    Faces area: " + toString(vid->faceArea) +
@@ -39,28 +52,6 @@ void metadataPanel::getData(const VideoFile * vid)
 	color1 = getColor1(vid);
 	color2 = getColor2(vid);
 
-}
-
-string metadataPanel::createCommonString(const File * f)
-{
-	string s;
-	s = "\n   File name: " + f->name + f->extension + "\n";						//Name of file
-	s += "   Resolution: " + std::to_string(f->resX) + " x " + std::to_string(f->resY) + "\n";
-	s += "   UGC rating: " + std::to_string(f->rate) + "                      Objective index: " + toString(f->ranksum) + "\n\n";
-	s += "   Orientation:" + std::to_string(f->ehGlobal) + "  Color Ratio " + "     Luminance: " + toString(f->luminance) + "\n";
-	s += "    " + std::to_string(f->eh1) + "   " + std::to_string(f->eh2) + "   " + std::to_string(f->eh3) + "   " +
-		std::to_string(f->eh4) + "       R: " + toString(f->redRatio) + "          Luminance_std: " + toString(f->luminance_std) + "\n";
-	s += "    " + std::to_string(f->eh5) + "   " + std::to_string(f->eh6) + "   " + std::to_string(f->eh7) + "   " +
-		std::to_string(f->eh8) + "       G: " + toString(f->greenRatio) + "          Sharpness: " + toString(f->sharpness) + "\n";
-	s += "    " + std::to_string(f->eh9) + "   " + std::to_string(f->eh10) + "   " + std::to_string(f->eh11) + "   " +
-		std::to_string(f->eh12) + "       B: " + toString(f->blueRatio) + "\n";
-	s += "    " + std::to_string(f->eh13) + "   " + std::to_string(f->eh14) + "   " + std::to_string(f->eh15) + "   " +
-		std::to_string(f->eh16) + "                             Dif. hues: " + toString(f->dif_hues) + "\n";
-	s += "                                                  Entropy: " + std::to_string(f->entropy) + "\n";
-	s += "\n";
-	s += "                               ";
-
-	return s;
 }
 
 void metadataPanel::setup(int x, int y)

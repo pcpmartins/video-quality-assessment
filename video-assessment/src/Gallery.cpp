@@ -296,8 +296,8 @@ void Gallery::draw()
 	if (thumbnailClicked) {
 		int metadataPanel_x = scrollBarRectangle.x + scrollBarWidth + 1.5*margin;		//x coordinate of metadata panel 
 		int metadataPanel_y = margin + 1;												//y coordinate of metadata panel 
-		int file_x = metadataPanel_x;													//x coordinate of file to draw
-		int file_y = metadataPanel.getHeight() + margin;								//y coordinate of file to draw
+		//int file_x = metadataPanel_x;													//x coordinate of file to draw
+		//int file_y = metadataPanel.getHeight() + margin;								//y coordinate of file to draw
 		metadataPanel.draw(metadataPanel_x, metadataPanel_y);
 
 		if (allFiles[choosenFileIndex].getType() == File::fileType::VIDEO)	//Video file choosen
@@ -401,7 +401,7 @@ void Gallery::mousePressed(int x, int y, int button) {
 	}
 	else
 	{
-		if (checkIfThumbnailClicked(x, y))							//Check if thumbnail clicked. Update choosenFileIndex or thumbnailClicked flag now
+		if (checkIfThumbnailClicked(x, y) && (!filtersPanel.isToolbarClicked(x,y)))	//Check if thumbnail clicked. Update choosenFileIndex 
 		{
 			cout << allFiles[choosenFileIndex].name << endl;
 
@@ -436,7 +436,7 @@ void Gallery::mouseReleased(int x, int y, int button) {
 		high_resolution_clock::time_point t1 = high_resolution_clock::now(); // note time before execution
 		filtersPanel.filter(&allFiles[0], allFiles.size(), choosenFileIndex);
 		high_resolution_clock::time_point t2 = high_resolution_clock::now(); // note time after execution
-		std::cout << "process took: "
+		std::cout << "operation time: "
 			<< std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count()
 			<< " ms\n";
 	}
@@ -639,7 +639,7 @@ bool Gallery::loadFiles()
 
 	if (vectorSize > 0)									//If there are some files
 	{
-		allFiles.assign(vectorSize, File());			//Create vector of size equal to number of images and videos
+		allFiles.assign(vectorSize, VideoFile());			//Create vector of size equal to number of images and videos
 
 		for (int k = 0; k < vectorSize; ++k)
 		{
@@ -656,7 +656,7 @@ bool Gallery::loadFiles()
 
 				tmpVideo.getMetadataFromCsv(test);
 				tmpVideo.generateXmlFile();
-				tmpVideo.getMetadataFromXml();		//Get metada from the xml
+				tmpVideo.getMetadataFromXml();		
 			}
 
 			allFiles[k] = tmpVideo;								//Create file with initialized data
@@ -754,13 +754,20 @@ bool Gallery::parseCsvFeatureVector() {
 
 vector<string> Gallery::getIndividualSample(string name) {
 
-	int i = 0;
-	while (i < csvData.size())
+	if (csvData.size() > 0)
 	{
-		if (csvData[i][0] == name) return csvData[i];
-		i++;
+		int i = 0;
+		while (i < csvData.size())
+		{
+			if (csvData[i][0] == name) return csvData[i];
+			i++;
+		}
 	}
-
+	else {
+		vector<string> vecStr ;
+		vecStr.assign(1, "");
+		return vecStr;
+	}
 }
 
 std::string ReplaceAll(std::string str, const std::string& from, const std::string& to) {

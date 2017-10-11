@@ -15,27 +15,16 @@ public:
 	static string thumbnailIconPath;				//Path to camera icon to add to thumbnail
 	static vector <string> availableFormats;			//Required to distinguish images from videos and other files
 
-	//Video metadata
 	double abruptness;
-	double sharpness;
 	double motion;
-	double avgFaces;
-	double faceArea;
-	double smiles;
-	double rule3;
 	double shake;
 	double fgArea;
 	double focus_dif;
-
-	//novos
 	double luminance_std;
-	double dif_hues;
-	double static_saliency;
 	double ranksum;
 	double shadow;
 	unsigned short predict;
-	int interest_1, interest_2, interest_3;
-	int humanFace;
+	int interest_1;
 
 	///////////////////Methods////////////////////////
 public:

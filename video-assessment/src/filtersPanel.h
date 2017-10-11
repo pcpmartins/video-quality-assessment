@@ -1,5 +1,6 @@
 #pragma once
 #include "File.h"
+#include "VideoFile.h"
 #include "ofxButtons.h"
 
 #define NUMBER_OF_RANKED_FILES 700
@@ -11,7 +12,7 @@ public:
 	~filtersPanel();
 
 	void draw();							//Draw gui window
-	void filter(File files[], int length,int choosenFileIndex);	//Filters array 
+	void filter(VideoFile files[], int length,int choosenFileIndex);	//Filters array 
 	void setup();					//Setup gui in coordinates. Length is for hashList
 
 	bool isSimilarityClicked(int x, int y); //Check if similarity title or value was clicked
@@ -45,6 +46,9 @@ private:
 
 
 	ButtonPanel * normalBP;		//Normal panel	
+	bool normalBP_videosSelected;	//Flag to display videos
+	bool normalBP_imagesSelected;	//Flag to display images
+	bool normalBP_ON;              //Flag if aply filters or not
 
 	float normalBP_redRatioP;		//Red ratio colour param
 	float normalBP_greenRatioP;	//Green ratio colour param					
@@ -55,31 +59,24 @@ private:
 	float normalBP_abruptness;			//Abruptness param
 	float normalBP_motion;			//motion param
 	float normalBP_entropy;			//motion param
+	float normalBP_dif_hues;
+	float normalBP_static_saliency;
 
-	bool normalBP_videosSelected;	//Flag to display videos
-	bool normalBP_imagesSelected;	//Flag to display images
-	bool normalBP_ON;				//Flag if aply filters or not
 	bool normalBP_humanFace;		//Flag if look for faces
 	float normalBP_rule3;			//shake param
-	
 	float normalBP_avgFaces;		//Luminance param
 	float normalBP_faceArea;        //Shapness param
 	float normalBP_smiles;			//Rate param
+
 	float normalBP_fgArea;			//Abruptness param
 	float normalBP_focus_dif;			//motion param
 	float normalBP_shake;			//shake param
-
-	//novos
 	float normalBP_luminance_std;
-	float normalBP_dif_hues;
-	float normalBP_static_saliency;
 	float normalBP_ranksum;
 	float normalBP_shadow;
-	bool normalBP_predict;
 
+	bool normalBP_predict;
 	bool normalBP_interest_1;
-	bool normalBP_interest_2;
-	bool normalBP_interest_3;
 
 	ButtonPanel * sortBP;		//Sort panel
 
@@ -121,12 +118,11 @@ private:
 	bool motionSimilarityON;
 	
 
-	vector<File> sortVector;		//Vector of ranked files
+	vector<VideoFile> sortVector;		//Vector of ranked files
 	int numberOfSortedFiles;		//Number of ranked files
-	//vector<int> hashList;			//Hash list for ranked list and all files list
 
-	void ranking(vector<File> &files);		//Rank array (sort)
-	void sortFiles(vector<File> &files, int length);						//Sort 
-	void hideUnrankedFiles(vector<File> rankedFiles, File allFiles[], int allLenght);	//Show only top ranked files
+	void ranking(vector<VideoFile> &files);		//Rank array (sort)
+	void sortFiles(vector<VideoFile> &files, int length);						//Sort 
+	void hideUnrankedFiles(vector<VideoFile> rankedFiles, VideoFile allFiles[], int allLenght);	//Show only top ranked files
 };
 

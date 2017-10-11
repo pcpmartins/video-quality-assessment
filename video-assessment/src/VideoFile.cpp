@@ -59,7 +59,6 @@ string VideoFile::generateThumbnail()
 {
 	ofImage thumbnail;
 	ofImage temp;
-	//int upperMargin;
 
 	ofDirectory dir(thumbnailFolderPath);					//Directory with thubmnails
 
@@ -81,7 +80,6 @@ string VideoFile::generateThumbnail()
 	else {
 		tempHeigth = thumbnailHeight;
 	}
-	//upperMargin = (thumbnailHeight - tempHeigth) / 2;
 
 	thumbnail.resize(thumbnailWidth, tempHeigth);
 
@@ -113,35 +111,20 @@ bool VideoFile::generateXmlFile()
 	ofXml xml;
 	if (xml.load(xmlPath))
 	{
-		//xml.setTo("//FILE");
-		xml.addValue("ABRUPTNESS", abruptness);
-		xml.addValue("SHARPNESS", sharpness);
-		xml.addValue("MOTION", motion);
-		xml.addChild("RESOLUTION");
-		xml.setTo("RESOLUTION");
-		xml.addValue("X", resX);
-		xml.addValue("Y", resY);
+
 		xml.setTo("//FILE");
-		xml.addValue("TYPE", "VIDEO");
-		xml.addValue("AVG_FACES", avgFaces);
-		xml.addValue("FACE_AREA", faceArea);
-		xml.addValue("AVG_HAAR", smiles);
-		xml.addValue("RULE_OF_THIRDS", rule3);
+		xml.addValue("ABRUPTNESS", abruptness);
+		xml.addValue("MOTION", motion);
 		xml.addValue("SHACKINESS", shake);
 		xml.addValue("FG_AREA", fgArea);
 		xml.addValue("FOCUS_DIFF", focus_dif);
 		xml.addValue("LUMA_STD", luminance_std);
-		xml.addValue("DIF_HUES", dif_hues);
-		xml.addValue("STATIC_SALIENCY", static_saliency);
-		xml.addValue("RANKSUM", ranksum);
 		xml.addValue("SHADOW", shadow);
+		xml.addValue("RANKSUM", ranksum);
 		xml.addValue("PREDICT", predict);
-		xml.addValue("HUMAN_FACE", humanFace);
-
 		xml.addValue("INTEREST_1", interest_1);
-		xml.addValue("INTEREST_2", interest_2);
-		xml.addValue("INTEREST_3", interest_3);
-		xml.addValue("SIMILARITY", similarityIndex);
+		xml.addValue("TYPE", "VIDEO");
+
 	}
 	else {
 		return false;
@@ -164,25 +147,15 @@ bool VideoFile::getMetadataFromXml()
 	ofXml* xml = new ofXml(xmlPath);
 	if (xml->load(xmlPath)) {
 		abruptness = xml->getValue<double>("//ABRUPTNESS");
-		sharpness = xml->getValue<double>("//SHARPNESS");
 		motion = xml->getValue<double>("//MOTION");
-		avgFaces = xml->getValue<double>("//AVG_FACES");
-		faceArea = xml->getValue<double>("//FACE_AREA");
-		smiles = xml->getValue<double>("//AVG_HAAR");
-		rule3 = xml->getValue<double>("//RULE_OF_THIRDS");
 		shake = xml->getValue<double>("//SHACKINESS");
 		fgArea = xml->getValue<double>("//FG_AREA");
 		focus_dif = xml->getValue<double>("//FOCUS_DIFF");
 		luminance_std = xml->getValue<double>("//LUMA_STD");
-		dif_hues = xml->getValue<double>("//DIF_HUES");
-		static_saliency = xml->getValue<double>("//STATIC_SALIENCY");
 		ranksum = xml->getValue<double>("//RANKSUM");
 		shadow = xml->getValue<double>("//SHADOW");
 		predict = xml->getValue<unsigned short>("//PREDICT");
-		humanFace = xml->getValue<int>("//HUMAN_FACE");
 		interest_1 = xml->getValue<int>("//INTEREST_1");
-		interest_2 = xml->getValue<int>("//INTEREST_2");
-		interest_3 = xml->getValue<int>("//INTEREST_3");
 	}
 	return false;
 }
@@ -226,31 +199,16 @@ bool VideoFile::getMetadataFromCsv(vector <string> csvSingleData)
 {
 	File::getMetadataFromCsv(csvSingleData);
 
-	sharpness = std::stod(csvSingleData[12]);
 	abruptness = std::stod(csvSingleData[35]);
 	motion = std::stod(csvSingleData[31]);
-	rule3 = std::stod(csvSingleData[25]);
 	shake = std::stod(csvSingleData[30]);
-
-	avgFaces = std::stod(csvSingleData[22]);
-	if (avgFaces > 0.0f)humanFace = 1;
-	else humanFace = 0;
-
-	faceArea = std::stod(csvSingleData[23]);
-	smiles = std::stod(csvSingleData[24]);
 	fgArea = std::stod(csvSingleData[32]);
 	focus_dif = std::stod(csvSingleData[36]);
 	luminance_std = std::stod(csvSingleData[14]);
-	dif_hues = std::stod(csvSingleData[21]);
-	static_saliency = std::stod(csvSingleData[26]);
 	ranksum = std::stod(csvSingleData[27]);
 	shadow = std::stod(csvSingleData[33]);
 	predict = std::stoi(csvSingleData[37]);
 	interest_1 = std::stoi(csvSingleData[38]);
-	interest_2 = std::stoi(csvSingleData[39]);
-	interest_3 = std::stoi(csvSingleData[40]);
-
-	similarityIndex = 0;
 
 	return true;
 }
@@ -258,4 +216,4 @@ bool VideoFile::getMetadataFromCsv(vector <string> csvSingleData)
 string VideoFile::filesFolderPath = "files";
 string VideoFile::thumbnailFolderPath = "/thumbnails/videos/";
 string VideoFile::thumbnailIconPath = "/icons/video.jpg";
-vector <string> VideoFile::availableFormats = { "mp4", "MTS", "mov", "avi" };
+vector <string> VideoFile::availableFormats = { "mp4", "MTS", "mov" };

@@ -21,23 +21,31 @@ bool File::generateXmlFile()
 {
 	ofXml xml;
 	xml.addChild("FILE");
+	xml.setTo("//FILE");
+
 	xml.addValue("THUMBNAIL_PATH", thumbnailPath);		//Thumbnail path field
 	xml.addValue("FILE_PATH", path);					//File path field
+
+	xml.addChild("RESOLUTION");
+	xml.setTo("RESOLUTION");
+	xml.addValue("X", resX);
+	xml.addValue("Y", resY);
+
+	xml.setTo("//FILE");
 	xml.addValue("RATE", rate);
 	xml.addValue("LUMINANCE", luminance);				//Luminance value
-	xml.addChild("EDGES");								//Edges child
-	xml.setTo("EDGES");
-	xml.addValue("EDGES", edges);
-	xml.addValue("EDGES_DISTRIBUTION", edgeDistribution);
-	xml.addValue("EDGES_VERTICAL", edgesVertical);
-	xml.addValue("EDGES_HORIZONTAL", edgesHorizontal);
-	xml.addValue("EDGES_DIAGONAL", edgesDiagonal);
-	xml.addValue("EDGES_HORIZONTAL_RATIO", edgesHorizontalRatio);
-	xml.addValue("EDGES_VERTICAL_RATIO", edgesVerticalRatio);
-	xml.addValue("EDGES_DIAGONAL_RATIO", edgesDiagonalRatio);
-	xml.setTo("//FILE");
-	//xml.addValue("HUMAN_FACE", humanFace);
-	xml.addValue("SIMPLICITY", simplicity);
+	xml.addValue("SHARPNESS", sharpness);
+	xml.addValue("DIF_HUES", dif_hues);
+	xml.addValue("SIMILARITY", similarityIndex);
+	xml.addValue("REFERENCE", referenceName);
+	xml.addValue("HUMAN_FACE", humanFace);
+	xml.addValue("AVG_FACES", avgFaces);
+	xml.addValue("FACE_AREA", faceArea);
+	xml.addValue("AVG_HAAR", smiles);
+	xml.addValue("RULE_OF_THIRDS", rule3);
+	xml.addValue("STATIC_SALIENCY", static_saliency);
+	xml.addValue("ENTROPY", entropy);
+
 	xml.addChild("COLOUR");								//Colours values
 	xml.setTo("COLOUR");
 	xml.addValue("RED1", redMoments.first);
@@ -49,10 +57,8 @@ bool File::generateXmlFile()
 	xml.addValue("RED_RATIO", redRatio);
 	xml.addValue("GREEN_RATIO", greenRatio);
 	xml.addValue("BLUE_RATIO", blueRatio);
-	xml.setTo("//FILE");
-	xml.addValue("SIMILARITY", similarityIndex);
-	xml.addValue("REFERENCE", referenceName);
 
+	xml.setTo("//FILE");
 	xml.addChild("EH");								//edge histograms
 	xml.setTo("EH");
 	xml.addValue("EH1", eh1);
@@ -72,10 +78,7 @@ bool File::generateXmlFile()
 	xml.addValue("EH15", eh15);
 	xml.addValue("EH16", eh16);
 	xml.addValue("EHGLOBAL", ehGlobal);
-
 	xml.setTo("//FILE");
-	xml.addValue("ENTROPY", entropy);
-
 
 	if (xml.save(xmlPath))
 	{
@@ -93,16 +96,16 @@ bool File::getMetadataFromXml()
 	if (xml->load(xmlPath)) {
 		thumbnailPath = xml->getValue<string>("//THUMBNAIL_PATH");
 		path = xml->getValue<string>("//FILE_PATH");
-		luminance = xml->getValue<double>("//LUMINANCE");
-		edges = xml->getValue<double>("//EDGES");
-		edgesHorizontal = xml->getValue<double>("//EDGES_HORIZONTAL");
-		edgesVertical = xml->getValue<double>("//EDGES_VERTICAL");
-		edgesDiagonal = xml->getValue<double>("//EDGES_DIAGONAL");
-		edgeDistribution = xml->getValue<string>("//EDGES_DISTRIBUTION");
-		edgesHorizontalRatio = xml->getValue<double>("//EDGES_HORIZONTAL_RATIO");
-		edgesVerticalRatio = xml->getValue<double>("//EDGES_VERTICAL_RATIO");
-		edgesDiagonalRatio = xml->getValue<double>("//EDGES_DIAGONAL_RATIO");
 		rate = xml->getValue<int>("//RATE");
+		resX = xml->getValue<int>("//X");
+		resY = xml->getValue<int>("//Y");
+
+		luminance = xml->getValue<double>("//LUMINANCE");
+		sharpness = xml->getValue<double>("//SHARPNESS");
+		dif_hues = xml->getValue<double>("//DIF_HUES");
+		static_saliency = xml->getValue<double>("//STATIC_SALIENCY");
+		entropy = xml->getValue<double>("//ENTROPY");
+
 		redMoments.first = xml->getValue<double>("//RED1");
 		greenMoments.first = xml->getValue<double>("//GREEN1");
 		blueMoments.first = xml->getValue<double>("//BLUE1");
@@ -112,31 +115,12 @@ bool File::getMetadataFromXml()
 		redRatio = xml->getValue<double>("//RED_RATIO");
 		greenRatio = xml->getValue<double>("//GREEN_RATIO");
 		blueRatio = xml->getValue<double>("//BLUE_RATIO");
+
 		humanFace = xml->getValue<int>("//HUMAN_FACE");		//0 if no face, 1 if there is face. Save boolean
-		simplicity = xml->getValue<double>("//SIMPLICITY");
-		resX = xml->getValue<int>("//X");
-		resY = xml->getValue<int>("//Y");
-		luminance = xml->getValue<double>("//LUMINANCE");
-		sharpness = xml->getValue<double>("//SHARPNESS");
-		abruptness = xml->getValue<double>("//ABRUPTNESS");
-		motion = xml->getValue<double>("//MOTION");
 		rule3 = xml->getValue<double>("//RULE_OF_THIRDS");
-		shake = xml->getValue<double>("//SHACKINESS");
 		avgFaces = xml->getValue<double>("//AVG_FACES");
 		faceArea = xml->getValue<double>("//FACE_AREA");
 		smiles = xml->getValue<double>("//AVG_HAAR");
-		fgArea = xml->getValue<double>("//FG_AREA");
-		focus_dif = xml->getValue<double>("//FOCUS_DIFF");
-		luminance_std = xml->getValue<double>("//LUMA_STD");
-		dif_hues = xml->getValue<double>("//DIF_HUES");
-		static_saliency = xml->getValue<double>("//STATIC_SALIENCY");
-		ranksum = xml->getValue<double>("//RANKSUM");
-		shadow = xml->getValue<double>("//SHADOW");
-		predict = xml->getValue<unsigned short>("//PREDICT");
-		interest_1 = xml->getValue<int>("//INTEREST_1");
-		interest_2 = xml->getValue<int>("//INTEREST_2");
-		interest_3 = xml->getValue<int>("//INTEREST_3");
-
 		similarityIndex = xml->getValue<double>("//SIMILARITY");
 		referenceName = xml->getValue<string>("//REFERENCE");
 
@@ -157,7 +141,7 @@ bool File::getMetadataFromXml()
 		eh15 = xml->getValue<int>("//EH15");
 		eh16 = xml->getValue<int>("//EH16");
 		ehGlobal = xml->getValue<int>("//EHGLOBAL");
-		entropy = xml->getValue<double>("//ENTROPY");
+		
 
 		return true;
 	}
@@ -170,26 +154,15 @@ bool File::getMetadataFromXml()
 bool File::getMetadataFromCsv(vector <string> csvSingleData)
 {
 	if (std::stoi(csvSingleData[0]) != 0) {
-
-		luminance = std::stod(csvSingleData[13]);
-		//cout << "luminance! " << luminance << endl;
-
-		edges = std::stod(csvSingleData[15]);
-		edgesHorizontal = std::stod(csvSingleData[16]) / 2;
-		edgesVertical = std::stod(csvSingleData[17]);
-		edgesDiagonal = std::stod(csvSingleData[18]) / 3.2;
+	
 		resX = std::stoi(csvSingleData[1]);
 		resY = std::stoi(csvSingleData[2]);
 
-		double totalEdges = edgesHorizontal + edgesVertical + edgesDiagonal;
-
-		edgeDistribution = "Horizontal";
-		if (edgesVertical > edgesHorizontal) edgeDistribution = "Vertical";
-		if (edgesDiagonal > edgesHorizontal && edgesDiagonal > edgesVertical) edgeDistribution = "Diagonal";
-
-		edgesHorizontalRatio = 0;
-		edgesVerticalRatio = 0;
-		edgesDiagonalRatio = 0;
+		luminance = std::stod(csvSingleData[13]);
+		sharpness = std::stod(csvSingleData[12]);
+		dif_hues = std::stod(csvSingleData[21]);
+		static_saliency = std::stod(csvSingleData[26]);
+		entropy = std::stod(csvSingleData[58]);
 
 		redMoments.first = std::stod(csvSingleData[4]);
 		greenMoments.first = std::stod(csvSingleData[7]);
@@ -200,12 +173,16 @@ bool File::getMetadataFromCsv(vector <string> csvSingleData)
 		redRatio = std::stod(csvSingleData[3]);
 		greenRatio = std::stod(csvSingleData[6]);
 		blueRatio = std::stod(csvSingleData[9]);
+
 		avgFaces = std::stod(csvSingleData[22]);
+		rule3 = std::stod(csvSingleData[25]);
 
 		if (avgFaces > 0) humanFace = 1;
 		else humanFace = 0;
 
-		simplicity = std::stod(csvSingleData[20]);
+		faceArea = std::stod(csvSingleData[23]);
+		smiles = std::stod(csvSingleData[24]);
+
 		similarityIndex = 0;
 		referenceName = "none";
 
@@ -225,9 +202,7 @@ bool File::getMetadataFromCsv(vector <string> csvSingleData)
 		eh14 = std::stoi(csvSingleData[54]);
 		eh15 = std::stoi(csvSingleData[55]);
 		eh16 = std::stoi(csvSingleData[56]);
-		ehGlobal = std::stoi(csvSingleData[57]);
-
-		entropy = std::stod(csvSingleData[58]);
+		ehGlobal = std::stoi(csvSingleData[57]);	
 
 		return true;
 	}

@@ -6,18 +6,18 @@ CBMI-2017 [ACM paper](https://dl.acm.org/citation.cfm?id=3095748) - [Semi-automa
 The availability of high-speed internet connections and the increasing rate of mobile phone usage all together combined with the advent of Social Media, created a growing stream of user generated content (UGC). 
 The goal was to develop a simple system capable of semi-automatically assess quality from user generated  video. It uses image and video processing combined with a model that is in accordance with human visual attention and perception. The main purpose of the system is the sorting and filtering of a large stream of UGC video in a timely manner and in a way, that it can be manageable by a human operator.
 
-Our aproach combines in a greaphical user interface, a balanced set of tools for video retrieval, to allow eficient video descrimination. It is available filtering and sorting operations based on a broad variety of visual properties and concepts that are very easy to be undestood by humans. there is a multiple feature indexing tool that allows to organize the videos by similarity to a reference. We also used Support Vector Machines to generate binary classifiers for video aesthetics and interestingness.
+Our aproach combines in a graphical user interface, a balanced set of tools for video retrieval, to allow eficient video descrimination. It is available filtering and sorting operations based on a broad variety of visual properties and concepts that are very easy to be undestood by humans. there is a multiple feature indexing tool that allows to organize the videos by similarity to a reference. We also used Support Vector Machines to generate binary classifiers for video aesthetics and interestingness.
 
 We populated this release with the UGC videos from the [CERTH-ITI-VAQ700](http://mklab.iti.gr/project/certh-iti-vaq700-dataset), a dataset composed by 700 YouTube videos licensed under Creative Commons Attribution. The duration of each of these videos ranges from 1 to 6 minutes. Because of the large size of the dataset(25.3GB) we only used 1 second of each video. To have the full dataset available, one can download it from the dataset homepage to the bin/data/files folder.
 
-Detailed instructions on how to use the GUI and on how to load a new video repository are available in the included instructions file instructions.pdf
+Detailed instructions on how to use the GUI and on how to load a new video repository are available in the included file [instructions.pdf](instructions.pdf)
 
 ## Development setup
 
-Windows
-Visual Studio community edition 2015
-openFrameworks 0.9.3
-OpenCV 3.2.0 + contrib modules
+* Windows 10
+* Visual Studio community edition 2015
+* openFrameworks 0.9.3
+* OpenCV 3.2.0 + contrib modules
 
 The available binaries should run on any Windows 8-10. x64 machine. To run, just copy the bin folder to local machine and run the executable video-assessment.exe
 The fastest way to solve missing video codecs error is to install [K-lite codec pack 12.3.0.](https://k-lite-mega-codec-pack.en.uptodown.com/windows/download/791979)
@@ -186,5 +186,9 @@ We use SVM classifiers to predict aesthetic and interestingness from video, the 
 #### CERTH-ITI-VAQ700
 A comprehensive  [video dataset](http://mklab.iti.gr/project/certh-iti-vaq700-dataset) for the problem of aesthetic quality assessment with annotated scores for 700 (UGC)videos from YouTube, 350 videos are rated as being of high aesthetic quality and another 350 as being of low aesthetic quality.We extracted our set of features from the dataset and using the ground truth experimental results [paper](https://www.researchgate.net/profile/Christos_Tzelepis/publication/307516039_Video_aesthetic_quality_assessment_using_kernel_Support_Vector_Machine_with_isotropic_Gaussian_sample_uncertainty_KSVM-IGSU/links/57d9074a08ae601b39b04749/Video-aesthetic-quality-assessment-using-kernel-Support-Vector-Machine-with-isotropic-Gaussian-sample-uncertainty-KSVM-IGSU.pdf) generated a classifier to predict aesthetic of any new sample.
 
+* aesthetics [0, 1]
+
 #### Video Interestingness Database (VID)
 Two benchmark datasets with ground-truth interestingness labels [more info](http://www.yugangjiang.info/research/interestingness/index.html). The first one (V.I.D. dataset A) consists in 1200 videos collected from Flickr which has a rank based on interestingness. The second (V.I.D. dataset B) consisted of 420 advertisement videos from YouTube. YouTube does not have an interestingness rank so to collect the interestingness scores, this dataset was subject to an experimental annotation procedure. We extracted our set of features from the (V.I.D. dataset A) together with the experimental binary values we generate a SVM classifier for interestingness on video.
+
+* interestingness [0, 1]

@@ -38,38 +38,25 @@ public:
 	double redRatio;					//red colour to all colour first moments ratio
 	double greenRatio;					//green colour to all colour first moments ratio
 	double blueRatio;					//Blue colour to all colour first moments ratio
-	double edges;						//Edges description
-	double edgesHorizontal;				//Horizontals edge
-	double edgesVertical;				//Vertical edge
-	double edgesDiagonal;
-	string edgeDistribution;			//Horizontal or vertical
-	double edgesHorizontalRatio;		//Edges horizontal ratio
-	double edgesVerticalRatio;			//Edges vertical ratio
-	double edgesDiagonalRatio;
 	int humanFace;						//If human detected
 	double luminance;
 	unsigned short rate;					//Rate of file (0..5);
-	double simplicity;						// More complex = less aesthetic
 	double sharpness;
-	double abruptness;
+	//double abruptness;
 	double rule3;
-	double shake;
-	double motion;
-
 	double avgFaces;
 	double faceArea;
 	double smiles;
-	double fgArea;
-	double focus_dif;
+	//double fgArea;
 
 	//novos
-	double luminance_std;
+	//double luminance_std;
 	double dif_hues;
 	double static_saliency;
-	double ranksum;
-	double shadow;
-	unsigned short predict;
-	int interest_1, interest_2, interest_3;
+	//double ranksum;
+	//double shadow;
+	//unsigned short predict;
+	//int interest_1;
 
 	double similarityIndex;
 	string referenceName;

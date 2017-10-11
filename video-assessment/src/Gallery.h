@@ -60,7 +60,7 @@ private:
 
 	//////////////////////////////////Objects//////////////////////////////
 
-	vector <File>	allFiles;				//Vector of files loaded at the initialization
+	vector <VideoFile>	allFiles;				//Vector of files loaded at the initialization
 	ImageFile choosenImage;					//Object of choosen image
 	VideoFile choosenVideo;					//Object of choosen video
 	metadataPanel metadataPanel;			//Object to display metadata
