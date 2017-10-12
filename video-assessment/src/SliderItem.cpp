@@ -16,7 +16,7 @@ SliderItem::SliderItem(string theTitle, float theMin, float theMax, float& theVa
 	top = theMax;
 	bottom = theMin;
 	w = 30 + 4+ title.length()*CHAR_W; //textw
-	w = (w <200)?200:w;
+	w = (w <180)?180:w;
 	value = &theValue;
     *value = MIN(theMax, MAX(theMin, *value));
 } 

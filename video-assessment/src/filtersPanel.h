@@ -3,7 +3,7 @@
 #include "VideoFile.h"
 #include "ofxButtons.h"
 
-#define NUMBER_OF_RANKED_FILES 700
+#define NUMBER_OF_RANKED_FILES 1000
 
 class filtersPanel
 {
@@ -19,6 +19,7 @@ public:
 	int isSimilarityExtracted; //Check if similarity data was already extracted
 
 	bool isFiltersClicked(int x, int y);	//Check if filters title or value clicked
+	bool isFiltersMoreClicked(int x, int y);	//Check if filters title or value clicked
 	bool isRankingClicked(int x, int y);	//Check if ranking title or value clicked
 	bool isRateClicked(int x, int y);		//Check if rate title or value clicked
 	bool isRateValueClicked(int x, int y);	//Check if rate clicked
@@ -26,6 +27,7 @@ public:
 
 	int getRate();
 	bool ifFiltersON();						//Getter of filtersFlag
+	bool ifFiltersMoreON();						//Getter of filtersFlag
 	bool isRankingON();						//Getter of rankingsFlag
 
 
@@ -44,10 +46,15 @@ private:
 		RATE_5
 	};
 
+	ButtonPanel * moreBP;		//more panel
+	bool moreBP_ON;              //Flag if aply filters or not
+
+	bool moreBP_v;
+	bool moreBP_h;
+	bool moreBP_45;
+	bool moreBP_135;
 
 	ButtonPanel * normalBP;		//Normal panel	
-	bool normalBP_videosSelected;	//Flag to display videos
-	bool normalBP_imagesSelected;	//Flag to display images
 	bool normalBP_ON;              //Flag if aply filters or not
 
 	float normalBP_redRatioP;		//Red ratio colour param

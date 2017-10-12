@@ -149,7 +149,7 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 	}
 
 
-	if (normalBP_ON)
+	if (normalBP_ON || moreBP_ON)
 	{
 
 		for (int i = 0; i < length; ++i) {				//For each file take values 
@@ -237,6 +237,35 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 					files[i].setVisible(files[i].interest_1);			//Set visible if there is max interest
 				}
 			}
+			
+			if (moreBP_v)								//If max interest filtering is set
+			{
+				if (files[i].getVisible()) {						//And file was visible
+					files[i].setVisible(files[i].ehGlobal == 1);			//Set visible if there is max interest
+				}
+
+			}
+			else if (moreBP_h)								//If max interest filtering is set
+			{
+				if (files[i].getVisible()) {						//And file was visible
+					files[i].setVisible(files[i].ehGlobal == 2);			//Set visible if there is max interest
+				}
+
+			}
+			else if (moreBP_45)								//If max interest filtering is set
+			{
+				if (files[i].getVisible()) {						//And file was visible
+					files[i].setVisible(files[i].ehGlobal == 3);			//Set visible if there is max interest
+				}
+
+			}
+		    else if (moreBP_135)								//If max interest filtering is set
+			{
+				if (files[i].getVisible()) {						//And file was visible
+					files[i].setVisible(files[i].ehGlobal == 4);			//Set visible if there is max interest
+				}
+
+			}		
 
 			if (sortBP_ON && files[i].getVisible())			//Add all visible files to ranking
 			{
@@ -289,6 +318,11 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 		cout << "Values reseted!" << endl;
 		resetFilterValues = false;
 		sortBP_ON = false;
+	
+		moreBP_v = false;		
+		moreBP_h = false;		
+		moreBP_45 = false;	
+		moreBP_135 = false;				
 
 		for (int i = 0; i < length; ++i) { 				//All files visible
 			files[i].setVisible(true);
@@ -336,6 +370,11 @@ void filtersPanel::setup()
 	normalBP_predict = false;		//Initialize to false
 	normalBP_interest_1 = false;		//Initialize to false
 
+	moreBP_v = false;		
+	moreBP_h = false;		
+	moreBP_45 = false;		
+	moreBP_135 = false;		
+
 	resetFilterValues = false;
 	sortBP_ON = false;
 
@@ -350,54 +389,67 @@ void filtersPanel::setup()
 	normalBP_shake = 0.5;
 
 	normalBP_ON = true;
+	moreBP_ON = true;
 
 	ofSetVerticalSync(true);
 
-	buttons.setup(); // this sets up the events etc..	
+	buttons.setup(); // this sets up the events etc..
+	
 	//UGC rating panel
-	ugcRateBP = buttons.addButtonPanel("RATING");
-	ugcRateBP->addSelectionItem("0", ugcRateBP_choosenRate, RATE_0);
-	ugcRateBP->addSelectionItem("1", ugcRateBP_choosenRate, RATE_1);
-	ugcRateBP->addSelectionItem("2", ugcRateBP_choosenRate, RATE_2);
-	ugcRateBP->addSelectionItem("3", ugcRateBP_choosenRate, RATE_3);
-	ugcRateBP->addSelectionItem("4", ugcRateBP_choosenRate, RATE_4);
-	ugcRateBP->addSelectionItem("5", ugcRateBP_choosenRate, RATE_5);
-	//ugcRateBP->addFlashItem("Clear all", clearAllRate);
+	ugcRateBP = buttons.addButtonPanel("      RATING");
+	ugcRateBP->addSelectionItem("      0             ", ugcRateBP_choosenRate, RATE_0);
+	ugcRateBP->addSelectionItem("      1             ", ugcRateBP_choosenRate, RATE_1);
+	ugcRateBP->addSelectionItem("      2             ", ugcRateBP_choosenRate, RATE_2);
+	ugcRateBP->addSelectionItem("      3             ", ugcRateBP_choosenRate, RATE_3);
+	ugcRateBP->addSelectionItem("      4             ", ugcRateBP_choosenRate, RATE_4);
+	ugcRateBP->addSelectionItem("      5             ", ugcRateBP_choosenRate, RATE_5);
+	//ugcRateBP->addToggleItem("testing", moreBP_v);
 
 	//Normal filters Panel
-	normalBP = buttons.addButtonPanel("FILTER");
+	normalBP = buttons.addButtonPanel("      FILTER 1");
 	normalBP->addFlashItem("Clear values", resetFilterValues);
 	normalBP->addSliderItem("Rating          ", 0, 5, normalBP_rateP);
-	normalBP->addSliderItem("Objective index ", 0, 0.5, normalBP_ranksum);
-	//normalBP->addListItem("Color:");
+	normalBP->addSliderItem("Obj. index      ", 0, 0.5, normalBP_ranksum);	                      
+	normalBP->addListItem("Color:");
 	normalBP->addSliderItem("Red             ", 0, 1, normalBP_redRatioP);
 	normalBP->addSliderItem("Green           ", 0, 1, normalBP_greenRatioP);
 	normalBP->addSliderItem("Blue            ", 0, 1, normalBP_blueRatioP);
+	normalBP->addListItem("Orientation:");
+	normalBP->addToggleItem("Vertical", moreBP_v);
+	normalBP->addToggleItem("Horizontal", moreBP_h);
+	normalBP->addToggleItem("45 degrees", moreBP_45);
+	normalBP->addToggleItem("135 degrees", moreBP_135);
 	normalBP->addSliderItem("Entropy         ", 0, 1, normalBP_entropy);
 	normalBP->addSliderItem("Luminance       ", 0, 1, normalBP_luminaceP);
-	normalBP->addSliderItem("Lum. std        ", 0, 0.5, normalBP_luminance_std);
 	normalBP->addSliderItem("Sharpness       ", 0, 1, normalBP_sharpness);
-	normalBP->addSliderItem("Diff. hues      ", 0, 1, normalBP_dif_hues);
-	normalBP->addSliderItem("static saliency ", 0, 0.3, normalBP_static_saliency);
+	normalBP->addSliderItem("Hue count       ", 0, 1, normalBP_dif_hues);
+	normalBP->addSliderItem("Saliency        ", 0, 0.3, normalBP_static_saliency);
 	normalBP->addToggleItem("Human face", normalBP_humanFace);
 	normalBP->addSliderItem("Avg faces       ", 0, 1, normalBP_avgFaces);
 	normalBP->addSliderItem("Faces area      ", 0, 0.4, normalBP_faceArea);
 	normalBP->addSliderItem("Rule of thirds  ", 0, 0.3, normalBP_rule3);
 	normalBP->addSliderItem("Smiles          ", 0, 0.5, normalBP_smiles);
-	normalBP->addSliderItem("Foreground area ", 0, 0.2, normalBP_fgArea);
-	normalBP->addSliderItem("Shadow          ", 0, 0.3, normalBP_shadow);
-	normalBP->addSliderItem("Focus diff.     ", 0, 1, normalBP_focus_dif);
-	normalBP->addSliderItem("Motion          ", 0, 0.5, normalBP_motion);
-	normalBP->addSliderItem("Abruptness      ", 0, 1, normalBP_abruptness);
-	normalBP->addSliderItem("Shakiness       ", 0, 0.5, normalBP_shake);
 
-	normalBP->addToggleItem("Aesthetics", normalBP_predict);
-	normalBP->addToggleItem("Interest", normalBP_interest_1);
+
+	//filter more
+	moreBP = buttons.addButtonPanel("      FILTER 2");
+	moreBP->addFlashItem("Clear values", resetFilterValues);
+	moreBP->addSliderItem("Lum. std        ", 0, 0.5, normalBP_luminance_std);
+	moreBP->addSliderItem("Foreg. area     ", 0, 0.2, normalBP_fgArea);
+	moreBP->addSliderItem("Shadow          ", 0, 0.3, normalBP_shadow);
+	moreBP->addSliderItem("Focus diff.     ", 0, 1, normalBP_focus_dif);
+	moreBP->addSliderItem("Motion          ", 0, 0.5, normalBP_motion);
+	moreBP->addSliderItem("Abruptness      ", 0, 1, normalBP_abruptness);
+	moreBP->addSliderItem("Shakiness       ", 0, 0.5, normalBP_shake);
+	moreBP->addListItem("Classification:");
+	moreBP->addToggleItem("Aesthetics", normalBP_predict);
+	moreBP->addToggleItem("Interest", normalBP_interest_1);
+	
 
 	//Sortpanel
-	sortBP = buttons.addButtonPanel("SORT");
+	sortBP = buttons.addButtonPanel("        SORT");
 	sortBP->addSelectionItem("Rating", sortBP_sortType, SORT_0);
-	sortBP->addSelectionItem("Objective index", sortBP_sortType, SORT_1);
+	sortBP->addSelectionItem("Obj. index", sortBP_sortType, SORT_1);
 	sortBP->addSelectionItem("Red", sortBP_sortType, SORT_2);
 	sortBP->addSelectionItem("Green", sortBP_sortType, SORT_3);
 	sortBP->addSelectionItem("Blue", sortBP_sortType, SORT_4);
@@ -406,12 +458,12 @@ void filtersPanel::setup()
 	sortBP->addSelectionItem("Luminance std", sortBP_sortType, SORT_7);
 	sortBP->addSelectionItem("Sharpness", sortBP_sortType, SORT_8);
 	sortBP->addSelectionItem("Diff. hues", sortBP_sortType, SORT_9);
-	sortBP->addSelectionItem("Static saliency", sortBP_sortType, SORT_10);
+	sortBP->addSelectionItem("Saliency", sortBP_sortType, SORT_10);
 	sortBP->addSelectionItem("Avg faces", sortBP_sortType, SORT_11);
 	sortBP->addSelectionItem("Faces area", sortBP_sortType, SORT_12);
 	sortBP->addSelectionItem("Rule of Thirds      ", sortBP_sortType, SORT_13);
 	sortBP->addSelectionItem("Smiles", sortBP_sortType, SORT_14);
-	sortBP->addSelectionItem("Foreground area", sortBP_sortType, SORT_15);
+	sortBP->addSelectionItem("Foreg. area", sortBP_sortType, SORT_15);
 	sortBP->addSelectionItem("Shadow", sortBP_sortType, SORT_16);
 	sortBP->addSelectionItem("Focus diff.", sortBP_sortType, SORT_17);
 	sortBP->addSelectionItem("Motion", sortBP_sortType, SORT_18);
@@ -424,10 +476,10 @@ void filtersPanel::setup()
 
 
 	//indexing panel
-	similarityBP = buttons.addButtonPanel("SIMILARITY");
-	similarityBP->addFlashItem("Generate similarity ", lockTargetVideo);
+	similarityBP = buttons.addButtonPanel("     SIMILARITY");
+	similarityBP->addFlashItem("Generate index", lockTargetVideo);
 	similarityBP->addToggleItem("COLOR", colorSimilarityON);
-	similarityBP->addToggleItem("EDGES", edgeSimilarityON);
+	similarityBP->addToggleItem("ORIENTATION", edgeSimilarityON);
 	similarityBP->addToggleItem("ENTROPY", entropySimilarityON);
 	similarityBP->addToggleItem("MOTION", motionSimilarityON);
 
@@ -451,6 +503,18 @@ bool filtersPanel::isFiltersClicked(int x, int y)
 	if (normalBP->checkTitleClick(x, y) || normalBP->checkClick(x, y))		//If value or title clicked
 	{
 		normalBP->checkClick(x, y);	//Number of checkClick calls have to be odd, so toggle button change
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+bool filtersPanel::isFiltersMoreClicked(int x, int y)
+{
+	if (moreBP->checkTitleClick(x, y) || moreBP->checkClick(x, y))		//If value or title clicked
+	{
+		moreBP->checkClick(x, y);	//Number of checkClick calls have to be odd, so toggle button change
 		return true;
 	}
 	else
@@ -504,6 +568,10 @@ int filtersPanel::getRate()
 bool filtersPanel::ifFiltersON()
 {
 	return normalBP_ON;
+}
+bool filtersPanel::ifFiltersMoreON()
+{
+	return moreBP_ON;
 }
 
 bool filtersPanel::isRankingON()

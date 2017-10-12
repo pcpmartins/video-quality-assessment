@@ -13,7 +13,7 @@
 ToggleItem::ToggleItem(string theTitle, bool& theValue):ListItem(theTitle){
 	// do nothing?
 	w = 30 + 4+ title.length()*CHAR_W; //textw
-	w = (w <200)?200:w;
+	w = (w <180)?180:w;
 	on = &theValue;
 } 
 

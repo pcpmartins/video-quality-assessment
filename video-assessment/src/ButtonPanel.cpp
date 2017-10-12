@@ -74,7 +74,7 @@ void ButtonPanel::setByName(string name, float val){
 //--------------------------------------------------------------
 ButtonPanel::ButtonPanel(string theTitle, int x, int y):SimpleButton(theTitle, x, y){
 	sel = -1;
-	itemheight = 22;
+	itemheight = 18;
 }
 
 

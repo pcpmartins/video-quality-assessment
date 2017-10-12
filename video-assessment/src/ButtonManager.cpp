@@ -8,10 +8,10 @@ ButtonManager::ButtonManager(){
 	lastbutton = NULL;
 	//
 	stdRowWidth  = 310;
-	rowwidth = 0;
-	rowx = 20;
+	//rowwidth = 180;
+	//rowx = 20;
 	toolbarlineheight = 25; //
-	toolbarw = 200; // width of an item in the toolbar
+	toolbarw = 180; // width of an item in the toolbar 200
 	toolbarh = 20;
 	bIsDragging = false;
     bReadKeys = true;

@@ -7,19 +7,12 @@ metadataPanel::metadataPanel()
 metadataPanel::~metadataPanel()
 {
 }
-/*
-void metadataPanel::getData(const ImageFile * img)
-{
-	metadataString = createCommonString(img);
-	color1 = getColor1(img);
-	color2 = getColor2(img);
-}
-*/
+
 void metadataPanel::getData(const VideoFile * vid)
 {
 	metadataString = "\n   File name: " + vid->name + vid->extension + "\n";	
 	metadataString += "   Resolution: " + std::to_string(vid->resX) + " x " + std::to_string(vid->resY) + "\n";
-	metadataString += "   Objective index: " + toString(vid->ranksum) + "\n\n";
+	metadataString += "   Objective index: " + toString(vid->ranksum) +"              User Rating: " + std::to_string(vid->rate) +"\n\n";
 	metadataString += "   Orientation:" + std::to_string(vid->ehGlobal) + "  Color Ratio " + "      Luminance: " + toString(vid->luminance) + "\n";
 	metadataString += "    " + std::to_string(vid->eh1) + "   " + std::to_string(vid->eh2) + "   " + std::to_string(vid->eh3) + "   " +
 		std::to_string(vid->eh4) + "       R: " + toString(vid->redRatio)  + "           Dif. hues: " + toString(vid->dif_hues) + "\n";
@@ -47,7 +40,7 @@ void metadataPanel::getData(const VideoFile * vid)
 	metadataString += "   Aesthethic: " + toString(vid->predict).substr(0, 1) +
 		"                       Similarity: " + toString(vid->similarityIndex) + "\n";
 	metadataString += "   Interestingness: " + toString(vid->interest_1).substr(0, 1)
-		+ " " + "             Ref: " + vid->referenceName + "\n\n";
+		+ " " + "               Ref: " + vid->referenceName + "\n\n";
 
 	color1 = getColor1(vid);
 	color2 = getColor2(vid);

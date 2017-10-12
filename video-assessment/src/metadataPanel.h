@@ -1,6 +1,5 @@
 #pragma once
 #include "ofxFontStash.h"
-//#include "ImageFile.h"
 #include "VideoFile.h"
 
 class metadataPanel
@@ -9,7 +8,6 @@ public:
 	metadataPanel();
 	~metadataPanel();
 
-	//void getData(const ImageFile *img);		//Get data from image and save it to metadaDisplay string
 	void getData(const VideoFile *img);		//Get data from video and save it to metadaDisplay string
 	void setup(int x, int y);
 	void draw(int x, int y);

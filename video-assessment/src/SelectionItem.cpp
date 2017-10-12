@@ -12,7 +12,7 @@
 //--------------------------------------------------------------
 SelectionItem::SelectionItem(string theTitle, int& _state, const int _stateValue):ListItem(theTitle){
 	// do nothing?
-	w = 34 + 4+ title.length()*CHAR_W; //textw
+	w = 15 + 4+ title.length()*CHAR_W; //textw
 	state = &_state;
 	stateValue = _stateValue;
 } 

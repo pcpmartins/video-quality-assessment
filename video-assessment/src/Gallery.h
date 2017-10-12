@@ -83,8 +83,8 @@ private:
 	int scrollBarWidth;
 
 	/*Buttons parameters*/
-	int buttonMargin;
-	int buttonRadius;
+	//int buttonMargin;
+	//int buttonRadius;
 
 	//Text
 	vector <ofTrueTypeFont> names;
