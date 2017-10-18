@@ -66,7 +66,7 @@ We also compute the luminance standard deviation. In terms of the human visual p
 
 * luminance_std - [0.0-1.0]
 
-### Edges
+### Edge orientation
 
 Edges may indicate the boundaries of objects in the scene. Detecting sharp changes in brigthness between each pixel and its surroundings allow us to detect edges.
 
