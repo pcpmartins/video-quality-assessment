@@ -213,7 +213,7 @@ vector<Mat> processing::splitMat(Mat inMat, double divide, bool bgr2gray) {
 }
 
 //Compute Edge Distributions
-int processing::processEdgeHistogram(Mat greyMat) {
+vector<double> processing::processEdgeHistogram(Mat greyMat) {
 
 	vector<double> orientations;
 	orientations.assign(5, 0.0);
@@ -242,6 +242,7 @@ int processing::processEdgeHistogram(Mat greyMat) {
 	Scalar m45Edge = mean(diagr_edges);
 	Scalar m135Edge = mean(diagl_edges);
 	Scalar mNondEdge = mean(nondEdges);
+	//cout << mVEdge << " " << mHEdge << " "<< m45Edge << " " << m135Edge << " " << mNondEdge << endl;
 
 	int response = 0;
 	double temp_max = 0;
@@ -265,7 +266,13 @@ int processing::processEdgeHistogram(Mat greyMat) {
 	if (mNondEdge[0] > temp_max)
 		response = 5;
 
-	return response;
+	vector<double> output;
+	output.assign(2, 0.0);
+	//Scalar output;
+	output[0] = response;
+	output[1] = temp_max / 100;
+	//cout << output[0] << output[1] << endl;
+	return output;
 
 }
 
@@ -322,7 +329,7 @@ float processing::entropy(Mat seq, Size size, int index) {
 	float total_size = size.height * size.width; //total size of all symbols in an image
 
 	for (int i = 0; i < index; i++) {
-		float sym_occur = seq.at<float>(0, i); //the number of times a symbol has occured
+		float sym_occur = seq.at<float>(i, 0); //the number of times a symbol has occured
 		if (sym_occur > 0) //log of zero goes to infinity
 		{
 			cnt++;
@@ -337,7 +344,7 @@ float processing::entropy(Mat seq, Size size, int index) {
 // myEntropy calculates relative occurrence of different symbols within given input sequence using histogram
 Mat processing::myEntropy(Mat seq, int histSize) {
 
-	float range[] = { 0, 256 };
+	float range[] = { 0, 255 };
 	const float *histRange = { range };
 
 	bool uniform = true;

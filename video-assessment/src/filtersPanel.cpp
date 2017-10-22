@@ -457,7 +457,7 @@ void filtersPanel::setup()
 	sortBP->addSelectionItem("Luminance", sortBP_sortType, SORT_6);
 	sortBP->addSelectionItem("Luminance std", sortBP_sortType, SORT_7);
 	sortBP->addSelectionItem("Sharpness", sortBP_sortType, SORT_8);
-	sortBP->addSelectionItem("Diff. hues", sortBP_sortType, SORT_9);
+	sortBP->addSelectionItem("Hue count", sortBP_sortType, SORT_9);
 	sortBP->addSelectionItem("Saliency", sortBP_sortType, SORT_10);
 	sortBP->addSelectionItem("Avg faces", sortBP_sortType, SORT_11);
 	sortBP->addSelectionItem("Faces area", sortBP_sortType, SORT_12);

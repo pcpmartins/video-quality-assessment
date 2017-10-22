@@ -37,7 +37,10 @@ void Gallery::setup()
 
 	if (!isLocked()) {
 		//cleanFolders();
-		extractVideoData();
+		getConfigParams();
+		if (!parseOnly)
+			extractVideoData();
+
 		parseCsvFeatureVector();
 		lock();
 	}
@@ -246,7 +249,7 @@ void Gallery::draw()
 				// Draw a rectangle in the panel
 
 				if (allFiles[i].getIsCurrentFile()) {
-					
+
 					ofSetColor(255, 255, 0);  // Set the drawing color to yellow							
 					ofDrawRectangle(r.x - 3, r.y - 3, thumbnailsWidth + 6, thumbnailsHeight + 16); 	// Draw white rectangle
 					ofSetColor(0);
@@ -403,7 +406,7 @@ void Gallery::mousePressed(int x, int y, int button) {
 	}
 	else
 	{
-		if (checkIfThumbnailClicked(x, y) && (!filtersPanel.isToolbarClicked(x,y)))	//Check if thumbnail clicked. Update choosenFileIndex 
+		if (checkIfThumbnailClicked(x, y) && (!filtersPanel.isToolbarClicked(x, y)))	//Check if thumbnail clicked. Update choosenFileIndex 
 		{
 			cout << allFiles[choosenFileIndex].name << endl;
 
@@ -433,7 +436,7 @@ void Gallery::mousePressed(int x, int y, int button) {
 void Gallery::mouseReleased(int x, int y, int button) {
 	isDraggingGrip = false;
 
-	if (filtersPanel.isFiltersClicked(x, y) || filtersPanel.isFiltersMoreClicked(x, y)|| filtersPanel.isRankingClicked(x, y)
+	if (filtersPanel.isFiltersClicked(x, y) || filtersPanel.isFiltersMoreClicked(x, y) || filtersPanel.isRankingClicked(x, y)
 		|| filtersPanel.isSimilarityClicked(x, y))
 	{
 		high_resolution_clock::time_point t1 = high_resolution_clock::now(); // note time before execution
@@ -609,7 +612,9 @@ bool Gallery::extractVideoData() {
 				<< "," << jsonSample["eh_14"]
 				<< "," << jsonSample["eh_15"]
 				<< "," << jsonSample["eh_16"]
-				<< "," << jsonSample["entropy"];
+				<< "," << jsonSample["entropy"]
+				<< "," << jsonSample["edge_strenght"];
+
 
 			myfile << "\n";
 			myfile.flush();
@@ -621,8 +626,9 @@ bool Gallery::extractVideoData() {
 		//myfile.flush();
 		nv++;
 
-	}
 
+	}
+	myfile.close();
 	return true;
 }
 
@@ -659,12 +665,11 @@ bool Gallery::loadFiles()
 
 				tmpVideo.getMetadataFromCsv(test);
 				tmpVideo.generateXmlFile();
-				tmpVideo.getMetadataFromXml();		
+				tmpVideo.getMetadataFromXml();
 			}
 
 			allFiles[k] = tmpVideo;								//Create file with initialized data
 			allFiles[k].setType(File::fileType::VIDEO);
-
 
 		}
 		//cout << "Feature vector loaded!" << endl;
@@ -767,10 +772,21 @@ vector<string> Gallery::getIndividualSample(string name) {
 		}
 	}
 	else {
-		vector<string> vecStr ;
+		vector<string> vecStr;
 		vecStr.assign(1, "");
 		return vecStr;
 	}
 }
+
+void Gallery::getConfigParams() {
+
+	ofXml* xml = new ofXml(ex.configPath);
+	if (xml->load(ex.configPath)) {
+		parseOnly = xml->getValue<bool>("//PARSE_ONLY");
+		inputFolder = xml->getValue<string>("//INPUT_FOLDER");
+	}
+}
+
+
 
 

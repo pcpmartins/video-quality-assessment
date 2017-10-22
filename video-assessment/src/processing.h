@@ -29,7 +29,7 @@ public:
 
 	vector<Mat> splitMat(Mat allMat, double divide, bool bgr2gray);
 
-	int processEdgeHistogram(Mat greyMat);
+	vector<double> processEdgeHistogram(Mat greyMat);
 
 	int processEHGroup(vector<int> edgeComplete);
 

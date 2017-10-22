@@ -13,34 +13,42 @@ void metadataPanel::getData(const VideoFile * vid)
 	metadataString = "\n   File name: " + vid->name + vid->extension + "\n";	
 	metadataString += "   Resolution: " + std::to_string(vid->resX) + " x " + std::to_string(vid->resY) + "\n";
 	metadataString += "   Objective index: " + toString(vid->ranksum) +"              User Rating: " + std::to_string(vid->rate) +"\n\n";
-	metadataString += "   Orientation:" + std::to_string(vid->ehGlobal) + "  Color Ratio " + "      Luminance: " + toString(vid->luminance) + "\n";
-	metadataString += "    " + std::to_string(vid->eh1) + "   " + std::to_string(vid->eh2) + "   " + std::to_string(vid->eh3) + "   " +
-		std::to_string(vid->eh4) + "       R: " + toString(vid->redRatio)  + "           Dif. hues: " + toString(vid->dif_hues) + "\n";
-	metadataString += "    " + std::to_string(vid->eh5) + "   " + std::to_string(vid->eh6) + "   " + std::to_string(vid->eh7) + "   " +
-		std::to_string(vid->eh8) + "       G: " + toString(vid->greenRatio) + "           Sharpness: " + toString(vid->sharpness) + "\n";
-	metadataString += "    " + std::to_string(vid->eh9) + "   " + std::to_string(vid->eh10) + "   " + std::to_string(vid->eh11) + "   " +
-		std::to_string(vid->eh12) + "       B: " + toString(vid->blueRatio) +"           Entropy: " + std::to_string(vid->entropy) + "\n";
-	metadataString += "    " + std::to_string(vid->eh13) + "   " + std::to_string(vid->eh14) + "   " + std::to_string(vid->eh15) + "   " +
+	metadataString += "       Edge strenght: " + std::to_string(vid->edgeStrenght).substr(0,4) + "                      Color Ratio " + "\n";
+	metadataString += "       Edge orientation: " + std::to_string(vid->ehGlobal) + "                          R: " + toString(vid->redRatio) + "\n";
+	metadataString += "             " + std::to_string(vid->eh1) + "   " + std::to_string(vid->eh2) + "   " + std::to_string(vid->eh3) + "   " +
+		std::to_string(vid->eh4) + "                                 G: " + toString(vid->greenRatio) + "\n";
+	metadataString += "             " + std::to_string(vid->eh5) + "   " + std::to_string(vid->eh6) + "   " + std::to_string(vid->eh7) + "   " +
+		std::to_string(vid->eh8) + "                                 B: " + toString(vid->blueRatio) + "\n";
+	metadataString += "             " + std::to_string(vid->eh9) + "   " + std::to_string(vid->eh10) + "   " + std::to_string(vid->eh11) + "   " +
+		std::to_string(vid->eh12)  + "\n";
+	metadataString += "             " + std::to_string(vid->eh13) + "   " + std::to_string(vid->eh14) + "   " + std::to_string(vid->eh15) + "   " +
 		std::to_string(vid->eh16) +"\n";
-	metadataString += "\n";
-	metadataString += "                                                  Luminance_std: " + toString(vid->luminance_std) + "\n";
-	metadataString += "                                                  Foreground area: " + toString(vid->fgArea) + "\n";
+	metadataString += +"\n";
+	
+	metadataString += "    Luminance: " + toString(vid->luminance) +
+		"                    Luminance_std: " + toString(vid->luminance_std) + "\n";
+
+	metadataString += "    Hue count: " + toString(vid->dif_hues) +
+		"                     Foreground area: " + toString(vid->fgArea) + "\n";
+	metadataString += "    Sharpness: " + toString(vid->sharpness) +
+		"                    Focus diff: " + toString(vid->focus_dif) + "\n";
+	metadataString += "    Entropy: " + std::to_string(vid->entropy).substr(0, 4) +
+		"                         Shadows: " + toString(vid->shadow) + "\n";
+	metadataString += "                                                  Abruptness: " + toString(vid->abruptness) + "\n";
+	                  
 	metadataString += "    Avg faces: " + toString(vid->avgFaces) +
-		"                     Focus diff: " + toString(vid->focus_dif) + "\n";
-	metadataString += "    Faces area: " + toString(vid->faceArea) +
-		"                   Shadows: " + toString(vid->shadow) + "\n";
-	metadataString += "    Rule of thirds: " + toString(vid->rule3) +
-		"                Abruptness: " + toString(vid->abruptness) + "\n";
-	metadataString += "    Smiles: " + toString(vid->smiles) +
-		"                          Static saliency: " + toString(vid->static_saliency) + "\n";
-	metadataString += "                                                  Motion: " + toString(vid->motion) + "\n" +
-		"                                                  Shakiness: " + toString(vid->shake) + "\n\n";
-	metadataString += "\n";
+		"                     Static saliency: " + toString(vid->static_saliency) + "\n";
+	                 
+	metadataString += "    Faces area: " + toString(vid->faceArea) +"                   Motion: " + toString(vid->motion) + "\n" +
+		"    Rule of thirds: " + toString(vid->rule3) + "                Shakiness: " + toString(vid->shake) + "\n";
+	   
+
+	metadataString += "    Smiles: " + toString(vid->smiles) + "\n";
 	metadataString += +"\n";
 	metadataString += "   Aesthethic: " + toString(vid->predict).substr(0, 1) +
-		"                       Similarity: " + toString(vid->similarityIndex) + "\n";
+		"                          Similarity: " + toString(vid->similarityIndex) + "\n";
 	metadataString += "   Interestingness: " + toString(vid->interest_1).substr(0, 1)
-		+ " " + "               Ref: " + vid->referenceName + "\n\n";
+		+ " " + "                  Ref: " + vid->referenceName + "\n\n";
 
 	color1 = getColor1(vid);
 	color2 = getColor2(vid);
@@ -92,8 +100,13 @@ void metadataPanel::draw(int x, int y)
 
 	//middle
 	ofPoint p3(x + 4, y + 48);
-	middle.set(p3, 152, 75);
+	middle.set(p3, 152, 85);
 	ofRect(middle);
+
+	//middle right
+	ofPoint p4(x + 4 +152 +4, y + 48);
+	middleRight.set(p4, 154, 85);
+	ofRect(middleRight);
 
 	ofPoint p2(x + 4, y + 264);
 	advanced.set(p2, 310, 30);

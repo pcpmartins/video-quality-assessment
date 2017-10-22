@@ -57,6 +57,7 @@ public:
 	vector<vector<int> > edgeHistogramVec;
 	vector<vector<int> > edgeDistributionVec;
 	vector<int> EH_edges_distribution;
+	double edgeStrenght;
 
 	String static_saliency_algorithm;
 	Ptr<BackgroundSubtractor> bg_model;
@@ -74,17 +75,15 @@ public:
 	bool opticalFlow = true;
 	float totalFlowX;
 	float totalFlowY;
-	//float totalFlowXBorder;
-	// float totalFlowYBorder;
+
 	double flowxVec, flowyVec, flowxAvgVec, flowyAvgVec, magFlowVec, shackinessVec; //total and average flow;
 	double shackiness;
 
 	float accumStaticSaliency;
 	double staticSaliencyVec;
+	string configPath = "extractor_config.xml";               //Path to configuration file
 
 private:
-	string configPath = "extractor_config.xml";               //Path to configuration file
 	void getConfigParams();
-
 
 };

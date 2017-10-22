@@ -115,7 +115,7 @@ void extractor::initVectors(unsigned long nFiles) {
 		else if (method == 2)
 			bg_model = createBackgroundSubtractorMOG2(200, 16.0, true).dynamicCast<BackgroundSubtractor>();
 	}
-	getConfigParams();
+
 
 }
 
@@ -186,6 +186,8 @@ void extract(int frameCount) {
 
 void extractor::extractFromVideo(string filePath, int nv) {
 
+	getConfigParams();
+
 	string path = "../" + filePath;
 
 	static_saliency_algorithm = "SPECTRAL_RESIDUAL";
@@ -204,15 +206,15 @@ void extractor::extractFromVideo(string filePath, int nv) {
 
 	initVectors(1);
 
+	edgeStrenght = 0.0;
 	totalHues = 0;
 	totalFaces = 0;
+	totalFaceArea = 0;
 	totalEyes = 0;
+	totalRof3 = 0;
 	accumStaticSaliency = 0.0;
 	totalFlowX = 0.0;
 	totalFlowY = 0.0;
-	//to be removed
-	//totalFlowXBorder = 0.0;
-	// totalFlowYBorder = 0.0;
 
 	//bg subtraction parameters
 	smoothMask = true;
@@ -239,13 +241,10 @@ void extractor::extractFromVideo(string filePath, int nv) {
 	widthVec = int(cap.get(CV_CAP_PROP_FRAME_WIDTH));
 	heightVec = int(cap.get(CV_CAP_PROP_FRAME_HEIGHT));
 
-	if (samplingFactor == 1) {
-		bgSub = true;
-		opticalFlow = true;
-	}
-	else {
+	if (samplingFactor > 1) {
 		bgSub = false;
 		opticalFlow = false;
+
 	}
 
 	cout << " [" << nv << "] " << fpsVec << "fps " << widthVec << "x" << heightVec << " " << "length:" << length << " " << "SF:"
@@ -275,7 +274,8 @@ void extractor::extractFromVideo(string filePath, int nv) {
 				frameCount++;
 			}
 
-			if (frame.data == nullptr) break;  //if frame doesnt contain data exit loop
+			if (frame.data == nullptr) break;  //if frame doesnt contain data exit loop						
+
 
 			cout << "\r [P] processed frames: " << frameCount;
 			Mat frameTemp;
@@ -416,8 +416,6 @@ void extractor::extractFromVideo(string filePath, int nv) {
 				totalFlowY += frameFlow.y;
 				v2.x = (int)frameFlow.x;
 				v2.y = (int)frameFlow.y;
-				//v2.x = frameFlowBorder.x;
-				//v2.y = frameFlowBorder.y;
 
 				float angle = u.innerAngle(v1.x, v1.y, v2.x, v2.y, w / 2, h / 2); //compute angle between two vectors
 				auto frameMagnitude = (float)((sqrt(pow(totalFlowX, 2) + pow(totalFlowY, 2))) / 70000);
@@ -443,16 +441,19 @@ void extractor::extractFromVideo(string filePath, int nv) {
 
 			processColors(frame);
 
+			/*Need to fix entropy processing, MSC compiler vs GCC !*/
 			//entropy
-			Mat src, hist;
-			cvtColor(frame, src, CV_BGR2GRAY);
+			//Mat src, hist;
+			//cvtColor(frame, src, CV_BGR2GRAY);
 			// Establish the number of bins
-			int histSize = 256;
-			hist = p.myEntropy(src, histSize);
-			float entropy = p.entropy(hist, src.size(), histSize);
-			frame_entropy_distribution.push_back(entropy);
+			//int histSize = 256;
+			//hist = p.myEntropy(src, histSize);
+			//cout << "hist " << hist << endl;
+			//float entropy = p.entropy(hist, src.size(), histSize);
+			//frame_entropy_distribution.push_back(entropy);
+			frame_entropy_distribution.push_back(0);
 
-			if ((samplingFactor > 1 && edgeHist) || (samplingFactor == 1 && frameCount % 15 == 0 && edgeHist)) {
+			if (edgeHist) {
 				vector<Mat> cutImage = p.splitMat(frame, 0.25, true); //0.25(=1/4) <=> split in 16 squares(4x4)
 
 				 //for each piece compute edge histogram coefficients
@@ -460,12 +461,17 @@ void extractor::extractFromVideo(string filePath, int nv) {
 				edgeComplete.assign(17, 0);
 
 				for (int i = 0; i < 16; i++) {
-					int edgeHistogramExtracted = p.processEdgeHistogram(cutImage[i]);
+					vector<double> edgeData = p.processEdgeHistogram(cutImage[i]);
+
+					int edgeHistogramExtracted = edgeData[0];
 					edgeComplete[i] = edgeHistogramExtracted;
 					edgeDistributionVec[i].push_back(edgeComplete[i]);
+					edgeStrenght += edgeData[1];
 				}
 
-				EH_edges_distribution.push_back(p.processEHGroup(edgeComplete));
+				int edgeOrientation = p.processEHGroup(edgeComplete);
+				EH_edges_distribution.push_back(edgeOrientation);
+
 			}
 			vector<double> faceData = p.processHaarCascade(frame, face_cascade, aditional_cascade, insideFace,
 				ruleImage);
@@ -477,11 +483,15 @@ void extractor::extractFromVideo(string filePath, int nv) {
 			totalEyes += faceData[3];
 		}
 
+		double divider = frameCount / samplingFactor;
+
 		for (int i = 0; i < 16; i++) {
 			edgeHistogramVec[0][i] = p.processEHGroup(edgeDistributionVec[i]);
 		}
+
 		edgeHistogramVec[0][16] = p.processEHGroup(EH_edges_distribution);
-		double divider = frameCount / samplingFactor;
+		edgeStrenght = (((double)edgeStrenght) / divider / 4);
+
 		double medianFocus = totalFocus / divider;
 
 		if (medianFocus > 8000)
@@ -559,11 +569,6 @@ void extractor::extractFromVideo(string filePath, int nv) {
 		blue_distribution.clear();
 		green_distribution.clear();
 		red_distribution.clear();
-		totalHues = 0;
-		totalFaces = 0;
-		totalFaceArea = 0;
-		totalRof3 = 0;
-		accumStaticSaliency = 0.0;
 		EH_edges_distribution.clear();
 		frame_entropy_distribution.clear();
 
@@ -624,7 +629,8 @@ void extractor::extractFromVideo(string filePath, int nv) {
 			{ "fps",   fpsVec },
 			{ "width",   widthVec },
 			{ "height",   heightVec },
-			{ "rank_sum",   rank_sum }
+			{ "rank_sum",   rank_sum },
+			{ "edge_strenght",   edgeStrenght }
 
 		};
 
@@ -642,16 +648,16 @@ json extractor::getJsonExtra() {
 	return jMLExtracted2;
 }
 
-void extractor::getConfigParams(){
+void extractor::getConfigParams() {
 
-	
 	ofXml* xml = new ofXml(configPath);
 	if (xml->load(configPath)) {
 		samplingFactor = xml->getValue<int>("//SAMPLING_FACTOR");
 		edgeHist = xml->getValue<bool>("//EDGE_HIST");
 		quietMode = xml->getValue<bool>("//QUIET");
-		resizeMode = xml->getValue<int>("//RESIZE");             //resize video input
-	
+		resizeMode = xml->getValue<int>("//RESIZE");
+		bgSub = xml->getValue<bool>("//BGSUB");
+		opticalFlow = xml->getValue<bool>("//FLOW");
 	}
 
 }

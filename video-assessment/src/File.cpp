@@ -45,6 +45,7 @@ bool File::generateXmlFile()
 	xml.addValue("RULE_OF_THIRDS", rule3);
 	xml.addValue("STATIC_SALIENCY", static_saliency);
 	xml.addValue("ENTROPY", entropy);
+	xml.addValue("EHSTRENGHT", edgeStrenght);
 
 	xml.addChild("COLOUR");								//Colours values
 	xml.setTo("COLOUR");
@@ -79,6 +80,7 @@ bool File::generateXmlFile()
 	xml.addValue("EH16", eh16);
 	xml.addValue("EHGLOBAL", ehGlobal);
 	xml.setTo("//FILE");
+	
 
 	if (xml.save(xmlPath))
 	{
@@ -105,6 +107,7 @@ bool File::getMetadataFromXml()
 		dif_hues = xml->getValue<double>("//DIF_HUES");
 		static_saliency = xml->getValue<double>("//STATIC_SALIENCY");
 		entropy = xml->getValue<double>("//ENTROPY");
+		edgeStrenght = xml->getValue<double>("//EHSTRENGHT");
 
 		redMoments.first = xml->getValue<double>("//RED1");
 		greenMoments.first = xml->getValue<double>("//GREEN1");
@@ -163,6 +166,7 @@ bool File::getMetadataFromCsv(vector <string> csvSingleData)
 		dif_hues = std::stod(csvSingleData[21]);
 		static_saliency = std::stod(csvSingleData[26]);
 		entropy = std::stod(csvSingleData[58]);
+		edgeStrenght = std::stod(csvSingleData[59]);
 
 		redMoments.first = std::stod(csvSingleData[4]);
 		greenMoments.first = std::stod(csvSingleData[7]);

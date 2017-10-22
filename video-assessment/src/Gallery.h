@@ -39,6 +39,7 @@ public:
 	void lock();
 	void unLock();
 	bool extractVideoData();
+	bool parseOnly = false;
 
 	extractor ex; //instantiate feature extractor class
 	mlclass mlc; //instantiate SVM classifier
@@ -50,6 +51,7 @@ private:
 	string inputFolder = "data/files/";               //video input files
 	string xmlFolderPath = "/xml/";                   //Path to folder with metadata
 
+	void getConfigParams();
 	bool loadFiles();								//Load data to allFiles vector 	
 	bool checkIfThumbnailClicked(int x, int y);		//Saves index to choosenFileIndex. Sets thumbnailClicked flag
 	bool toolBarClicked(int x, int y);				//Check if "click" was over toolbar

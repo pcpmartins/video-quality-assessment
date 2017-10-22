@@ -26,6 +26,7 @@ private:
 	ofRectangle bboxMultiline;	//Frame
 	ofRectangle title;	//Frame
 	ofRectangle middle;	//Frame
+	ofRectangle middleRight;	//Frame
 	ofRectangle advanced;	//Frame
 	string toString(double x);	//Return string with 2 digits precision
 	ofColor getColor1(const File *f);

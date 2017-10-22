@@ -42,25 +42,16 @@ public:
 	double luminance;
 	unsigned short rate;					//Rate of file (0..5);
 	double sharpness;
-	//double abruptness;
 	double rule3;
 	double avgFaces;
 	double faceArea;
 	double smiles;
-	//double fgArea;
-
-	//novos
-	//double luminance_std;
 	double dif_hues;
 	double static_saliency;
-	//double ranksum;
-	//double shadow;
-	//unsigned short predict;
-	//int interest_1;
-
 	double similarityIndex;
 	string referenceName;
 	int eh1, eh2, eh3, eh4, eh5, eh6, eh7, eh8, eh9, eh10, eh11, eh12, eh13, eh14, eh15, eh16, ehGlobal;
+	double edgeStrenght;
 	double entropy;
 
 protected:

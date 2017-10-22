@@ -10,7 +10,7 @@ Our aproach combines in a graphical user interface, a balanced set of tools for 
 
 We populated this release with the UGC videos from the [CERTH-ITI-VAQ700](http://mklab.iti.gr/project/certh-iti-vaq700-dataset), a dataset composed by 700 YouTube videos licensed under Creative Commons Attribution. The duration of each of these videos ranges from 1 to 6 minutes. Because of the large size of the dataset(25.3GB) we only used 1 second of each video. To have the full dataset available, one can download it from the dataset homepage to the bin/data/files folder.
 
-Detailed instructions on how to use the GUI and on how to load a new video repository are available in the included file [instructions.pdf](instructions.pdf)
+Detailed instructions on how to use the GUI and on how to load a new video repository are available in the [instructions file](instructions.md)
 
 ## Development setup
 
@@ -82,11 +82,17 @@ We implented a simplified version of the method presented in ["Efficient Use of 
 
 The global edge histogram feature is computed using the full image.
 
+### Edge strenght
+
+The amount of edges detected.
+
+* Edge_strenght [0, 1]
+
 #### Color diversity
 
 Color diversity is a property related to visual aesthetics. We count different groups of hues. On the hue histogram (computed from the H channel of HSV) we count any variation of hue bigger than a certain threshold.
 
-* dif_hues - [0-360]
+* dif_hues - [0.0-1.0]
 
 
 ### Object detection

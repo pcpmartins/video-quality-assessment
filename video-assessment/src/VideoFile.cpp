@@ -66,6 +66,7 @@ string VideoFile::generateThumbnail()
 	video.setPosition(0.15);
 	video.update();
 
+
 	if (video.isLoaded())
 		thumbnail.setFromPixels(video.getPixelsRef());
 	else {
@@ -87,6 +88,7 @@ string VideoFile::generateThumbnail()
 
 	string path = thumbnailFolderPath + "\\" + name + ".jpg";
 	video.stop();
+
 	if (!dir.exists())	//If directory with thubmnails doesn't exist
 	{
 		cout << "Create directory for videos thumbnails" << endl;
@@ -102,6 +104,9 @@ string VideoFile::generateThumbnail()
 	}
 
 	thumbnail.saveImage(path);								//Save it to directories with thumbnails
+	temp.clear();
+	thumbnail.clear();
+	video.closeMovie();
 	return path;
 }
 
