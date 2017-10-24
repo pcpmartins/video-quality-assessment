@@ -44,6 +44,7 @@ public:
 	extractor ex; //instantiate feature extractor class
 	mlclass mlc; //instantiate SVM classifier
 	vector<String> fileNames;
+	int totalFiles = 100;
 
 private:
 	/////////////////////////////////Methods////////////////////////////////

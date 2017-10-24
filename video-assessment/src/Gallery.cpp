@@ -38,11 +38,13 @@ void Gallery::setup()
 	if (!isLocked()) {
 		//cleanFolders();
 		getConfigParams();
-		if (!parseOnly)
-			extractVideoData();
 
-		parseCsvFeatureVector();
+		if (!parseOnly) {
+			extractVideoData();		
+		}
 		lock();
+		parseCsvFeatureVector();
+		
 	}
 
 
@@ -442,7 +444,7 @@ void Gallery::mouseReleased(int x, int y, int button) {
 		high_resolution_clock::time_point t1 = high_resolution_clock::now(); // note time before execution
 		filtersPanel.filter(&allFiles[0], allFiles.size(), choosenFileIndex);
 		high_resolution_clock::time_point t2 = high_resolution_clock::now(); // note time after execution
-		std::cout << "operation time: "
+		std::cout << "operation duration: "
 			<< std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count()
 			<< " ms\n";
 	}
@@ -735,7 +737,7 @@ bool Gallery::parseCsvFeatureVector() {
 		int l = 0;
 		int w = 0;
 
-		csvData.assign(700, vector<string>(100, ""));
+		csvData.assign(1000, vector<string>(100, ""));
 
 		while (getline(myReadFile, line)) {
 
@@ -784,6 +786,7 @@ void Gallery::getConfigParams() {
 	if (xml->load(ex.configPath)) {
 		parseOnly = xml->getValue<bool>("//PARSE_ONLY");
 		inputFolder = xml->getValue<string>("//INPUT_FOLDER");
+		totalFiles = xml->getValue<int>("//TOTAL_FILES");
 	}
 }
 

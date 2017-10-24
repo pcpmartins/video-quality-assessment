@@ -116,7 +116,6 @@ void extractor::initVectors(unsigned long nFiles) {
 			bg_model = createBackgroundSubtractorMOG2(200, 16.0, true).dynamicCast<BackgroundSubtractor>();
 	}
 
-
 }
 
 double extractor::processStaticSaliency(Ptr<Saliency> staticSaliencyAlgorithm, Mat image) {

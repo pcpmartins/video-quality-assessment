@@ -1,15 +1,8 @@
 # Graphical Interface Instructions
 
-In this project github repository there is a Visual Studio Project made using the following setup:
+In this project github repository there is a Visual Studio Project. One can either compile it from source or just copy and paste the binaries from the bin folder to any place on a windows x64 machine and then, run the executable video-assessment.exe The fastest way to solve missing video codecs error is to install K-lite codec pack 12.3.0.
 
-* Windows
-* Visual Studio community edition 2015
-* openFrameworks 0.9.3
-* OpenCV 3.2.0 cimpiled with contrib modules.
-
-One can either compile it from source or just copy and paste the binaries from the bin folder to any place on a windows x64 machine and then, run the executable video-assessment.exe The fastest way to solve missing video codecs error is to install K-lite codec pack 12.3.0.
-
-When starting the application, as we can see in image 1, the gui present us with the thumbnails of all the videos in the repository. In this case is the demonstration repository made with one second of each of the 700 videos of the CERTH-ITI-VAQ700 dataset.
+When starting the application, as we can see in image 1, the gui present us with the thumbnails of all the videos in the repository. In this case is the starting demonstration repository made with one second of each of the 700 videos of the CERTH-ITI-VAQ700 aesthetics dataset.
 
 ![image 1](/images/1.png)
 
@@ -27,7 +20,7 @@ The fastest way to solve missing video codecs error is to install [K-lite codec 
 
 When one of the thumbnails is clicked, as we can see in image 2, the gui marks the selected video with a green border and present us in its rigth side with a metadata panel and below it a preview panel with the selected video. Pressing the spacebar toggles between preview play and stop.
 
-![image 2](images/2.png)
+![image 2](images/2.jpg)
 
 #### Menus
 
@@ -41,7 +34,7 @@ There are 4 available menu tabs:
 
 ## Adding a new video repository
 
-The extractor module accepts 3 types of video file extensions:
+The extractor class accepts 3 types of video file extensions:
 
 * MP4
 * MTS
@@ -84,6 +77,7 @@ the content of this file where we can see the default values:
 	<FLOW>1</FLOW>
 	<PARSE_ONLY>0</PARSE_ONLY>
 	<INPUT_FOLDER>data/files/</INPUT_FOLDER>
+	<TOTAL_FILES>1000</TOTAL_FILES>
 </CONFIG>
 ```
 
@@ -108,6 +102,17 @@ Turning off quiet mode will increase console feed-back from extraction process.
 * 2 - 480 x 360
 * 3 - 640 x 480
 
-## Errors
+## Error handling
 
-The error handling and exception mechanism is not enough implemented, if the application hangs at the extraction phase, theres a great probability of existance of ome or more corrupted video files, you can inspect the output/output.csv file to try to understand wich is the damaged file and delete/recode it.
+The error handling and exception mechanism is not enough implemented, if the application hangs at the extraction phase, theres a great probability of existance of corrupted video files, you can inspect the output/output.csv file to try to understand wich is the damaged file and delete/recode it. If some error occurs during very long extraction operations it is possible to reuse the already extracted data.
+
+1 - backup the output.csv file
+2 - delete/move the already computed videos
+3 - restart the extraction process
+4 - in the end concatenate all output.csv files
+5 - put correct video file set in data/files folder
+6 - change PARSE_ONLY to 1 (bypass extraction)
+7 - xml folder should be empty
+8 - restart the application
+9 - after creation of thumbnails and XML files the GUI will start
+10 - At this point switch PARSE_ONLY to 0. (back to default value)

@@ -220,7 +220,6 @@ vector<double> processing::processEdgeHistogram(Mat greyMat) {
 
 	GaussianBlur(greyMat, greyMat, Size(3, 3), 0, 0, BORDER_DEFAULT);
 
-
 	//5 kernels
 	Mat vert_edge_filter = (cv::Mat1f(2, 2) << 1, -1, 1, -1);
 	Mat hor_edge_filter = (cv::Mat1f(2, 2) << 1, 1, -1, -1);
@@ -268,7 +267,6 @@ vector<double> processing::processEdgeHistogram(Mat greyMat) {
 
 	vector<double> output;
 	output.assign(2, 0.0);
-	//Scalar output;
 	output[0] = response;
 	output[1] = temp_max / 100;
 	//cout << output[0] << output[1] << endl;

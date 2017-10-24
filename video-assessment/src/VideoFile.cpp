@@ -1,4 +1,6 @@
 #include "VideoFile.h"
+#include <chrono>
+
 
 VideoFile::VideoFile()
 {
@@ -57,6 +59,7 @@ bool VideoFile::loadThumbnail()
 
 string VideoFile::generateThumbnail()
 {
+	auto start = chrono::high_resolution_clock::now();
 	ofImage thumbnail;
 	ofImage temp;
 
@@ -64,7 +67,7 @@ string VideoFile::generateThumbnail()
 
 	video.play();
 	video.setPosition(0.15);
-	video.update();
+	//video.update();
 
 
 	if (video.isLoaded())
@@ -74,6 +77,7 @@ string VideoFile::generateThumbnail()
 		ofLoadImage(p, "black.jpg");
 		thumbnail.setFromPixels(p);
 	}
+	video.stop();
 	double tempHeigth;
 	if (video.getWidth() > video.getHeight()) {
 		tempHeigth = (thumbnailWidth / video.getWidth())*video.getHeight();
@@ -84,10 +88,10 @@ string VideoFile::generateThumbnail()
 
 	thumbnail.resize(thumbnailWidth, tempHeigth);
 
-	cout << "thumbnail created for " << name + extension << endl;
+	cout << "thumbnail created for " << name + extension ;
 
 	string path = thumbnailFolderPath + "\\" + name + ".jpg";
-	video.stop();
+	
 
 	if (!dir.exists())	//If directory with thubmnails doesn't exist
 	{
@@ -106,7 +110,11 @@ string VideoFile::generateThumbnail()
 	thumbnail.saveImage(path);								//Save it to directories with thumbnails
 	temp.clear();
 	thumbnail.clear();
+	video.close();
 	video.closeMovie();
+	auto end = chrono::high_resolution_clock::now();
+	cout << " in: " << std::chrono::duration_cast<chrono::milliseconds>(end - start).count() << " ms" << endl;
+
 	return path;
 }
 
