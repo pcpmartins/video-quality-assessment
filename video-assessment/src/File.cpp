@@ -11,12 +11,12 @@ File::~File()
 {
 }
 
-string File::generateThumbnail()
+/*string File::generateThumbnail()
 {
 	cout << "generateThumbnail()" << endl;
 	return NULL;
 }
-
+*/
 bool File::generateXmlFile()
 {
 	ofXml xml;

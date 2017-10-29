@@ -34,7 +34,7 @@ public:
 	//void open();					//Call when double-clicked. OPen full screen?
 	//virtual void load(string path) override;
 	//virtual void draw() override;
-	string generateThumbnail() override;
+	//string generateThumbnail() override;
 	bool generateXmlFile() override;
 	bool getMetadataFromXml()  override;
 	bool getMetadataFromCsv(vector<string> csvData) override; // csv parse

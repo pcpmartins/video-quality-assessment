@@ -27,7 +27,7 @@ public:
 
 	void draw(int x, int y);					//Call when clicked. Show metadata 
 	void draw(ofRectangle space);
-	string generateThumbnail() override;
+	//string generateThumbnail() override;
 	bool generateXmlFile() override;
 	bool getMetadataFromXml()  override;
 	//void generateMetadata();					//Generate metadata

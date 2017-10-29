@@ -36,7 +36,7 @@ ImageFile::ImageFile(string name, string path)
 			
 	if (!ofFile::doesFileExist(thumbnailPath)) {	//If there is no thumbnail
 		if (image.load(path)) {						//Load image to class
-			generateThumbnail();					//Generate thumbnail for file and returns path to it
+			//generateThumbnail();					//Generate thumbnail for file and returns path to it
 		}	
 	}
 	loadThumbnail();			//Load thumbnail
@@ -68,7 +68,7 @@ void ImageFile::draw(ofRectangle space)
 {
 	image.draw(space);
 }
-
+/*
 string ImageFile::generateThumbnail()
 {
 	ofImage thumbnail = ofImage (image);					//Copy of image
@@ -90,18 +90,12 @@ string ImageFile::generateThumbnail()
 			::ofExit();
 		}
 	}
-	/*if (thumbnailIcon.load(thumbnailIconPath)) {
-		addIconToThumbnail(thumbnail, thumbnailIcon);
-	}
-	else {
-		cout << "[ImageFile.cpp] thumbnail icon load error" << endl;
-	}
-	*/
+
 	
 	thumbnail.saveImage(path);								//Save it to directories with thumbnails
 	return path;
 }
-
+*/
 bool ImageFile::generateXmlFile()
 {
 	File::generateXmlFile();

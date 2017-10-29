@@ -64,7 +64,7 @@ private:
 
 //////////////////////////////Methods////////////////////////////////////
 public:
-	virtual string generateThumbnail();			//Generates thumbnails.	
+	//virtual string generateThumbnail();			//Generates thumbnails.	
 	virtual bool generateXmlFile();				//Create xml file
 	virtual bool getMetadataFromXml();			//Get data from xml
 	virtual bool getMetadataFromCsv(vector<string> csvData); // csv parse

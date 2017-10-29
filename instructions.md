@@ -42,11 +42,11 @@ The extractor class accepts 3 types of video file extensions:
 
 To add a new repository of videos:
 
-1 - Delete all files in “data/xml” folder
-2 - Delete all files in “data/thumbnails/videos” folder (optional step)
-3 - Delete all files in “data/files” folder
-4 - Put new video files in “data/files” folder
-5 - Start application
+* Delete all files in “data/xml” folder
+* Delete all files in “data/thumbnails/videos” folder (optional step)
+* Delete all files in “data/files” folder
+* Put new video files in “data/files” folder
+* Start application
 
 Example:
 
@@ -71,6 +71,7 @@ the content of this file where we can see the default values:
 <CONFIG>
 	<SAMPLING_FACTOR>1</SAMPLING_FACTOR>
 	<EDGE_HIST>1</EDGE_HIST>
+	<ENTRO>0</ENTRO>
 	<QUIET>1</QUIET>
 	<RESIZE>1</RESIZE>
 	<BGSUB>1</BGSUB>
@@ -80,10 +81,9 @@ the content of this file where we can see the default values:
 	<TOTAL_FILES>1000</TOTAL_FILES>
 </CONFIG>
 ```
+These are experimental configurable values, it is not advisable to change them.
 
-The possible values for each configurable variable are:
-
-#### SAMPLING_FACTOR = [1 - INF] 
+#### SAMPLING_FACTOR = [positive integer] 
 Increasing the sampling factor will skip frames during the extraction process, making it much
 faster to compute. Extracting our features using a factor of 10 means that the time of the
 extraction process will be 1/10 of using a factor of 1.There is a drawback, background
@@ -92,27 +92,47 @@ subtraction and optical flow features will not be extracted.
 #### EDGE_HIST = [0, 1] 
 Turning off edge histogram will decrease sligthly computation time.
 
+#### ENTRO = [0, 1] 
+Entropy computation switch for debug.
+
 #### QUIET = [0, 1] 
 Turning off quiet mode will increase console feed-back from extraction process.
 
 #### RESIZE = [1, 2, 3]
  The extraction process is done on a resized version of the video frames, available options are:
 
+* 0 - no resizing
 * 1 - 320 x 240
 * 2 - 480 x 360
 * 3 - 640 x 480
 
+#### BGSUB = [0, 1] 
+Computation of background subtraction features.
+
+#### FLOW = [0, 1] 
+Computation of optical flow features
+
+#### PARSE_ONLY = [0, 1] 
+Allows to bypass extraction process and start from feature vector parse phase.
+
+#### INPUT_FOLDER = [string] 
+The path to folder with input videos.
+
+#### TOTAL_FILES = [positive integer] 
+The total capacity.
+
+
 ## Error handling
 
-The error handling and exception mechanism is not enough implemented, if the application hangs at the extraction phase, theres a great probability of existance of corrupted video files, you can inspect the output/output.csv file to try to understand wich is the damaged file and delete/recode it. If some error occurs during very long extraction operations it is possible to reuse the already extracted data.
+The error handling and exception mechanism is not enough implemented, if the application hangs at the extraction phase, theres a great probability of existance of corrupted video files, you can inspect the output/output.csv file to try to understand wich is the damaged file and delete/recode it. When errors occur during very long extraction operations it is possible to reuse the already extracted data.
 
-1 - backup the output.csv file
-2 - delete/move the already computed videos
-3 - restart the extraction process
-4 - in the end concatenate all output.csv files
-5 - put correct video file set in data/files folder
-6 - change PARSE_ONLY to 1 (bypass extraction)
-7 - xml folder should be empty
-8 - restart the application
-9 - after creation of thumbnails and XML files the GUI will start
-10 - At this point switch PARSE_ONLY to 0. (back to default value)
+* backup the output.csv file
+* delete/move the already computed videos
+* restart the extraction process
+* in the end concatenate all output.csv files
+* put correct video file set in data/files folder (they should correspond to the thumbnails)
+* change PARSE_ONLY to 1 (to bypass extraction process)
+* xml folder should be empty
+* restart the application
+* after creation of XML files the GUI will start
+* At this point switch PARSE_ONLY to 0. (back to default value)

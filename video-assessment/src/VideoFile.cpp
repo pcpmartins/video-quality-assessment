@@ -34,12 +34,13 @@ VideoFile::VideoFile(string name, string path)
 	setThumbnailPath();
 	setXmlPath();
 
-
+	/*
 	if (!ofFile::doesFileExist(thumbnailPath)) {			//If there is no thumbnail
 		if (video.load(path)) {								//Load video to class			
 			generateThumbnail();		//Generate thumbnail for file and returns path to it	
 		}
 	}
+	*/
 	loadThumbnail();				//Load thumbnail	
 }
 
@@ -56,7 +57,7 @@ bool VideoFile::loadThumbnail()
 	}
 	return true;
 }
-
+/*
 string VideoFile::generateThumbnail()
 {
 	auto start = chrono::high_resolution_clock::now();
@@ -103,7 +104,7 @@ string VideoFile::generateThumbnail()
 		else
 		{
 			cout << "Cannot create directory for videos thumbnails" << endl;
-			::ofExit();
+			ofExit();
 		}
 	}
 
@@ -117,7 +118,7 @@ string VideoFile::generateThumbnail()
 
 	return path;
 }
-
+*/
 bool VideoFile::generateXmlFile()
 {
 	File::generateXmlFile();

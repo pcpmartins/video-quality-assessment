@@ -625,7 +625,6 @@ bool Gallery::extractVideoData() {
 		auto end = chrono::high_resolution_clock::now();
 		cout << " [!] File " << finalName << " processed in : " <<
 			duration_cast<chrono::milliseconds>(end - start).count() << " ms\n" << endl;
-		//myfile.flush();
 		nv++;
 
 
@@ -786,7 +785,7 @@ void Gallery::getConfigParams() {
 	if (xml->load(ex.configPath)) {
 		parseOnly = xml->getValue<bool>("//PARSE_ONLY");
 		inputFolder = xml->getValue<string>("//INPUT_FOLDER");
-		totalFiles = xml->getValue<int>("//TOTAL_FILES");
+		totalFiles = xml->getValue<int>("//TOTAL_FILES");		
 	}
 }
 

@@ -49,6 +49,7 @@ public:
 	CascadeClassifier face_cascade;
 	CascadeClassifier aditional_cascade;
 	bool insideFace = true;
+	bool entro = false;
 
 	int widthVec;
 	int heightVec;
@@ -82,6 +83,9 @@ public:
 	float accumStaticSaliency;
 	double staticSaliencyVec;
 	string configPath = "extractor_config.xml";               //Path to configuration file
+	static string thumbnailFolderPath;				//Path to thumbnails
+	int thumbnailHeight = 100;
+	int thumbnailWidth = 120;
 
 private:
 	void getConfigParams();

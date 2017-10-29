@@ -3,6 +3,7 @@
 //
 
 #include "extractor.h"
+#include <chrono>
 
 using json = nlohmann::json;
 using namespace cv;
@@ -187,8 +188,6 @@ void extractor::extractFromVideo(string filePath, int nv) {
 
 	getConfigParams();
 
-	string path = "../" + filePath;
-
 	static_saliency_algorithm = "SPECTRAL_RESIDUAL";
 	//instantiates the specific static Saliency
 	Ptr<Saliency> staticSaliencyAlgorithm = Saliency::create(static_saliency_algorithm);
@@ -232,9 +231,9 @@ void extractor::extractFromVideo(string filePath, int nv) {
 		const char *err_msg = e.what();
 		std::cout << "exception!: " << err_msg << std::endl;
 	}
-	if (!cap.isOpened()) {
-		cout << "Error opening video file" << endl;
-	}
+	//if (!cap.isOpened()) {
+	//	cout << "Error opening video file" << endl;
+	//}
 	int length = int(cap.get(CV_CAP_PROP_FRAME_COUNT));
 	fpsVec = cap.get(CV_CAP_PROP_FPS);
 	widthVec = int(cap.get(CV_CAP_PROP_FRAME_WIDTH));
@@ -254,6 +253,7 @@ void extractor::extractFromVideo(string filePath, int nv) {
 		float totalFocus = 0.0;
 		int frameCount = 0;
 		bool once = false;
+		bool onceTwice = false;
 		shackiness = 0.0;
 		int shakes = 0;
 
@@ -302,10 +302,34 @@ void extractor::extractFromVideo(string filePath, int nv) {
 				//we need to resize the rule of thirds template to exactly the same size of the video frame
 				ruleImage = u.resizeRuleImg(ruleImage, frame);
 				once = true;
-				v1 = Point2f(0.0, 0.0);
+				v1 = Point2f(0.0, 0.0);				
+				
+			}
+
+			if (!onceTwice && frameCount >= length/5 ){
+						
+				double tempHeigth;
+				if (frame.rows > frame.cols) {
+					tempHeigth = (thumbnailWidth / frame.rows*frame.cols);
+				}
+				else { tempHeigth = thumbnailHeight; }
+				
+				Mat thumbnailImage;
+				resize(frame, thumbnailImage, Size(thumbnailWidth, tempHeigth), 0, 0, INTER_NEAREST);				
+				size_t lastindex1 = filePath.find_last_of("\\");			
+				string name = filePath.substr(lastindex1);
+				size_t lastindex2 = name.find_last_of(".");
+				name = name.substr(0, lastindex2);
+				string path = thumbnailFolderPath + name + ".jpg";			
+				imwrite(path, thumbnailImage);
+				//cout << " thumbnail " << name + ".jpg" << " created" << endl;
+				onceTwice = true;
 			}
 
 			if (bgSub) {
+
+				//auto start = chrono::high_resolution_clock::now();
+
 				if (fgimg.empty())
 					fgimg.create(frame.size(), frame.type());
 				if (backimg.empty())
@@ -368,11 +392,16 @@ void extractor::extractFromVideo(string filePath, int nv) {
 				if (isnan(focusDiff))focusDiff = 0;
 				if (focusDiff > 30) focusDiff = 30;
 				percentFocus += focusDiff;
+
+			//	auto end = chrono::high_resolution_clock::now();
+			//	cout << "bgsub processed in: " << std::chrono::duration_cast<chrono::milliseconds>(end - start).count() << " ms" << endl;
 			}
+
+			cvtColor(frame, grayFrame, COLOR_BGR2GRAY);
 
 			if (opticalFlow) {
 
-				cvtColor(frame, grayFrame, COLOR_BGR2GRAY);
+				//auto start2 = chrono::high_resolution_clock::now();
 
 				Point2f frameFlow = Point2f(0.0, 0.0);
 				Point2f frameFlowBorder = Point2f(0.0, 0.0);
@@ -389,24 +418,12 @@ void extractor::extractFromVideo(string filePath, int nv) {
 					for (int y = 0; y < h; y += 5) {
 						for (int x = 0; x < w; x += 5) {
 
-							// get the flow from y, x position * 10 for better visibility
-							const Point2f flowatxy = flow.at<Point2f>(y, x);//*10
+							// get the flow from y, x position 
+							const Point2f flowatxy = flow.at<Point2f>(y, x);
 
 							frameFlow.x += abs(flowatxy.x);
 							frameFlow.y += abs(flowatxy.y);
-							signedFrameFlow.x += flowatxy.x;
-							signedFrameFlow.y += flowatxy.y;
 
-							if (x >= 20 && x <= w - 20 && y >= 20) {
-								// line(cflow, Point(x, y), Point(cvRound(x + flowatxy.x), cvRound(y + flowatxy.y)),
-								//     Scalar(255, 0, 0));
-							}
-
-							if (x < 20 || x > w - 20 || y < 20) {
-								frameFlowBorder.x += flowatxy.x;
-								frameFlowBorder.y += flowatxy.y;
-								// circle(cflow, Point(x, y), 1, Scalar(0, 0, 0), -1); // draw initial point
-							}
 						}
 					}
 				}
@@ -429,6 +446,8 @@ void extractor::extractFromVideo(string filePath, int nv) {
 				std::swap(prevgray, grayFrame);
 				v1.x = v2.x;
 				v1.y = v2.y;
+				//auto end2 = chrono::high_resolution_clock::now();
+				//cout << "flow processed in: " << std::chrono::duration_cast<chrono::milliseconds>(end2 - start2).count() << " ms" << endl;
 			}
 
 			accumStaticSaliency += processStaticSaliency(staticSaliencyAlgorithm, frame);
@@ -441,16 +460,20 @@ void extractor::extractFromVideo(string filePath, int nv) {
 			processColors(frame);
 
 			/*Need to fix entropy processing, MSC compiler vs GCC !*/
-			//entropy
-			//Mat src, hist;
-			//cvtColor(frame, src, CV_BGR2GRAY);
+			//entropy grayFrame
 			// Establish the number of bins
-			//int histSize = 256;
-			//hist = p.myEntropy(src, histSize);
-			//cout << "hist " << hist << endl;
-			//float entropy = p.entropy(hist, src.size(), histSize);
-			//frame_entropy_distribution.push_back(entropy);
-			frame_entropy_distribution.push_back(0);
+			if (entro) {
+				Mat src, hist;
+				cvtColor(frame, src, CV_BGR2GRAY);
+				// Establish the number of bins
+				int histSize = 256;
+				hist = p.myEntropy(src, histSize);
+				//cout << "hist " << hist << endl;
+				float entropy = p.entropy(hist, src.size(), histSize);
+				frame_entropy_distribution.push_back(entropy);
+				
+			}
+			else { frame_entropy_distribution.push_back(0); }
 
 			if (edgeHist) {
 				vector<Mat> cutImage = p.splitMat(frame, 0.25, true); //0.25(=1/4) <=> split in 16 squares(4x4)
@@ -489,7 +512,7 @@ void extractor::extractFromVideo(string filePath, int nv) {
 		}
 
 		edgeHistogramVec[0][16] = p.processEHGroup(EH_edges_distribution);
-		edgeStrenght = (((double)edgeStrenght) / divider / 4);
+		edgeStrenght = (((double)edgeStrenght) / divider / 8);
 
 		double medianFocus = totalFocus / divider;
 
@@ -657,6 +680,8 @@ void extractor::getConfigParams() {
 		resizeMode = xml->getValue<int>("//RESIZE");
 		bgSub = xml->getValue<bool>("//BGSUB");
 		opticalFlow = xml->getValue<bool>("//FLOW");
+		entro = xml->getValue<bool>("//ENTRO");
 	}
 
 }
+string extractor::thumbnailFolderPath = "../bin/data/thumbnails/videos/";
