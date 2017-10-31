@@ -260,6 +260,7 @@ void extractor::extractFromVideo(string filePath, int nv) {
 		Mat flow, cflow;
 		UMat grayFrame, prevgray, uflow; //optic flow
 		Point v1, v2; //for flow angle measure
+		float currentEntropy = 0, prevEntropy= 0;
 
 		for (;;) //loop trough the video frames
 		{
@@ -462,6 +463,7 @@ void extractor::extractFromVideo(string filePath, int nv) {
 			/*Need to fix entropy processing, MSC compiler vs GCC !*/
 			//entropy grayFrame
 			// Establish the number of bins
+
 			if (entro) {
 				Mat src, hist;
 				cvtColor(frame, src, CV_BGR2GRAY);
@@ -471,7 +473,16 @@ void extractor::extractFromVideo(string filePath, int nv) {
 				//cout << "hist " << hist << endl;
 				float entropy = p.entropy(hist, src.size(), histSize);
 				frame_entropy_distribution.push_back(entropy);
-				
+				/*
+				currentEntropy = entropy;
+				float difference = abs(currentEntropy - prevEntropy);
+				if(currentEntropy<0.001)
+					cout << "dissolve!" << currentEntropy << " " << frameCount / 24 << endl;
+
+				if(difference >0.2)
+					cout << "cut!" << difference<<" "<<frameCount/24 <<endl;
+				std::swap(prevEntropy, currentEntropy);
+				*/
 			}
 			else { frame_entropy_distribution.push_back(0); }
 
