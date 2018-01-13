@@ -11,6 +11,7 @@ The goal is the development of a system capable of semi-automatically assess vid
 *figure 1 - System overview* 
 
 Video quality assessment (VQA) combines existing models for human visual perception and attention with more pragmatic methods based on visual feature extraction. This assessment can have an objective or subjective nature and, until recently, was focused on professional captured media. In the perspective of VQA, UGC is different in many ways from traditional media, where fidelity is of the utmost importance and mean opinion score (MOS) is the standard for comparing quality. There is nowadays a massive volume of UGC that needs to be assessed, fidelity is less important, and the criterion that defines quality becomes more personalized, focused on the group or user. As consumers are also becoming creators of content, it makes sense to combine UGC captured on large scale events in their live conventional broadcast. This inclusion could enhance the quality of Experience (QoE) provided that at the same time high standards for content quality are maintained. 
+
 On an initial stage, it was performed an extensive literature study to collect a set of relevant visual features in terms of human visual perception and how it discriminates visual quality, it was used the OpenCV library of computer vision algorithms as a basis to compute visual only features focused mainly on subjective criteria like interestingness and attention arouse or aesthetic perceived from video. These features were tested in terms of performance and usability using a graphical user interface (GUI). A subset of these features was also selected and used to create machine learning binary classifiers for aesthetics and interestingness. It was also developed and tested in the GUI a video indexing tool, that allows to index and sort videos by a multiple feature similarity index. It is possible to see in [figure 1]() an overview.
 
 Afterwards, it was necessary to integrate these concepts into an extended infrastructure to offer visual quality assessment to applications. 
@@ -31,7 +32,7 @@ Detailed instructions on how to use the GUI and on how to load a new video repos
 * openFrameworks 0.9.3
 * OpenCV 3.2.0 + contrib modules
 
-In this project github repository there is a Visual Studio 2015 Project. One can either compile it from source or just copy and paste the binaries folder. The available binaries should run on any Windows 8-10. x64 machine. To run, just copy the bin folder to local machine and run the executable video-assessment.exe
+In this project github repository there is a Visual Studio 2015 Project. One can either compile it from source (make sure to read [this](install_requirements.md) before) or just copy and paste the binaries folder. The available binaries should run on any Windows 8-10. x64 machine. To run, just copy the bin folder to local machine and run the executable video-assessment.exe
 
 ## Feature description
 

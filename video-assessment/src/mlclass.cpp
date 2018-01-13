@@ -10,39 +10,26 @@ using namespace cv;
 using namespace cv::ml;
 using namespace chrono;
 
-bool binout = false;            //Do we want to output to file the aditional feature vector prediction results?
-bool showPrediction = false;   //Do we want to see and compare each prediction alongside with experimental value?
-const int features = 19;
-int final_evaluation_items = 200;
-string outputPath = "final_evaluation.csv";
-
 //Aesthetics classifier
-
-string a_binary_scores = "../bin/data/SVM/aesthetic_big/aesthetic_big_binary_data.csv";
-string a_feature_vector = "../bin/data/SVM/aesthetic_big/aesthetic_big_train_data.csv";
-string a_final_evaluation_vector = "../bin/data/SVM/aesthetic_big/aesthetic_big_200_evaluation_samples.csv";
-int a_total_items = 700;
-int a_evaluation_start = 190; //190 82%
-int a_evaluation_items = 50;
+string a_binary_scores = "../bin/data/SVM/A2018_21/A2018_binary21.csv";
+string a_feature_vector = "../bin/data/SVM/A2018_21/A2018_train21_norm.csv";
+string a_maxmin_path = "../bin/data/SVM/A2018_21/A2018_train21_maxmin.csv";
 
 //Interestingness classifier
-string i_binary_scores = "../bin/data/SVM/interest_big/interest_big_binary_data.csv";
-string i_feature_vector = "../bin/data/SVM/interest_big/interest_big_train_data.csv";
-string i_final_evaluation_vector = "../bin/data/SVM/interest_big/interest_big_200_evaluation_samples.csv";
-int i_total_items = 1200;
-int i_evaluation_start = 600; //600 79%
-int i_evaluation_items = 100;
+string i_binary_scores = "../bin/data/SVM/i_beach_gui/i_beach_bin_gui.csv";
+string i_feature_vector = "../bin/data/SVM/i_beach_gui/i_beach_train_gui_nonorm_norm.csv";
+string i_maxmin_path = "../bin/data/SVM/i_beach_gui/i_beach_train_gui_nonorm_maxmin.csv";
 
+vector< vector<double> > trainingData, a_maxmin, i_maxmin;
+vector< int > trainingLabels;
 Ptr<SVM> svm_a;
 Ptr<SVM> svm_i;
 
-mlclass::mlclass() {
-
+mlclass::mlclass() { 
 	//ctor
 }
 
 mlclass::~mlclass() {
-
 	//dtor
 }
 
@@ -50,336 +37,227 @@ void mlclass::init() {
 
 	auto start = chrono::high_resolution_clock::now();
 
-	svm_a = processSVM(a_binary_scores, a_feature_vector, a_total_items,
-		a_evaluation_start, a_evaluation_items, a_final_evaluation_vector, "Aesthetic");
-
-	svm_i = processSVM(i_binary_scores, i_feature_vector, i_total_items,
-		i_evaluation_start, i_evaluation_items, i_final_evaluation_vector, "Interestingness");
+	svm_a = processSVM(a_binary_scores, a_feature_vector, "Aesthetic", 2.56, 0.107374);
+	svm_i = processSVM(i_binary_scores, i_feature_vector, "Interestingness", 2.56, 0.429497);
 
 	auto end = chrono::high_resolution_clock::now();
 
-	cout << "\n [!] Classifiers created in (ms): " << duration_cast<chrono::milliseconds>(end - start).count()
-		<< '\n';
+	cout << "\n [!] Classifiers created in " << duration_cast<chrono::milliseconds>(end - start).count()
+		<< " ms" << endl;
+
+	a_maxmin.assign(2, vector<double>(21, 0));
+	i_maxmin.assign(2, vector<double>(30, 0));
+
+	ifstream inputData(a_maxmin_path);
+	string current_line;
+	int y = 0;
+
+	while (getline(inputData, current_line)) {
+
+		stringstream temp(current_line);
+		std::string single_value;
+		int z = 0;
+		while (getline(temp, single_value, ',')) {
+
+			a_maxmin[y][z] = atof(single_value.c_str()); 		
+			z++;
+		}
+		y++;
+	}
+	inputData.close();
+
+	ifstream inData(i_maxmin_path);
+	string curr_line;
+	int y2 = 0;
+
+	while (getline(inData, curr_line)) {
+
+		stringstream temp(curr_line);
+		std::string single_value;
+		int z = 0;
+		while (getline(temp, single_value, ',')) {
+
+			i_maxmin[y2][z] = atof(single_value.c_str());
+			z++;
+		}
+		y2++;
+	}
+	inData.close();
 };
 
-Ptr<SVM> mlclass::processSVM(string binary_scores, string feature_vector, int total_items,
-	int evaluation_start, int evaluation_items,
-	string final_evaluation_vector, string classifier_name) {
+Ptr<SVM> mlclass::processSVM(string binary_scores, string feature_vector,
+	string classifier_name, double C, double G) {
 
-	int evaluation_end = evaluation_start + evaluation_items;
-	int numberToTrain = total_items - evaluation_items; //number of training data items
-	const int numberOfFeatures = 19; //number of features
+	vector <int> countResult = mlclass::countData(feature_vector);
+	int numberOfFeatures = countResult[1];
+	int total_items = countResult[0];
 
 	//allocate the arrays
-	auto trainingLabels = new int[numberToTrain];
-	auto evalLabels = new int[evaluation_items];
-	auto trainingData = new float[numberToTrain][numberOfFeatures];
-	auto evaluationData = new float[evaluation_items][numberOfFeatures];
+	trainingData.assign(total_items, vector<double>(numberOfFeatures, 0));
+	trainingLabels.assign(total_items, 0);
 
 	///Print current classifier stats
-	cout << "\n";
-	cout << " [M] dataset items: " << total_items << endl;
-	//cout << " [M] evaluation items: " << evaluation_items << endl;
-	//cout << " [M] start evaluation item: " << evaluation_start << endl;
+	cout << "\n [M] dataset items: " << total_items << endl;
 	cout << " [M] features: " << numberOfFeatures << endl;
 
 	/// Set up label data----------------------------------------------------
 	ifstream inputBinaryData(binary_scores);
 	std::string current_binary_line;
-
-
 	int x = 0;
-	int t = 0;
-	int e = 0;
+
 	while (getline(inputBinaryData, current_binary_line)) {
 
 		int temp = atoi(current_binary_line.c_str());
-
-		if (x < evaluation_start || x >= evaluation_end) {
-			trainingLabels[t] = temp;
-			t++;
-		}
-		else {
-			evalLabels[e] = temp;
-			e++;
-		}
+		trainingLabels[x] = temp;
 		x++;
-
 	}
 
 	/// Set up feature data------------------------------------------------------
 	ifstream inputFeatureData(feature_vector);
 	string current_training_line;
 	int y = 0;
-	int tf = 0;
-	int ef = 0;
-	bool training;
 
 	// Start reading lines as long as there are lines in the file
 	while (getline(inputFeatureData, current_training_line)) {
-		training = (y < evaluation_start || y >= evaluation_end);
 
 		stringstream temp(current_training_line);
 		std::string single_value;
 		int z = 0;
 		while (getline(temp, single_value, ',')) {
 
-			float tempF = atof(single_value.c_str()); // convert the string element to a float value
-
-			if (training) {
-
-				trainingData[tf][z] = tempF;
-
-			}
-			else {
-
-				evaluationData[ef][z] = tempF;
-
-			}
+			trainingData[y][z] = atof(single_value.c_str()); // convert the string element to a float value
 			z++;
 		}
-		if (training) tf++;
-		else ef++;
 		y++;
-
 	}
 
-	///Setup the input matrixes for training the svm----------------------------------
-	Mat trainingDataMat(numberToTrain, numberOfFeatures, CV_32FC1, trainingData);
-	Mat labelsMat(numberToTrain, 1, CV_32SC1, trainingLabels);
+	///Setup the input matrixes for training and evaluating of the svm /////////////
+	Mat trainingDataMat = Mat(total_items, numberOfFeatures, CV_32FC1);
+
+	for (int i = 0; i < total_items; ++i)
+		for (int j = 0; j < numberOfFeatures; ++j)
+		{
+			trainingDataMat.at<float>(i, j) = trainingData.at(i).at(j);
+		}
+	Mat trainingLabelsMat = Mat(total_items, 1, CV_32SC1);
+	memcpy(trainingLabelsMat.data, trainingLabels.data(), trainingLabels.size() * sizeof(int));
+
 	cout << " [M] " << trainingDataMat.size() << " feature vector" << endl;
-	cout << " [M] " << labelsMat.size() << " labels vector" << endl;
+	cout << " [M] " << trainingLabels.size() << " labels vector" << endl;
 
-	/// Create the SVM
-	double c = 0.0000001; //just to initialize
-	double g = 0.0000001; //just to initialize
-
-	// Set up SVM's parameters
+	// Create the SVM
 	Ptr<SVM> s = SVM::create();
 	s->setType(SVM::C_SVC);
-	s->setKernel(SVM::RBF); //(SVM::CHI2, SVM::INTER, SVM::RBF).
+	s->setKernel(SVM::RBF);
 	s->setTermCriteria(TermCriteria(TermCriteria::MAX_ITER, 10000, 1e-6));
+	s->train(trainingDataMat, ROW_SAMPLE, trainingLabelsMat);
+	s->setC(C);
+	s->setGamma(G);
 
-	// Pointer
-	Ptr<TrainData> td = TrainData::create(trainingDataMat, ROW_SAMPLE, labelsMat);
-
-	// Train the SVM with optimal parameters the second argument is K-fold for cross-validation
-
-	s->trainAuto(td, 10);
-
-	td.release();
-	c = s->getC();
-	g = s->getGamma();
-	//svm->save("svm_classifier.xml"); //save classifier
-	// svm->load("svm_2features/classifier_2feature.xml"); //load classifier
-
-	int linhas = 0;
-	int ones = 0;
-	int zeros = 0;
-	int acertos = 0;
-	int tp = 0;
-	int tn = 0;
-	int fn = 0;
-	int fp = 0;
-
-	// Start reading lines as long as there are lines in the file
-
-	while (linhas < evaluation_items) {
-
-		Mat sampleDataMat(1, numberOfFeatures, CV_32FC1, evaluationData[linhas]);
-		//cout<< sampleDataMat<<endl;
-
-		///Show the decision given by the SVM
-
-		float response = s->predict(sampleDataMat);
-
-		// cout<<"sample tested:"<<endl;
-		// cout<<sampleDataMat<<endl;
-		// cout<<"SVM classification: "<<response<<" test case: "<<labels50[linhas]<<endl;
-
-		if (response == evalLabels[linhas]) {
-			acertos++;
-			if (evalLabels[linhas] == 1) {
-				tp++;
-				ones++;
-			}
-			else {
-				zeros++;
-				tn++;
-			}
-
-		}
-		else {
-
-			if (evalLabels[linhas] == 1) {
-				fn++;
-				ones++;
-			}
-			else {
-				zeros++;
-				fp++;
-			}
-
-		}
-
-		linhas++;
-	}
-	/*
-	float acertoF = ((float)acertos / linhas) * 100;
-	float precision = (float)tp / (tp + fp);
-
-	if (isnan(precision)) precision = 0.0;
-	float recall = (float)tp / (fn + tp);
-	//float fnr = (float)fn/(fn+tp);
-	float fpr = (float)fp / (tn + fp); //fall-out
-
-
-	cout << " [M] " << "A: " << acertoF << "%" << " " << c << " " << g << " P: " << precision << " R: " << recall
-		<< " fpr " << fpr
-		<< " O: " << ones << endl;
-	*/
-
-	///For outputing CSV file with additional evaluation data
-	/*
-	if (binout) {
-		float finalEvaluationData[final_evaluation_items][numberOfFeatures];
-
-		/// Set up feature data
-		ifstream inputFeatureData2(final_evaluation_vector);
-		string current_training_line2;
-		int y2 = 0;
-
-		// Start reading lines as long as there are lines in the file
-		while (getline(inputFeatureData2, current_training_line2)) {
-
-			stringstream temp(current_training_line2);
-			string single_value;
-			int z = 0;
-			while (getline(temp, single_value, ',')) {
-				float temp = atof(single_value.c_str()); // convert the string element to a float value
-				finalEvaluationData[y2][z] = temp;
-
-				z++;
-			}
-
-			y2++;
-		}
-
-		ofstream evalBinData(outputPath.c_str());
-		int evalLinhas = 0;
-		int ones = 0;
-
-		while (evalLinhas < final_evaluation_items) {
-
-			Mat sampleDataMat(1, numberOfFeatures, CV_32FC1, finalEvaluationData[evalLinhas]);
-
-			///Show the decision given by the SVM
-
-			float response = s->predict(sampleDataMat);
-
-			evalBinData << response << "\n";
-
-			if (response == 1) ones++;
-
-			evalLinhas++;
-
-		}
-
-		// cout <<"ones " << ones << " total " <<evalLinhas <<endl;
-		evalBinData.close();
-		cout << "final binary data saved at file: " << outputPath << endl;
-
-	}
-	*/
-	cout << " [M] " << classifier_name << " Classifier generated!" << endl;
+	cout << " [M] " << classifier_name << " Classifier generated!" << " C: "<<C<<" G: "<<G<< endl;
 	return s;
-
 }
 
 //Predict sample
-int mlclass::predictSample(json jSample, int nFeatures) {
+int mlclass::predictSample(json jSample, int c) {
 
-	float* sampleData = new float[nFeatures];
-	//float sampleData[nFeatures];
-	sampleData[0] = jSample["red_ratio"];
-	sampleData[1] = jSample["green_ratio"];
-	sampleData[2] = jSample["blue_ratio"];
-	sampleData[3] = jSample["focus"];
-	sampleData[4] = jSample["luminance"];
-	sampleData[5] = jSample["luminance_std"];
-	sampleData[6] = jSample["dif_hues"];
-	sampleData[7] = jSample["faces"];
-	sampleData[8] = jSample["faces_area"];
-	sampleData[9] = jSample["smiles"];
-	sampleData[10] = jSample["rule_of_thirds"];
-	sampleData[11] = jSample["static_saliency"];
-	sampleData[12] = jSample["shackiness"];
-	sampleData[13] = jSample["motion_mag"];
-	sampleData[14] = jSample["fg_area"];
-	sampleData[15] = jSample["shadow_area"];
-	sampleData[16] = jSample["bg_area"];
-	sampleData[17] = jSample["camera_move"];
-	sampleData[18] = jSample["focus_diff"];
 
-	Mat sampleDataMat(1, nFeatures, CV_32FC1, sampleData);
+	int sSize = jSample.size();
+	float* sampleData = new float[sSize];
+	float* sampleNormData = new float[sSize];
+	int ps = 0;
+
+	for (json::iterator it = jSample.begin(); it != jSample.end(); ++it) {
+		//std::cout << it.key() << " : " << it.value() << "\n";
+		sampleData[ps] = it.value();
+		ps++;
+	}
+
+	if (c == 0) {
+		
+	for (int p = 0; p < sSize; p++)
+			{
+				double fMax = a_maxmin[0][p];
+				//cout << " max " << fMax;
+				double fMin = a_maxmin[1][p];
+				//cout << " min " << fMin;
+				double cValue = sampleData[p];
+				//cout << " value " << cValue;
+				double denominator = (fMax - fMin);
+				double numerator = (cValue - fMin);
+				//cout << "dois " << dois << " um " << um <<" ";
+				float result = (float)numerator / denominator;
+				result = (result > 1) ? 1 : result;
+				result = (result < 0) ? 0 : result;
+				sampleNormData[p] = result;
+				//cout <<" res "<< sampleNormData[p] << " ";
+			}
+		
+	//cout << endl;
+	}
+	else if (c == 1) {
+
+		for (int p = 0; p < sSize; p++)
+		{
+			double fMax = i_maxmin[0][p];
+			double fMin = i_maxmin[1][p];
+			double cValue = sampleData[p];
+			double denominator = (fMax - fMin);
+			double numerator = (cValue - fMin);
+			float result = (float)numerator / denominator;
+			result = (result > 1) ? 1 : result;
+			result = (result < 0) ? 0 : result;
+			sampleNormData[p] = result;
+		}
+
+		//cout << endl;
+	}
+
+	Mat sampleDataMat(1, sSize, CV_32FC1, sampleNormData);
 
 	///Show the decision given by the SVM
 
 	int finalResponse = 0;
-	int aesthetic_response = (int)svm_a->predict(sampleDataMat);
-	int interest_response = (int)svm_i->predict(sampleDataMat);
-
-	cout << "\n [M] aesthetics: " << aesthetic_response << " interestingness: " << interest_response << endl;
-
-	if (aesthetic_response >= 1)
-		finalResponse += 3;
-	if (interest_response >= 1)
-		finalResponse += 4;
-
+	if (c == 0) {
+		finalResponse = (int)svm_a->predict(sampleDataMat);
+		cout << " [M] aesthetics: " << finalResponse << endl;
+	}
+	else if (c == 1) {
+		finalResponse = (int)svm_i->predict(sampleDataMat);
+		cout << " [M] interestingness: " << finalResponse << endl;
+	}
 	delete[] sampleData;
 	return finalResponse;
 
 }
-//Method for testing random samples
-int mlclass::predictTestSample(int nFeatures) {
+vector <int> mlclass::countData(string f_vector)
+{
 
+	/// Count features and samples //////////////////////////////////////////////////////
+	ifstream inputFeatureCountData(f_vector.c_str());
+	string current_line;
+	int sampleCount = 0;     //number of samples
+	int featureCount = 0;    //number of features
 
-	float* sampleData = new float[nFeatures];
-	// float sampleData[nFeatures];
-	sampleData[0] = 0.585126;
-	sampleData[1] = 0.281233;
-	sampleData[2] = 0.133641;
-	sampleData[3] = 1;
-	sampleData[4] = 0.110374;
-	sampleData[5] = 0.0991967;
-	sampleData[6] = 0.0226191;
-	sampleData[7] = 0.0113379;
-	sampleData[8] = 0.000804487;
-	sampleData[9] = 0;
-	sampleData[10] = 0.00166289;
-	sampleData[11] = 0.0702186;
-	sampleData[12] = 0.183673;
-	sampleData[13] = 0.0869409;
-	sampleData[14] = 0.356178;
-	sampleData[15] = 0.000427326;
-	sampleData[16] = 0.641127;
-	sampleData[17] = 0.104308;
-	sampleData[18] = 0.0380477;
+	// Start reading lines as long as there are lines in the file
+	while (getline(inputFeatureCountData, current_line))
+	{
+		stringstream temp(current_line);
+		string single_value;
 
-	Mat sampleDataMat(1, nFeatures, CV_32FC1, sampleData);
+		if (sampleCount == 0)
+		{
+			while (getline(temp, single_value, ','))
+				featureCount++;
+		}
+		sampleCount++;
+	}
 
-	///Show the decision given by the SVM
+	inputFeatureCountData.close();
+	vector<int> result;
+	result.assign(2, 0);
 
-	int finalResponse = 0;
-	int aesthetic_response = (int)svm_a->predict(sampleDataMat);
-	int interest_response = (int)svm_i->predict(sampleDataMat);
-
-	cout << " [M] aesthetic test: " << aesthetic_response << " interest test: " << interest_response << endl;
-
-	if ((aesthetic_response + interest_response) >= 1)
-		finalResponse = 1;
-
-	delete[] sampleData;
-	return finalResponse;
-
+	result[0] = sampleCount;
+	result[1] = featureCount;
+	return result;
 }

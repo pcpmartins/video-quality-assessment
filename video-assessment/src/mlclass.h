@@ -21,16 +21,14 @@ public:
 	virtual ~mlclass();
 
 	void init();
-	int predictSample(json jSample, int nFeatures);
-	int predictTestSample(int nFeatures);
+	int predictSample(json jSample, int c);
 
 
 protected:
-	Ptr<SVM> processSVM(string binary_scores, string feature_vector, int total_items,
-		int evaluation_start, int evaluation_items,
-		string final_evaluation_vector, string classifier_name);
+	Ptr<SVM> processSVM(string binary_scores, string feature_vector,
+		string classifier_name, double C, double G);
 
-
+	vector <int> countData(string f_vector);
 private:
 
 };

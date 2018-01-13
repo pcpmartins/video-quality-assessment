@@ -77,6 +77,8 @@
     <TargetName>$(ProjectName)_debug</TargetName>
     <LinkIncremental>true</LinkIncremental>
     <GenerateManifest>true</GenerateManifest>
+    <CodeAnalysisRuleSet>C:\Program Files (x86)\Microsoft Visual Studio 14.0\Team Tools\Static Analysis Tools\Rule Sets\NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>bin\</OutDir>
@@ -114,16 +116,17 @@ C:\of_v0.9.3_vs_release\addons\ofxSaliencyMap\src</AdditionalIncludeDirectories>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\..\addons\ofxGui\src;..\..\..\..\addons\ofxXmlSettings\libs;..\..\..\..\addons\ofxXmlSettings\src;C:\opencv-3.2.0\build\install\include\opencv2;C:\opencv-3.2.0\build\install\include\opencv;C:\opencv-3.2.0\build\install\include;json\src;json</AdditionalIncludeDirectories>
+      <WarningLevel>Level4</WarningLevel>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\..\addons\ofxGui\src;..\..\..\..\addons\ofxXmlSettings\libs;..\..\..\..\addons\ofxXmlSettings\src;C:\opencv-3.2.0\build\install\include\opencv2;C:\opencv-3.2.0\build\install\include\opencv;C:\opencv-3.2.0\build\install\include</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <EnablePREfast>true</EnablePREfast>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <AdditionalDependencies>opencv_aruco320d.lib;opencv_bgsegm320d.lib;opencv_bioinspired320d.lib;opencv_calib3d320d.lib;opencv_ccalib320d.lib;opencv_core320d.lib;opencv_datasets320d.lib;opencv_dnn320d.lib;opencv_dpm320d.lib;opencv_face320d.lib;opencv_features2d320d.lib;opencv_flann320d.lib;opencv_fuzzy320d.lib;opencv_highgui320d.lib;opencv_imgcodecs320d.lib;opencv_imgproc320d.lib;opencv_line_descriptor320d.lib;opencv_ml320d.lib;opencv_objdetect320d.lib;opencv_optflow320d.lib;opencv_phase_unwrapping320d.lib;opencv_photo320d.lib;opencv_plot320d.lib;opencv_reg320d.lib;opencv_rgbd320d.lib;opencv_saliency320d.lib;opencv_shape320d.lib;opencv_stereo320d.lib;opencv_stitching320d.lib;opencv_structured_light320d.lib;opencv_superres320d.lib;opencv_surface_matching320d.lib;opencv_text320d.lib;opencv_tracking320d.lib;opencv_video320d.lib;opencv_videoio320d.lib;opencv_videostab320d.lib;opencv_xfeatures2d320d.lib;opencv_ximgproc320d.lib;opencv_xobjdetect320d.lib;opencv_xphoto320d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_core320d.lib;opencv_bgsegm320d.lib;opencv_highgui320d.lib;opencv_imgcodecs320d.lib;opencv_imgproc320d.lib;opencv_ml320d.lib;opencv_objdetect320d.lib;opencv_optflow320d.lib;opencv_saliency320d.lib;opencv_tracking320d.lib;opencv_video320d.lib;opencv_videoio320d.lib;opencv_dnn320d.lib;opencv_photo320d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\opencv-3.2.0\build\install\x64\vc14\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent />
@@ -157,7 +160,7 @@ C:\of_v0.9.3_vs_release\addons\ofxSaliencyMap\src</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>json;json\src;%(AdditionalIncludeDirectories);src;..\..\..\..\addons\ofxGui\src;..\..\..\..\addons\ofxXmlSettings\libs;..\..\..\..\addons\ofxXmlSettings\src;C:\opencv-3.2.0\build\install\include\opencv2;C:\opencv-3.2.0\build\install\include\opencv;C:\opencv-3.2.0\build\install\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\..\addons\ofxGui\src;..\..\..\..\addons\ofxXmlSettings\libs;..\..\..\..\addons\ofxXmlSettings\src;C:\opencv-3.2.0\build\install\include\opencv2;C:\opencv-3.2.0\build\install\include\opencv;C:\opencv-3.2.0\build\install\include</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -167,13 +170,17 @@ C:\of_v0.9.3_vs_release\addons\ofxSaliencyMap\src</AdditionalIncludeDirectories>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <AdditionalDependencies>opencv_aruco320.lib;opencv_bgsegm320.lib;opencv_bioinspired320.lib;opencv_calib3d320.lib;opencv_ccalib320.lib;opencv_core320.lib;opencv_datasets320.lib;opencv_dnn320.lib;opencv_dpm320.lib;opencv_face320.lib;opencv_features2d320.lib;opencv_flann320.lib;opencv_fuzzy320.lib;opencv_highgui320.lib;opencv_imgcodecs320.lib;opencv_imgproc320.lib;opencv_line_descriptor320.lib;opencv_ml320.lib;opencv_objdetect320.lib;opencv_optflow320.lib;opencv_phase_unwrapping320.lib;opencv_photo320.lib;opencv_plot320.lib;opencv_reg320.lib;opencv_rgbd320.lib;opencv_saliency320.lib;opencv_shape320.lib;opencv_stereo320.lib;opencv_stitching320.lib;opencv_structured_light320.lib;opencv_superres320.lib;opencv_surface_matching320.lib;opencv_text320.lib;opencv_tracking320.lib;opencv_video320.lib;opencv_videoio320.lib;opencv_videostab320.lib;opencv_xfeatures2d320.lib;opencv_ximgproc320.lib;opencv_xobjdetect320.lib;opencv_xphoto320.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_core320.lib;opencv_bgsegm320.lib;opencv_highgui320.lib;opencv_imgcodecs320.lib;opencv_imgproc320.lib;opencv_ml320.lib;opencv_objdetect320.lib;opencv_optflow320.lib;opencv_saliency320.lib;opencv_tracking320.lib;opencv_video320.lib;opencv_videoio320.lib;opencv_dnn320.lib;opencv_photo320.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\opencv-3.2.0\build\install\x64\vc14\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
     </Link>
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\extractor.cpp" />
+    <ClCompile Include="src\extractor.cpp">
+      <ShowIncludes Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ShowIncludes>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4267;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
     <ClCompile Include="src\mlclass.cpp" />
     <ClCompile Include="src\processing.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -189,6 +196,7 @@ C:\of_v0.9.3_vs_release\addons\ofxSaliencyMap\src</AdditionalIncludeDirectories>
     <ClCompile Include="src\ListItem.cpp" />
     <ClCompile Include="src\metadataPanel.cpp" />
     <ClCompile Include="src\ofxFontStash.cpp" />
+    <ClCompile Include="src\RunningStats.cpp" />
     <ClCompile Include="src\SelectionItem.cpp" />
     <ClCompile Include="src\SimpleButton.cpp" />
     <ClCompile Include="src\SliderItem.cpp" />
@@ -211,6 +219,7 @@ C:\of_v0.9.3_vs_release\addons\ofxSaliencyMap\src</AdditionalIncludeDirectories>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\extractor.h" />
+    <ClInclude Include="src\json.hpp" />
     <ClInclude Include="src\mlclass.h" />
     <ClInclude Include="src\processing.h" />
     <ClInclude Include="src\ofApp.h" />
@@ -226,6 +235,7 @@ C:\of_v0.9.3_vs_release\addons\ofxSaliencyMap\src</AdditionalIncludeDirectories>
     <ClInclude Include="src\metadataPanel.h" />
     <ClInclude Include="src\ofxButtons.h" />
     <ClInclude Include="src\ofxFontStash.h" />
+    <ClInclude Include="src\RunningStats.h" />
     <ClInclude Include="src\SelectionItem.h" />
     <ClInclude Include="src\SimpleButton.h" />
     <ClInclude Include="src\SliderItem.h" />

@@ -34,14 +34,7 @@ VideoFile::VideoFile(string name, string path)
 	setThumbnailPath();
 	setXmlPath();
 
-	/*
-	if (!ofFile::doesFileExist(thumbnailPath)) {			//If there is no thumbnail
-		if (video.load(path)) {								//Load video to class			
-			generateThumbnail();		//Generate thumbnail for file and returns path to it	
-		}
-	}
-	*/
-	loadThumbnail();				//Load thumbnail	
+	loadThumbnail();			
 }
 
 VideoFile::~VideoFile()
@@ -57,68 +50,7 @@ bool VideoFile::loadThumbnail()
 	}
 	return true;
 }
-/*
-string VideoFile::generateThumbnail()
-{
-	auto start = chrono::high_resolution_clock::now();
-	ofImage thumbnail;
-	ofImage temp;
 
-	ofDirectory dir(thumbnailFolderPath);					//Directory with thubmnails
-
-	video.play();
-	video.setPosition(0.15);
-	//video.update();
-
-
-	if (video.isLoaded())
-		thumbnail.setFromPixels(video.getPixelsRef());
-	else {
-		ofPixels p;
-		ofLoadImage(p, "black.jpg");
-		thumbnail.setFromPixels(p);
-	}
-	video.stop();
-	double tempHeigth;
-	if (video.getWidth() > video.getHeight()) {
-		tempHeigth = (thumbnailWidth / video.getWidth())*video.getHeight();
-	}
-	else {
-		tempHeigth = thumbnailHeight;
-	}
-
-	thumbnail.resize(thumbnailWidth, tempHeigth);
-
-	cout << "thumbnail created for " << name + extension ;
-
-	string path = thumbnailFolderPath + "\\" + name + ".jpg";
-	
-
-	if (!dir.exists())	//If directory with thubmnails doesn't exist
-	{
-		cout << "Create directory for videos thumbnails" << endl;
-
-		if (dir.create(true)) {
-			cout << dir.getAbsolutePath() << " created" << endl;
-		}
-		else
-		{
-			cout << "Cannot create directory for videos thumbnails" << endl;
-			ofExit();
-		}
-	}
-
-	thumbnail.saveImage(path);								//Save it to directories with thumbnails
-	temp.clear();
-	thumbnail.clear();
-	video.close();
-	video.closeMovie();
-	auto end = chrono::high_resolution_clock::now();
-	cout << " in: " << std::chrono::duration_cast<chrono::milliseconds>(end - start).count() << " ms" << endl;
-
-	return path;
-}
-*/
 bool VideoFile::generateXmlFile()
 {
 	File::generateXmlFile();
@@ -138,6 +70,18 @@ bool VideoFile::generateXmlFile()
 		xml.addValue("PREDICT", predict);
 		xml.addValue("INTEREST_1", interest_1);
 		xml.addValue("TYPE", "VIDEO");
+		xml.addChild("SEMANTIC");								
+		xml.setTo("SEMANTIC");
+		xml.addValue("SID_1", semanticID_1);
+		xml.addValue("SVALUE_1", semanticValue_1);
+		xml.addValue("SID_2", semanticID_2);
+		xml.addValue("SVALUE_2", semanticValue_2);
+		xml.addValue("SID_3", semanticID_3);
+		xml.addValue("SVALUE_3", semanticValue_3);
+		xml.addValue("SID_4", semanticID_4);
+		xml.addValue("SVALUE_4", semanticValue_4);
+		xml.addValue("SID_5", semanticID_5);
+		xml.addValue("SVALUE_5", semanticValue_5);
 
 	}
 	else {
@@ -170,6 +114,16 @@ bool VideoFile::getMetadataFromXml()
 		shadow = xml->getValue<double>("//SHADOW");
 		predict = xml->getValue<unsigned short>("//PREDICT");
 		interest_1 = xml->getValue<int>("//INTEREST_1");
+		semanticID_1 = xml->getValue<int>("//SID_1");
+		semanticValue_1 = xml->getValue<double>("//SVALUE_1");
+		semanticID_2 = xml->getValue<int>("//SID_2");
+		semanticValue_2 = xml->getValue<double>("//SVALUE_2");
+		semanticID_3 = xml->getValue<int>("//SID_3");
+		semanticValue_3 = xml->getValue<double>("//SVALUE_3");
+		semanticID_4 = xml->getValue<int>("//SID_4");
+		semanticValue_4 = xml->getValue<double>("//SVALUE_4");
+		semanticID_5 = xml->getValue<int>("//SID_5");
+		semanticValue_5 = xml->getValue<double>("//SVALUE_5");
 	}
 	return false;
 }
@@ -225,6 +179,21 @@ bool VideoFile::getMetadataFromCsv(vector <string> csvSingleData)
 	interest_1 = std::stoi(csvSingleData[38]);
 
 	return true;
+}
+
+void VideoFile::getMetadataFromSemanticSample(vector<pair<double, int> > semanticSample)
+{
+	semanticID_1 = semanticSample[0].second;
+	semanticValue_1 = semanticSample[0].first;
+	semanticID_2 = semanticSample[1].second;
+	semanticValue_2 = semanticSample[1].first;
+    semanticID_3 = semanticSample[2].second;
+    semanticValue_3 = semanticSample[2].first;
+	semanticID_4 = semanticSample[3].second;
+	semanticValue_4 = semanticSample[3].first;
+	semanticID_5 = semanticSample[4].second;
+	semanticValue_5 = semanticSample[4].first;
+
 }
 
 string VideoFile::filesFolderPath = "files";

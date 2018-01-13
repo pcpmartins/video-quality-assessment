@@ -38,16 +38,23 @@ public:
 	bool isLocked();
 	void lock();
 	void unLock();
+	bool extractVideoThumbnails();
 	bool extractVideoData();
 	bool parseOnly = false;
+
+	static string thumbnailFolderPath;				          //Path to thumbnails
+	int thumbnailHeight = 100;
+	int thumbnailWidth = 120;
 
 	extractor ex; //instantiate feature extractor class
 	mlclass mlc; //instantiate SVM classifier
 	vector<String> fileNames;
-	int totalFiles = 100;
+	int totalFiles = 700;
+	vector<String> clNames;
 
 private:
 	/////////////////////////////////Methods////////////////////////////////
+	string semanticDataOutputPath = "data/output/semantic_data.csv"; //output from extraction process
 	string dataOutputPath = "data/output/output.csv"; //output from extraction process
 	string inputFolder = "data/files/";               //video input files
 	string xmlFolderPath = "/xml/";                   //Path to folder with metadata
@@ -58,8 +65,12 @@ private:
 	bool toolBarClicked(int x, int y);				//Check if "click" was over toolbar
 	ofRectangle spaceForFileDisplay();
 
+	bool parseSemanticVector();
+
 	bool parseCsvFeatureVector();					//Load data to allFiles vector 
 	vector<string> getIndividualSample(string name);
+
+	std::vector<String> readClassNames();
 
 	//////////////////////////////////Objects//////////////////////////////
 
@@ -70,8 +81,9 @@ private:
 	filtersPanel filtersPanel;				//Object to filter displayed data
 	ofRectangle fileSpace;					//Space avaiable for displaying image/video
 	bool videoPlay;							//Flag if video should play
-	vector <vector <string> >	csvData;
+	vector <vector <string> >csvData;
 	int numberOfselectedFiles;
+	vector <vector< pair <double, int > > > semanticData;
 
 	/*Thumbnails parameteres*/
 	int thumbnailsWidth;

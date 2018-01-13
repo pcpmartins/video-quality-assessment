@@ -36,25 +36,24 @@ void Gallery::setup()
 {
 
 	if (!isLocked()) {
-		//cleanFolders();
+
 		getConfigParams();
 
 		if (!parseOnly) {
-			extractVideoData();		
+			extractVideoData();
 		}
-		lock();
-		parseCsvFeatureVector();
-		
-	}
+		else extractVideoThumbnails();
 
+		parseCsvFeatureVector();
+		parseSemanticVector();
+		lock();
+	}
 
 	if (!loadFiles())
 	{
 		std::cout << "Load files error" << endl;
 		::ofExit(1);
 	}
-
-
 	/*
 	The "panel" is a frame. This frame contains the displayed images, and the scroll bar.
 	The scroll bar contains a "grip". The user can drag the grip with the mouse.
@@ -98,6 +97,7 @@ void Gallery::setup()
 	filtersPanel.setup();
 	fileSpace = spaceForFileDisplay();		//Calcute avaiable space for file to display
 	videoPlay = false;
+	cout << "------------------------------------------------------------------" << endl;
 }
 
 void Gallery::update()
@@ -225,12 +225,12 @@ void Gallery::draw()
 					//img.resize(r.width, r.height-gap);
 
 					img.getTextureReference().drawSubsection(r.x, 0, r.width, thumbnailsHeight + r.y - gap, 0, -r.y - gap, r.width, thumbnailsHeight + r.y - gap);
-					name->drawString(allFiles[i].name, r.x, r.y + thumbnailsHeight + 0.5*gap);
+					name->drawString(allFiles[i].name.substr(0, 16), r.x + 3, r.y - 10 + thumbnailsHeight + 0.5*gap);
 
 				}
 			}
-			else if (r.getBottom() > panelHeight) {
-				if (r.y < panelHeight) {
+			else if (r.getBottom() >= panelHeight) {
+				if (r.y <= panelHeight) {
 
 					if (allFiles[i].getIsCurrentFile()) {
 
@@ -243,7 +243,8 @@ void Gallery::draw()
 					ofDrawRectangle(r.x, r.y, thumbnailsWidth, panelHeight - r.y);
 					ofSetColor(255);
 					// Exception 2: If a rectangle is cut at the bottom of the panel.				
-					img.getTextureReference().drawSubsection(r.x, r.y + gap, r.width, panelHeight - r.y - gap, 0, 0, r.width, panelHeight - r.y - gap);
+					img.getTextureReference().drawSubsection(r.x, r.y, r.width, panelHeight - r.y - gap, 0, 0, r.width, panelHeight - r.y - gap);
+
 
 				}
 			}
@@ -265,7 +266,7 @@ void Gallery::draw()
 				float dif = (thumbnailsHeight - allFiles[i].thumbnail.getHeight()) / 2;
 				allFiles[i].thumbnail.draw(r.x, r.y + dif);
 
-				name->drawString(allFiles[i].name, r.x, r.y + thumbnailsHeight + 0.5*gap);
+				name->drawString(allFiles[i].name.substr(0, 16), r.x + 3, r.y + thumbnailsHeight + 0.5*gap);
 
 			}
 
@@ -410,8 +411,30 @@ void Gallery::mousePressed(int x, int y, int button) {
 	{
 		if (checkIfThumbnailClicked(x, y) && (!filtersPanel.isToolbarClicked(x, y)))	//Check if thumbnail clicked. Update choosenFileIndex 
 		{
-			cout << allFiles[choosenFileIndex].name << endl;
+			VideoFile vf = allFiles[choosenFileIndex];
 
+			cout << "-> file: " << vf.name << endl;
+			if (vf.semanticValue_1 > 0) {
+				cout << vf.semanticID_1 << " - " << clNames[vf.semanticID_1] << " - " <<
+					vf.semanticValue_1 * 100 << "%" << endl;
+			}
+			if (vf.semanticValue_2 > 0) {
+				cout << vf.semanticID_2 << " - " << clNames[vf.semanticID_2] << " - " <<
+					vf.semanticValue_2 * 100 << "%" << endl;
+			}
+			if (vf.semanticValue_3 > 0) {
+				cout << vf.semanticID_3 << " - " << clNames[vf.semanticID_3] << " - " <<
+					vf.semanticValue_3 * 100 << "%" << endl;
+			}
+			if (vf.semanticValue_4 > 0) {
+				cout << vf.semanticID_4 << " - " << clNames[vf.semanticID_4] << " - " <<
+					vf.semanticValue_4 * 100 << "%" << endl;
+			}
+			if (vf.semanticValue_5 > 0) {
+				cout << vf.semanticID_5 << " - " << clNames[vf.semanticID_5] << " - " <<
+					vf.semanticValue_5 * 100 << "%" << endl;
+			}
+			cout << "-------------------------------------------------------" << endl;
 			if (allFiles[choosenFileIndex].getType() == File::fileType::VIDEO)		//Video file choosen
 			{
 				videoPlay = false;
@@ -428,10 +451,7 @@ void Gallery::mousePressed(int x, int y, int button) {
 				cout << "File not initialized" << endl;
 			}
 		}
-		else {
-
-
-		}
+		//else {}
 	}
 }
 
@@ -458,22 +478,18 @@ void Gallery::windowResized(int w, int h) {
 	fileSpace = spaceForFileDisplay();		//Calcute avaiable space for file to display
 }
 
-void Gallery::dragEvent(ofDragInfo dragInfo)
-{
-}
+void Gallery::dragEvent(ofDragInfo dragInfo) {}
 
-void Gallery::gotMessage(ofMessage msg)
-{
-}
+void Gallery::gotMessage(ofMessage msg) {}
 
 bool Gallery::isLocked() {
 	ofFile fileToRead(ofToDataPath(xmlFolderPath + "locked.txt")); // a file 
 	if (fileToRead.exists()) {
-		std::cout << "Locked!" << endl;
+		std::cout << "Extraction process locked!" << endl;
 		return true;
 	}
 	else {
-		std::cout << "Unlocked!" << endl;
+		std::cout << "Extraction process unlocked!" << endl;
 		return false;
 	}
 }
@@ -486,38 +502,71 @@ void Gallery::unLock() {
 	ofFile deleteFile(ofToDataPath(xmlFolderPath + "locked.txt"));
 	deleteFile.remove();
 }
-/*
-void Gallery::cleanFolders() {
-	ofDirectory dir;
-	dir.listDir("/thumbnails/videos/");
-	for (int i = 0; i < (int)dir.size(); i++) {
-		ofFile f = dir.getFile(i);
-		f.remove();
+
+bool Gallery::extractVideoThumbnails() {
+	cout << " [*] Extracting video thumbnails!" << endl;
+
+	size_t nFiles;                              //number of files to process
+	glob(inputFolder.c_str(), fileNames);    // loads path to filenames into vector
+	nFiles = fileNames.size();
+	cout << " [!] Thumbnails to process: " << nFiles << "\n\n";
+
+	int nv = 0;      // index to transverse video collection
+	Mat frame;       //matrix to save each frame pixel data
+
+	while (nv < nFiles)
+	{
+		VideoCapture cap;
+
+		string filePath = fileNames.at(nv);
+		try {
+			cap.open(filePath.c_str());
+
+			cap >> frame;
+			double tempHeigth;
+			if (frame.rows > frame.cols) {
+				tempHeigth = (thumbnailWidth / frame.rows*frame.cols);
+			}
+			else { tempHeigth = thumbnailHeight; }
+
+			Mat thumbnailImage;
+			resize(frame, thumbnailImage, Size(thumbnailWidth, tempHeigth), 0, 0, INTER_NEAREST);
+			size_t lastindex1 = filePath.find_last_of("\\");
+			string name = filePath.substr(lastindex1);
+			size_t lastindex2 = name.find_last_of(".");
+			name = name.substr(0, lastindex2);
+			string path = thumbnailFolderPath + name + ".jpg";
+			imwrite(path, thumbnailImage);
+		}
+		catch (Exception &e) {
+			const char *err_msg = e.what();
+			cout << "exception!: " << err_msg << std::endl;
+		}
+		cap.release();
+		nv++;
 	}
-	ofDirectory dir2;
-	dir2.listDir("/xml/");
-	for (int i = 0; i < (int)dir2.size(); i++) {
-		ofFile h = dir2.getFile(i);
-		h.remove();
-	}
+	return true;
 }
-*/
 bool Gallery::extractVideoData() {
 
 
 	cout << " [*] Cognitus visual feature extraction module" << endl;
 	cout << " [*] Video input folder: " << inputFolder << endl;
 
-	mlc.init(); //generate classifiers
+	mlc.init(); //initialize machine learning module instance
+	ex.init(); //initialize feature extraction module instance
 	//cout << "testing " << mlc.predictTestSample(19) << endl;
-	//lets save all filenames
-	unsigned long nFiles;                    //number of files to process
+
+	//lets load all filenames
+	size_t nFiles;                    //number of files to process
 	glob(inputFolder.c_str(), fileNames); // loads path to filenames into vector
 	nFiles = fileNames.size();
 	cout << " [!] number of files to process: " << nFiles << "\n\n";
 
-	//let's write the metadata to the output csv file
+	//Save metadata to the output csv file
 	ofstream myfile(dataOutputPath.c_str());
+	//and semantic data too
+	ofstream mysemanticfile(semanticDataOutputPath.c_str());
 
 	///main loop
 	int nv = 0;
@@ -528,24 +577,44 @@ bool Gallery::extractVideoData() {
 		auto start = chrono::high_resolution_clock::now();
 		ex.extractFromVideo(fileNames.at(nv), nv + 1);
 
-		json json4ML = ex.getJson4ML();
+		vector < pair <double, int > > semanticTemp;
 
-		int mlPrediction = mlc.predictSample(json4ML, 19);
+		semanticTemp = ex.getSemanticMap();
 
-		if (mlPrediction == 3) {
-			aesthetic = 1;
-			interest = 0;
-		}
-		if (mlPrediction == 4) {
-			aesthetic = 0;
-			interest = 1;
-		}
-		if (mlPrediction == 7) {
-			aesthetic = 1;
-			interest = 1;
-		}
+		if (mysemanticfile.is_open()) {
 
-		json jsonSample = ex.getJsonExtra();
+			int x = 0;
+
+			while (x < semanticTemp.size()) {
+
+				if (x != semanticTemp.size() - 1) {
+
+					mysemanticfile << semanticTemp.at(x).second << ","
+						<< semanticTemp.at(x).first << ",";
+
+				}
+				else {
+					mysemanticfile << semanticTemp.at(x).second << ","
+						<< semanticTemp.at(x).first;
+				}
+				x++;
+
+			}
+
+			mysemanticfile << "\n";
+			mysemanticfile.flush();
+
+		}
+		json jsonA = ex.getJsonA();
+		json jsonI = ex.getJsonI();
+
+		aesthetic = mlc.predictSample(jsonA, 0);
+
+		interest = mlc.predictSample(jsonI, 1);
+		//interest = 3;
+		
+
+		json jsonSample = ex.getJsonAll();
 
 		string finalName;
 		if (myfile.is_open()) {
@@ -556,46 +625,47 @@ bool Gallery::extractVideoData() {
 			myfile << nv + 1
 				<< "," << jsonSample["width"]
 				<< "," << jsonSample["height"]
-				<< "," << json4ML["red_ratio"]
+				<< "," << jsonSample["red_ratio"]
 				<< "," << jsonSample["red_moments1"]
 				<< "," << jsonSample["red_moments2"]
-				<< "," << json4ML["green_ratio"]
+				<< "," << jsonSample["green_ratio"]
 				<< "," << jsonSample["green_moments1"]
 				<< "," << jsonSample["green_moments2"]
-				<< "," << json4ML["blue_ratio"]
+				<< "," << jsonSample["blue_ratio"]
 				<< "," << jsonSample["blue_moments1"]
 				<< "," << jsonSample["blue_moments2"];
 
-			myfile << "," << json4ML["focus"]
-				<< "," << json4ML["luminance"]
-				<< "," << json4ML["luminance_std"]
-				<< "," << 0
-				<< "," << 0
-				<< "," << 0
-				<< "," << 0
-				<< "," << 0
-				<< "," << 0;
+			myfile << "," << jsonSample["focus"]
+				<< "," << jsonSample["luminance"]
+				<< "," << jsonSample["luminance_std"]
+				<< "," << jsonSample["red_moments3"]
+				<< "," << jsonSample["red_moments4"]
+				<< "," << jsonSample["green_moments3"]
+				<< "," << jsonSample["green_moments4"]
+				<< "," << jsonSample["blue_moments3"]
+				<< "," << jsonSample["blue_moments4"];
 
-			myfile << "," << json4ML["dif_hues"]
-				<< "," << json4ML["faces"]
-				<< "," << json4ML["faces_area"]
-				<< "," << json4ML["smiles"]
-				<< "," << json4ML["rule_of_thirds"]
-				<< "," << json4ML["static_saliency"]
+			myfile << "," << jsonSample["dif_hues"]
+				<< "," << jsonSample["faces"]
+				<< "," << jsonSample["faces_area"]
+				<< "," << jsonSample["smiles"]
+				<< "," << jsonSample["rule_of_thirds"]
+				<< "," << jsonSample["static_saliency"]
 				<< "," << jsonSample["rank_sum"]
 				<< "," << jsonSample["fps"]
-				<< "," << 0
-				<< "," << json4ML["shackiness"]
-				<< "," << json4ML["motion_mag"]
-				<< "," << json4ML["fg_area"]
-				<< "," << json4ML["shadow_area"]
-				<< "," << json4ML["bg_area"]
-				<< "," << json4ML["camera_move"]
-				<< "," << json4ML["focus_diff"]
+				<< "," << jsonSample["hues_std"]
+				<< "," << jsonSample["shackiness"]
+				<< "," << jsonSample["motion_mag"]
+				<< "," << jsonSample["fg_area"]
+				<< "," << jsonSample["shadow_area"]
+				<< "," << jsonSample["bg_area"]
+				<< "," << jsonSample["camera_move"]
+				<< "," << jsonSample["focus_diff"]
 				<< "," << aesthetic
 				<< "," << interest
-				<< "," << 0
-				<< "," << 0;
+				<< "," << jsonSample["hues_skewness"]
+				<< "," << jsonSample["hues_kurtosis"];
+
 
 			myfile << "," << jsonSample["eh_0"]
 				<< "," << jsonSample["eh_1"]
@@ -617,6 +687,45 @@ bool Gallery::extractVideoData() {
 				<< "," << jsonSample["entropy"]
 				<< "," << jsonSample["edge_strenght"];
 
+			myfile << "," << jsonSample["luminance_skewness"]
+				<< "," << jsonSample["luminance_kurtosis"]
+				<< "," << jsonSample["entropy_std"]
+				<< "," << jsonSample["entropy_skewness"]
+				<< "," << jsonSample["entropy_kurtosis"]
+				<< "," << jsonSample["focus_std"]
+				<< "," << jsonSample["focus_skewness"]
+				<< "," << jsonSample["focus_kurtosis"]
+				<< "," << jsonSample["mag_std"]
+				<< "," << jsonSample["mag_skewness"]
+				<< "," << jsonSample["mag_kurtosis"]
+				<< "," << jsonSample["uflowx_mean"]
+				<< "," << jsonSample["uflowx_std"]
+				<< "," << jsonSample["uflowx_skewness"]
+				<< "," << jsonSample["uflowx_kurtosis"]
+				<< "," << jsonSample["uflowy_mean"]
+				<< "," << jsonSample["uflowy_std"]
+				<< "," << jsonSample["uflowy_skewness"]
+				<< "," << jsonSample["uflowy_kurtosis"];
+
+			myfile << "," << jsonSample["sflowx_mean"]
+				<< "," << jsonSample["sflowx_std"]
+				<< "," << jsonSample["sflowx_skewness"]
+				<< "," << jsonSample["sflowx_kurtosis"]
+				<< "," << jsonSample["sflowy_mean"]
+				<< "," << jsonSample["sflowy_std"]
+				<< "," << jsonSample["sflowy_skewness"]
+				<< "," << jsonSample["sflowy_kurtosis"]
+				<< "," << jsonSample["colorfullness_rg1"]
+				<< "," << jsonSample["colorfullness_rg2"]
+				<< "," << jsonSample["colorfullness_yb1"]
+				<< "," << jsonSample["colorfullness_yb2"]
+				<< "," << jsonSample["duration"]
+				<< "," << jsonSample["saturation_1"]
+				<< "," << jsonSample["saturation_2"]
+				<< "," << jsonSample["brightness_1"]
+				<< "," << jsonSample["brightness_2"]
+				<< "," << jsonSample["colorfull_1"]
+				<< "," << jsonSample["colorfull_2"];
 
 			myfile << "\n";
 			myfile.flush();
@@ -629,6 +738,7 @@ bool Gallery::extractVideoData() {
 
 
 	}
+	mysemanticfile.close();
 	myfile.close();
 	return true;
 }
@@ -650,6 +760,8 @@ bool Gallery::loadFiles()
 	if (vectorSize > 0)									//If there are some files
 	{
 		allFiles.assign(vectorSize, VideoFile());			//Create vector of size equal to number of images and videos
+		clNames.assign(1000, "");
+		clNames = readClassNames();
 
 		for (int k = 0; k < vectorSize; ++k)
 		{
@@ -663,8 +775,9 @@ bool Gallery::loadFiles()
 			else {
 
 				vector<string> test = getIndividualSample(to_string(k + 1));
-
+				vector<pair<double, int> > semanticSample = semanticData[k];
 				tmpVideo.getMetadataFromCsv(test);
+				tmpVideo.getMetadataFromSemanticSample(semanticSample);
 				tmpVideo.generateXmlFile();
 				tmpVideo.getMetadataFromXml();
 			}
@@ -718,6 +831,62 @@ ofRectangle Gallery::spaceForFileDisplay()
 
 	return space;
 }
+
+bool Gallery::parseSemanticVector() {
+
+	semanticData.assign(totalFiles, vector<pair<double, int>>(5));
+	ifstream myReadFile;
+	myReadFile.open(semanticDataOutputPath.c_str());
+
+	string line;
+	if (myReadFile.fail())
+	{
+		cout << "fail loading semantic vector!" << endl;
+		myReadFile.close();
+		return false;
+	}
+	else {
+
+		vector<pair<double, int>> tempVector;
+		tempVector.assign(5, pair<double, int>(0.0, 0));
+		int l = 0;
+		while (getline(myReadFile, line)) {
+
+			stringstream temp(line);
+			string word;
+			int w = 0;
+			int par = 0;
+
+			while (getline(temp, word, ',')) {
+
+				if (w % 2 == 0 || w == 0) {
+
+					tempVector.at(par).second = std::stoi(word);
+				}
+				else {
+					tempVector.at(par).first = std::stod(word);
+					par++;
+
+				}
+				w++;
+			}
+			int dif = 5 - w / 2;
+			while (dif > 0) {
+				tempVector.at(5 - dif).first = -1;
+				tempVector.at(5 - dif).second = -1;
+
+				dif--;
+			}
+			semanticData.at(l) = tempVector;
+			l++;
+		}
+
+	}
+	myReadFile.close();
+	return true;
+}
+
+
 bool Gallery::parseCsvFeatureVector() {
 
 	ifstream myReadFile;
@@ -736,7 +905,7 @@ bool Gallery::parseCsvFeatureVector() {
 		int l = 0;
 		int w = 0;
 
-		csvData.assign(1000, vector<string>(100, ""));
+		csvData.assign(totalFiles, vector<string>(100, ""));
 
 		while (getline(myReadFile, line)) {
 
@@ -779,15 +948,38 @@ vector<string> Gallery::getIndividualSample(string name) {
 	}
 }
 
+std::vector<String> Gallery::readClassNames()
+{
+	const char *filename = "../bin/data/dnn/synset_words.txt";
+	std::vector<String> cNames;
+	std::ifstream fp(filename);
+	if (!fp.is_open())
+	{
+		std::cerr << "File with classes labels not found: " << filename << std::endl;
+		exit(-1);
+	}
+	std::string name;
+	while (!fp.eof())
+	{
+		std::getline(fp, name);
+		if (name.length())
+			cNames.push_back(name.substr(name.find(' ') + 1));
+	}
+	//cout << filename << " loaded!" << endl;
+	fp.close();
+	return cNames;
+}
+
 void Gallery::getConfigParams() {
 
 	ofXml* xml = new ofXml(ex.configPath);
 	if (xml->load(ex.configPath)) {
 		parseOnly = xml->getValue<bool>("//PARSE_ONLY");
 		inputFolder = xml->getValue<string>("//INPUT_FOLDER");
-		totalFiles = xml->getValue<int>("//TOTAL_FILES");		
+		totalFiles = xml->getValue<int>("//TOTAL_FILES");
 	}
 }
+string Gallery::thumbnailFolderPath = "../bin/data/thumbnails/videos/";
 
 
 

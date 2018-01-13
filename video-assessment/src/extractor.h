@@ -11,7 +11,13 @@
 #include <opencv2/opencv.hpp>
 #include "opencv2/videoio.hpp"
 #include <json.hpp>
+#include <opencv2/dnn.hpp>
+#include <opencv2/saliency.hpp>
+#include <fstream>
+#include <iostream>
+#include <cstdlib>
 
+using namespace saliency;
 using json = nlohmann::json;
 
 
@@ -22,20 +28,26 @@ public:
 
 	virtual ~extractor();
 
+	void init();
+
 	void initVectors(unsigned long nFiles);
 
 	double processStaticSaliency(Ptr<Saliency> staticSaliencyAlgorithm, Mat image);
 
 	void processColors(Mat colorMat);
 
+	vector <pair<double, int > > getSemanticMap();
+
 	void extractFromVideo(string filePath, int nv);
 
-	json getJson4ML();
-	json getJsonExtra();
+	String getClassTextFromID(int ID);
+
+	json getJsonA();
+	json getJsonI();
+	json getJsonAll();
 
 	int nFiles;                     //number of files to process
 	VideoCapture cap;               //current videoCapture object
-
 	double facesVec;
 	double eyesVec;
 	float facesAreaVec;
@@ -49,12 +61,12 @@ public:
 	CascadeClassifier face_cascade;
 	CascadeClassifier aditional_cascade;
 	bool insideFace = true;
-	bool entro = false;
 
 	int widthVec;
 	int heightVec;
 	double fpsVec;
 	double rank_sum;
+
 	vector<vector<int> > edgeHistogramVec;
 	vector<vector<int> > edgeDistributionVec;
 	vector<int> EH_edges_distribution;
@@ -66,24 +78,19 @@ public:
 	float percentBg, percentShadow, percentForegorund, percentFocus, percentCameraMove;
 
 	//background subtraction
-	bool bgSub = true;
 	Mat fgmask, fgimg, backimg, bgmask;
-	bool smoothMask = true;
-	bool update_bg_model = true;
-	int method = 1;
 
 	//opticflow
-	bool opticalFlow = true;
-	float totalFlowX;
-	float totalFlowY;
-
-	double flowxVec, flowyVec, flowxAvgVec, flowyAvgVec, magFlowVec, shackinessVec; //total and average flow;
+	//float totalFlowX;
+	//float totalFlowY;
+	//total and average flow
 	double shackiness;
+	//double shackiness;
 
 	float accumStaticSaliency;
 	double staticSaliencyVec;
 	string configPath = "extractor_config.xml";               //Path to configuration file
-	static string thumbnailFolderPath;				//Path to thumbnails
+	static string thumbnailFolderPath;				          //Path to thumbnails
 	int thumbnailHeight = 100;
 	int thumbnailWidth = 120;
 

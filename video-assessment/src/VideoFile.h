@@ -27,6 +27,9 @@ public:
 	unsigned short predict;
 	int interest_1;
 
+	int semanticID_1, semanticID_2, semanticID_3, semanticID_4, semanticID_5;
+	double semanticValue_1, semanticValue_2, semanticValue_3, semanticValue_4, semanticValue_5;
+
 	///////////////////Methods////////////////////////
 public:
 
@@ -38,6 +41,7 @@ public:
 	bool generateXmlFile() override;
 	bool getMetadataFromXml()  override;
 	bool getMetadataFromCsv(vector<string> csvData) override; // csv parse
+	void getMetadataFromSemanticSample(vector< pair <double, int > > semanticSample); // csv parse
 
 	void setThumbnailPath() override;
 	bool loadThumbnail() override;

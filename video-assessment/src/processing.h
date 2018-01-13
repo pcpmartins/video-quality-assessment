@@ -5,11 +5,9 @@
 
 #include "utility.h"
 #include <opencv2/core/utility.hpp>
-#include <opencv2/saliency.hpp>
 
 using namespace std;
 using namespace cv;
-using namespace saliency;
 
 class processing {
 
@@ -22,7 +20,7 @@ public:
 
 	double processFocus(Mat colorMat);
 
-	int processHues(Mat src);
+	vector<double> processHues(Mat src);
 
 	vector<double> processHaarCascade(Mat &colorMat, CascadeClassifier &finder, CascadeClassifier &aditional_cascade,
 		bool insideFace, Mat &ruleImage);
@@ -36,6 +34,8 @@ public:
 	float entropy(Mat seq, Size size, int index);
 
 	Mat myEntropy(Mat seq, int histSize);
+
+	std::vector<cv::Vec3b> find_dominant_colors(cv::Mat img, int count,int filecount, int frameCount, bool imwrite);
 
 	struct Mean {
 		unsigned int n;
@@ -57,6 +57,7 @@ public:
 			return sum + pow(mean - x, 2) / n;
 		}
 	};
+	
 
 protected:
 
@@ -82,5 +83,6 @@ private:
 			return sum + pow(mean - x.first, 2) / n;
 		}
 	};
+
 
 };

@@ -112,6 +112,7 @@
     <ClCompile Include="src\utility.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\RunningStats.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -242,6 +243,8 @@
     <ClInclude Include="src\utility.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\RunningStats.h" />
+    <ClInclude Include="src\json.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
