@@ -11,9 +11,12 @@ using namespace cv::ml;
 using namespace chrono;
 
 //Aesthetics classifier
-string a_binary_scores = "../bin/data/SVM/A2018_21/A2018_binary21.csv";
-string a_feature_vector = "../bin/data/SVM/A2018_21/A2018_train21_norm.csv";
-string a_maxmin_path = "../bin/data/SVM/A2018_21/A2018_train21_maxmin.csv";
+//string a_binary_scores = "../bin/data/SVM/A2018_21/A2018_binary21.csv";
+//string a_feature_vector = "../bin/data/SVM/A2018_21/A2018_train21_norm.csv";
+//string a_maxmin_path = "../bin/data/SVM/A2018_21/A2018_train21_maxmin.csv";
+string a_binary_scores = "../bin/data/SVM/A2018C22/A2018C_40__binary.csv";
+string a_feature_vector = "../bin/data/SVM/A2018C22/A2018C_40_reorg_norm.csv";
+string a_maxmin_path = "../bin/data/SVM/A2018C22/A2018C_40_reorg_maxmin.csv";
 
 //Interestingness classifier
 string i_binary_scores = "../bin/data/SVM/i_beach_gui/i_beach_bin_gui.csv";
@@ -37,7 +40,7 @@ void mlclass::init() {
 
 	auto start = chrono::high_resolution_clock::now();
 
-	svm_a = processSVM(a_binary_scores, a_feature_vector, "Aesthetic", 1, 0.2);
+	svm_a = processSVM(a_binary_scores, a_feature_vector, "Aesthetic", 5.12, 0.107374);
 	svm_i = processSVM(i_binary_scores, i_feature_vector, "Interestingness", 1, 0.2);
 
 	auto end = chrono::high_resolution_clock::now();
@@ -45,7 +48,7 @@ void mlclass::init() {
 	cout << "\n [!] Classifiers created in " << duration_cast<chrono::milliseconds>(end - start).count()
 		<< " ms" << endl;
 
-	a_maxmin.assign(2, vector<double>(21, 0));
+	a_maxmin.assign(2, vector<double>(22, 0));
 	i_maxmin.assign(2, vector<double>(30, 0));
 
 	ifstream inputData(a_maxmin_path);

@@ -818,21 +818,22 @@ void extractor::extractFromVideo(string filePath, int nv) {
 			{ "04",		F1 },		        //focus
 			{ "05",		facesRof3Vec },		//rule_of_thirds
 			{ "06",		MAG4 },		        //mag_kurtosis
-			{ "07",     rank_sum },		    //rank_sum
+			{ "07",     fpsVec / 60 },		    //fps
 			{ "08",     SFLOWY2 },		    //sflowy_std
 			{ "09",     E3 },		        //entropy_skewness
-			{ "10",     SFLOWX3 },		    //sflowx_skewness
+			{ "10",     SFLOWX3 },		    //sfx3
 			{ "11",     eyesVec },		    //smiles
 			{ "12",     SFLOWY1 },	     	//sflowy_mean
 			{ "13",     heightVec },		//height
-			{ "14",     SFLOWX1 },		    //sflowx_mean
-			{ "15",     G2 },		        //green_moments2
-			{ "16",     F4 },	          	//focus_kurtosis
-			{ "17",     UFLOWX1 },		    //uflowx_mean
-			{ "18",     B4 },		        //blue_moments4
-			{ "19",     RG2 },		        //colorfullness_rg2
-			{ "20",     UFLOWY3 },		    //uflowy_skewness
-			{ "21",     shackiness }		//shackiness
+			{ "14",     H1},		        //dif_hues
+			{ "15",     SFLOWX1 },		     //sflowx mean
+			{ "16",     G2 },	          	//green moment 2
+			{ "17",     B4 },		        //blue_moments4
+			{ "18",     R1 },		        //red moment 1
+			{ "19",     shackiness },		//shackiness
+			{ "20",     MAG1 },		        //mag 1
+			{ "21",     SFLOWY4 },		    //sfy4
+			{ "22",     bgSubVec.at(4) }    //focus diff.
 
 		};
 

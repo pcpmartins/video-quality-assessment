@@ -30,7 +30,7 @@ In this project github repository there is a Visual Studio 2015 Project. One can
 
 ## Feature description
 
-In this section we enumerate the main visual features, for each one we explain its relevancy, from our point of view.We can see in [figure 3](/images/diag.png) a snapshot of the current feature taxanomy. The features can be computed by groups. For each one its possible to compute the mean, variance, standard deviation, skewness and kurtosis.
+In this section we enumerate the main visual features, for each one we explain its relevancy, from our point of view.We can see in [figure 3](/images/feature_groups.png) a snapshot of the current feature taxanomy. The features can be computed by groups. For each one its possible to compute the mean, variance, standard deviation, skewness and kurtosis.
 
 ![figure 3](/images/feature_groups.png)
 *figure 3 - Feature extraction groups*
@@ -166,29 +166,30 @@ Topics related to saliency were adapted from the related OpenCV documentation. M
 
 It was trained SVM binary classifiers, using our extracted features, to predict aesthetic and interestingness from video. The classifiers are based on two publicly available video datasets with ground truth data. One for aesthetic  concepts where the dataset was used with a scheme that exploits visual properties and movement to assess the aesthetic quality of video. Other for interestingness , used in the development of a computational system to compare the interestingness levels of videos. For more details please refer to the corresponding papers [[9]](https://www.researchgate.net/profile/Christos_Tzelepis/publication/307516039_Video_aesthetic_quality_assessment_using_kernel_Support_Vector_Machine_with_isotropic_Gaussian_sample_uncertainty_KSVM-IGSU/links/57d9074a08ae601b39b04749/Video-aesthetic-quality-assessment-using-kernel-Support-Vector-Machine-with-isotropic-Gaussian-sample-uncertainty-KSVM-IGSU.pdf) and [[10]](http://www.yugangjiang.info/publication/aaai13-interestingness.pdf).
 
+![figure 6](/images/tool-norm-formulae.png)
+*figure 6 - Feature normalisation options* 
+
+![figure 7](/images/statistical_measures.png)
+*figure 7 - Statistical measures* 
+
+
 #### Aesthetic classifier details
 
 * At start a rough pre-selection is made according to the concept to be classified, discarding redundant or not applicable groups of features. The overall extracted features were reduced by this process from the initial 98 columns to 48. 
 
-* Feeding this 48 columns [initial feature vector](/docs/A2018C_49_cut_mrmr.csv), representing our features/attributes, together with the ground-truth class labels(on the first column) to the feature selection algorithm [minimum-Redundancy-Maximum-Relevance (mRMR)](http://home.penglab.com/proj/mRMR/), allowed to reorganize our variables taking into account not only the dependency and redundancy between variables but also their relevancy. during this step some variables were discarded, only the top 40 features were preserverd. It is possible to see the resulting algorithm output in [figure 6](/images/a_mrmr40_result.png). The 40 variables are shown sorted by relevancy only at the left side, and by mRMR at the rigth, the first column for both sort methods refer to the ranked variable position, the second to its original column position, the third to its denomination and finaly, the fourth to the algorithm rank score.
+* Feeding this 48 columns [initial feature vector](/docs/A2018C_49_cut_mrmr.csv), representing our features/attributes, together with the ground-truth class labels(on the first column) to the feature selection algorithm [minimum-Redundancy-Maximum-Relevance (mRMR)](http://home.penglab.com/proj/mRMR/), allowed to reorganize our variables taking into account not only the dependency and redundancy between variables but also their relevancy. during this step some variables were discarded, only the top 40 features were preserverd. It is possible to see the resulting algorithm output in [figure 8](/images/a_mrmr40_result.png). The 40 variables are shown sorted by relevancy only at the left side, and by mRMR at the rigth, the first column for both sort methods refer to the ranked variable position, the second to its original column position, the third to its denomination and finaly, the fourth to the algorithm rank score.
 
-![figure 6](/images/a_mrmr40_result.png)
-*figure 6 - Feature selection result* 
+![figure 8](/images/a_mrmr40_result.png)
+*figure 8 - Feature selection result* 
 
-* The resulting 700x40 feature vector from the previous step was rescaled to [0,1] with minMax normalisation. Other normalisation methods were also pondered as shown in [figure 7](). The resulting min. and max. values are saved in a CSV file.
+* The resulting 700x40 feature vector from the previous step was rescaled to [0,1] with minMax normalisation. Other normalisation methods were also pondered as shown in [figure 6](/images/tool-norm-formulae.png). The resulting min. and max. values are also saved in a CSV file.
 
-![figure 7](/images/tool-norm-formulae.png)
-*figure 7 - Feature normalisation options* 
-
-* Next, we trained SVM classifiers incrementing progressively the number of features used and evaluating, at the same time, the classification performance using several statistical measures listed in [figure 8](). The registered classification performance using cross-validation can be observed in [figure 9]().
-
-![figure 8](/images/statistical_measures.png)
-*figure 8 - Statistical measures* 
+* Next, we trained SVM classifiers incrementing progressively the number of features used and evaluating, at the same time, the classification performance using several statistical measures listed in [figure 7](/images/statistical_measures.png). The registered classification performance using cross-validation can be observed in [figure 9](/images/a_classification_stats.png).
 
 ![figure 9](/images/a_classification_stats.png)
 *figure 9 - Aesthetic classification performance with incremental feature number* 
 
-* The selection of the best number of features(19) was made after pondering on accuracy, F1 score and also on the SVM  parameters C and Gamma of the classification results with incremental feature numbers, [figure 10](/images/a_classification_C.png) and [figure 11](/images/a_classification_G.png).
+* The selection of the best number of features(22) was made after pondering on the statistical measures of accuracy and F1 score and also on the SVM  parameters C and Gamma obtained from the classification results with incremental feature numbers, [figure 10](/images/a_classification_C.png) and [figure 11](/images/a_classification_G.png).
 
 ![figure 10](/images/a_classification_C.png)
 *figure 10 - Aesthetic classification performance C parameter* 
@@ -198,7 +199,10 @@ It was trained SVM binary classifiers, using our extracted features, to predict 
 
 #### Interestingness classifier details
 
-The interestingness classification focused on specific events. Each specific event dataset was gathered from the event categories of the beforementioned Flickr interestingness dataset.
+The interestingness classification focused on specific events. Each specific event dataset was gathered from the event categories of the beforementioned Flickr interestingness video dataset. We can see a breakdown of the dataset event categories selected in [figure 12](/images/i_categories.png).
+
+![figure 12](/images/i_categories.png)
+*figure 12 - Interestingness event categories breakdown* 
 
 ## References
 
