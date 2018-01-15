@@ -98,7 +98,9 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 						pow(green2 - files[i].greenMoments.second, 2) +
 						pow(blue2 - files[i].blueMoments.second, 2));
 
-					colorSimilarity = (500.0 - colorSimilarity) / 500.0;
+					colorSimilarity = (10.0 - colorSimilarity) / 10.0;
+					//cout << red1<<" " << files[i].redMoments.first << endl;
+					//cout << colorSimilarity << endl;
 				}
 
 				if (edgeSimilarityON)

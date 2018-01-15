@@ -980,7 +980,3 @@ void Gallery::getConfigParams() {
 	}
 }
 string Gallery::thumbnailFolderPath = "../bin/data/thumbnails/videos/";
-
-
-
-

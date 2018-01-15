@@ -37,8 +37,8 @@ void mlclass::init() {
 
 	auto start = chrono::high_resolution_clock::now();
 
-	svm_a = processSVM(a_binary_scores, a_feature_vector, "Aesthetic", 2.56, 0.107374);
-	svm_i = processSVM(i_binary_scores, i_feature_vector, "Interestingness", 2.56, 0.429497);
+	svm_a = processSVM(a_binary_scores, a_feature_vector, "Aesthetic", 1, 0.2);
+	svm_i = processSVM(i_binary_scores, i_feature_vector, "Interestingness", 1, 0.2);
 
 	auto end = chrono::high_resolution_clock::now();
 

@@ -34,6 +34,8 @@ C:\of_v0.9.8_vs_release\apps\myApps
 
 ## Configuring video-assessment project
 
+On the solution explorer right click on the video-assessment project and select openFrameworks addons. Check ofxGui and ofxXmlSettings and click ok.
+
 * Project>Properties>C/C++>Additional Include Directories.
 ![figure 1](/images/vs1.jpg)
 
@@ -57,6 +59,8 @@ opencv_saliency320.lib
 opencv_tracking320.lib
 opencv_video320.lib
 opencv_videoio320.lib
+opencv_dnn320.lib
+opencv_photo320.lib
 
 ** Debug:
 
@@ -72,3 +76,5 @@ opencv_saliency320d.lib
 opencv_tracking320d.lib
 opencv_video320d.lib
 opencv_videoio320d.lib
+opencv_dnn320d.lib
+opencv_photo320d.lib

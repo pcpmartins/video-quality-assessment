@@ -14,7 +14,7 @@ The several tool menus are visible in  figure 2.  The rating menu (1) helps the 
 
 There are 4 available menu tabs:
 
-* RATING - With the rating tabthe user can assign a rating from 0 to 5 to some videos and afterwards filter or sort by this rating.
+* RATING - With this tab the user can assign a rating from 0 to 5 to some videos and afterwards filter or sort by this rating.
 * FILTER 1 - In the filter tab 1 the user can filter using the basic features.
 * FILTER 2 - In the filter tab 2 are grouped more advanced features.
 * SORT - In this tab we can sort the videos by more then 20 different features.
@@ -58,55 +58,83 @@ the content of this file where we can see the default values:
 ```
 <CONFIG>
 	<SAMPLING_FACTOR>1</SAMPLING_FACTOR>
-	<EDGE_HIST>1</EDGE_HIST>
-	<ENTRO>0</ENTRO>
-	<QUIET>1</QUIET>
 	<RESIZE>1</RESIZE>
 	<BGSUB>1</BGSUB>
+	<HAAR>1</HAAR>
+	<EDGE_HIST>1</EDGE_HIST>
+	<ENTROPY>1</ENTROPY>
+	<HSV>1</HSV>
+	<FOCUS>1</FOCUS>
+	<DOMINANT_COLORS>0</DOMINANT_COLORS>
+	<SAVEPALLETE>0</SAVEPALLETE>
+	<SSALIENCY>1</SSALIENCY>
 	<FLOW>1</FLOW>
+	<SEMANTIC>1</SEMANTIC>
+	<COLORFULLNESS>1</COLORFULLNESS>
 	<PARSE_ONLY>0</PARSE_ONLY>
-	<INPUT_FOLDER>data/files/</INPUT_FOLDER>
+	<INPUT_FOLDER>data/files</INPUT_FOLDER>
 	<TOTAL_FILES>1000</TOTAL_FILES>
 </CONFIG>
 ```
 These are experimental configurable values, it is not recomended to change.
 
-### SAMPLING_FACTOR = [positive integer] 
+- SAMPLING_FACTOR = [positive integer] 
 Increasing the sampling factor will skip frames during the extraction process, making it much
 faster to compute. Extracting our features using a factor of 10 means that the time of the
 extraction process will be 1/10 of using a factor of 1.There is a drawback, background
 subtraction and optical flow features will not be extracted.
 
-### EDGE_HIST = [0, 1] 
-Turning off edge histogram will decrease sligthly computation time.
-
-### ENTRO = [0, 1] 
-Entropy computation switch for debug.
-
-### QUIET = [0, 1] 
-Turning off quiet mode will increase console feed-back from extraction process.
-
-### RESIZE = [1, 2, 3]
- The extraction process is done on a resized version of the video frames, available options are:
+- RESIZE = [1, 2, 3]
+ The extraction process is done on a resized version of the video frames,increasing the size will also increase greatly the overall computation time, available options are:
 
 * 0 - no resizing
 * 1 - 320 x 240
 * 2 - 480 x 360
 * 3 - 640 x 480
 
-### BGSUB = [0, 1] 
-Computation of background subtraction features.
+- BGSUB = [0, 1] 
+Turning off of background subtraction features will decrease moderately the overall computation time.
 
-### FLOW = [0, 1] 
-Computation of optical flow features
+- HAAR = [0, 1] 
+Turning off the computation of Haar features will decrease moderately the overall computation time.
 
-### PARSE_ONLY = [0, 1] 
+- EDGE_HIST = [0, 1] 
+Turning off edge histogram will decrease sligthly computation time.
+
+- ENTRO = [0, 1] 
+Turning off  entropy computation will decrease sligthly computation time.
+
+- HSV = [0, 1] 
+Turning off the computation of HSV colorspace features will decrease sligthly computation time.
+
+- FOCUS = [0, 1] 
+Turning off the computation of focus measure will decrease sligthly computation time.
+
+- DOMINANT_COLORS = [0, 1] 
+Turning off the computation of dominat colors will decrease moderately the overall computation time, this measure is computed once per 30 frames interval.
+
+- SAVE_PALLETE = [0, 1] 
+Save the corresponding palletes for dominant color keyframes in PNG format. Turning off this feature will decrease moderately the overall computation time.
+
+- SSALIENCY = [0, 1] 
+Turning off static saliency feature will decrease sligthly computation time.
+
+- FLOW = [0, 1] 
+Computation of optical flow features contribute to roughly 50% of the overall computation time when extracting all features.
+
+- SEMANTIC = [0, 1] 
+Turning off semantic concepts extraction will decrease greatly the overall computation time.
+
+- COLORFULLNESS = [0, 1] 
+Turning off colorfullness computation will decrease moderately the overall computation time.
+
+- PARSE_ONLY = [0, 1] 
 Allows to bypass extraction process and start from feature vector parse phase.
 
-### INPUT_FOLDER = [string] 
+- INPUT_FOLDER = [string] 
 The path to folder with input videos.
 
-### TOTAL_FILES = [positive integer] 
+- TOTAL_FILES = [positive integer] 
 The total capacity.
 
 ## Error handling
