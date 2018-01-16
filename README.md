@@ -166,6 +166,27 @@ Topics related to saliency were adapted from the related OpenCV documentation. M
 
  SVM binary classifiers were trained, using our extracted features, to predict aesthetic and interestingness from video. The classifiers are based on two publicly available video datasets with ground truth data. One for aesthetic  concepts where the dataset was used with a scheme that exploits visual properties and movement to assess the aesthetic quality of video. Other for interestingness , used in the development of a computational system to compare the interestingness levels of videos. For more details please refer to the corresponding papers [[9]](https://www.researchgate.net/profile/Christos_Tzelepis/publication/307516039_Video_aesthetic_quality_assessment_using_kernel_Support_Vector_Machine_with_isotropic_Gaussian_sample_uncertainty_KSVM-IGSU/links/57d9074a08ae601b39b04749/Video-aesthetic-quality-assessment-using-kernel-Support-Vector-Machine-with-isotropic-Gaussian-sample-uncertainty-KSVM-IGSU.pdf) and [[10]](http://www.yugangjiang.info/publication/aaai13-interestingness.pdf).
 
+### SVM parameters
+
+All classifiers used the following SVM parameter setup:	
+
+    *svmType (type of formulation) - C-Support Vector Classification. n-class classification (n \geq 2), allows imperfect separation of classes with penalty multiplier C for outliers.
+
+    C_SVC
+
+    *kernelType - Radial basis function (RBF), a good choice in most cases. K(x_i, x_j) = e^{-\gamma ||x_i - x_j||^2}, \gamma > 0.
+
+    SVM::RBF
+
+    *Cvalue – Parameter C of a SVM optimization problem. The C parameter trades off misclassification of training examples against simplicity of the decision surface. A low C makes the decision surface smooth, while a high C aims at classifying all training examples correctly by giving the model freedom to select more samples as support vectors.
+
+    Exponential grid-search to find optimal value
+
+    *gamma – Parameter gamma of a kernel function. Intuitively, the gamma parameter defines how far the influence of a single training example reaches, with low values meaning ‘far’ and high values meaning ‘close’. The gamma parameters can be seen as the inverse of the radius of influence of samples selected by the model as support vectors.
+
+    Exponential grid-search to find optimal value
+
+
 ### Feature scaling
 
 In a pre-processing step data normalisation is performend. Since the range of values of raw data varies widely, in some machine learning algorithms, namely SVM, objective functions will not work properly without normalization.
@@ -215,7 +236,7 @@ Often, there is an inverse relationship between precision and recall, where it i
 ### Interestingness classifiers details
 
 The interestingness classification focused on specific events. Each specific event dataset was gathered from the event categories of the beforementioned Flickr interestingness video dataset. We can see a breakdown of the dataset event categories selected in [figure 13](/images/i_categories.png).
-Each event dataset comprises 40 positive and 40 negative samples, this samples were compiled from the top 10%(positives) and bottom 10% (negatives) from a total of 400 videos retrieved from Flickr keyword search for each event and sorted by interestingness. The methodology used was the same used for aesthetic classification explained in the ### Aesthetic classifier details.
+Each event dataset comprises 40 positive and 40 negative samples, this samples were compiled from the top 10% (positives) and bottom 10% (negatives) from a total of 400 videos retrieved from Flickr keyword search for each event and sorted by interestingness. The methodology used was the same used for aesthetic classification explained in the [Aesthetic classifier details section](### Aesthetic classifier details).
 
 ![figure 13](/images/i_categories.png)
 *figure 13 - Interestingness event categories breakdown* 
@@ -223,16 +244,29 @@ Each event dataset comprises 40 positive and 40 negative samples, this samples w
 #### Basketball classifier
 
 ![figure 14](/images/basket_graph.png)
-*figure 14 - Basketball interestingness classifier performance*
+*figure 14 - Basketball event interestingness classifier performance*
 
-In [figure 14](/images/basket_graph.png) it is possible to to see the performance comparison between classifiers trained with progressively higher number of features. The associated C and Gamma parameters evolution can also be seen at [figure 15](/images/basket_c.png) and [figure 16](/images/basket_g.png) respectively. The top 28 features were selected to train the final classifier. The accuracy registered was 88% and the F-score 0.8.
+In [figure 14](/images/basket_graph.png) it is possible to to see the performance comparison between classifiers trained to predict interestingness on basketball events with progressively higher number of features. The associated C and Gamma parameters evolution can also be seen at [figure 15](/images/basket_c.png) and [figure 16](/images/basket_g.png) respectively. The top 28 features were selected to train the final classifier. The accuracy registered was 88% and the F-score 0.8.
 
 ![figure 15](/images/basket_c.png)
-*figure 15 - Basketball interestingness classifier C parameter*
+*figure 15 - Basketball event interestingness classifier C parameter*
 
 ![figure 16](/images/basket_g.png)
-*figure 16 - Basketball interestingness classifier Gamma parameter*
+*figure 16 - Basketball event interestingness classifier Gamma parameter*
 
+#### Parade classifier
+
+In [figure 17](/images/parade_graph.png) it is possible to to see the performance comparison between classifiers trained to predict interestingness of parade events with progressively higher number of features.
+
+![figure 17](/images/parade_graph.png)
+*figure 17 - Parade event interestingness classifier performance*
+
+#### Music performance classifier
+
+In [figure 18](/images/music_graph.png) it is possible to to see the performance comparison between classifiers trained to predict interestingness of music events events with progressively higher number of features. as the audio information is very relevant on this event, the performance of the classification was overall lower than in the other events.
+
+![figure 18](/images/music_graph.png)
+*figure 18 - Music event interestingness classifier performance*
 
 ## References
 
