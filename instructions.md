@@ -87,13 +87,10 @@ subtraction and optical flow features will not be extracted.
 - RESIZE = [1, 2, 3]
  The extraction process is done on a resized version of the video frames,increasing the size will also increase greatly the overall computation time, available options are:
 
-* 0 - no resizing
-* 1 - 320 x 240
-* 2 - 480 x 360
-* 3 - 640 x 480
+ 0 - no resizing, 1 - 320 x 240, 2 - 480 x 360, 3 - 640 x 480.
 
 - BGSUB = [0, 1] 
-Turning off of background subtraction features will decrease moderately the overall computation time.
+Turning off background subtraction features will decrease moderately the overall computation time.
 
 - HAAR = [0, 1] 
 Turning off the computation of Haar features will decrease moderately the overall computation time.
