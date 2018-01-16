@@ -173,7 +173,7 @@ In a pre-processing step data normalisation is performend. Since the range of va
 ![figure 6](/images/tool-norm-formulae.png)
 *figure 6 - Feature normalisation options* 
 
-## Statistical measures
+### Statistical measures
 
 In an information retrieval scenario, the instances are documents and the task is to return a set of relevant documents given a search term; or equivalently, to assign each document to one of two categories, "relevant" and "not relevant". In this case, the "relevant" documents are simply those that belong to the "relevant" category. Recall is defined as the number of relevant documents retrieved by a search divided by the total number of existing relevant documents, while precision is defined as the number of relevant documents retrieved by a search divided by the total number of documents retrieved by that search.
 
@@ -191,40 +191,51 @@ Often, there is an inverse relationship between precision and recall, where it i
 
 ### Aesthetic classifier details
 
-* At start a rough pre-selection was made according to the concept to be classified, discarding redundant or not applicable groups of features. The overall extracted features were reduced by this process from the initial 98 columns to 48. 
+* At start a rough pre-selection was made according to the concept to be classified, discarding redundant or not applicable groups of features. The overall extracted features were reduced by this process from the initial 98 columns to 48 as shown in [figure 8](/images/a_48_features.png).
 
-* Feeding this 48 columns [initial feature vector](/docs/A2018C_49_cut_mrmr.csv), representing our features/attributes, together with the ground-truth class labels(on the first column) to the feature selection algorithm [minimum-Redundancy-Maximum-Relevance (mRMR)](http://home.penglab.com/proj/mRMR/), allowed to reorganize our variables taking into account not only the dependency and redundancy between variables but also their relevancy. during this step some variables were discarded, only the top 40 features were preserverd. It is possible to see the resulting algorithm output in [figure 8](/images/a_mrmr40_result.png). The 40 variables are shown sorted by relevancy only, at the left side, and by mRMR at the rigth, the first column for both sort methods refer to the ranked variable position, the second to its original column position, the third to its denomination and finaly, the fourth to the algorithm rank score.
+![figure 8](/images/a_48_features.png)
+*figure 8 - Feature pre-selection* 
 
-![figure 8](/images/a_mrmr40_result.png)
-*figure 8 - Feature selection result* 
+* Feeding this 48 columns [initial feature vector](/docs/A2018C_49_cut_mrmr.csv), representing our features/attributes, together with the ground-truth class labels(on the first column) to the feature selection algorithm [minimum-Redundancy-Maximum-Relevance (mRMR)](http://home.penglab.com/proj/mRMR/), allowed to reorganize our variables taking into account not only the dependency and redundancy between variables but also their relevancy. during this step some variables were discarded, only the top 40 features were preserverd. It is possible to see the resulting algorithm output in [figure 9](/images/a_mrmr40_result.png). The 40 variables are shown sorted by relevancy only, at the left side, and by mRMR at the rigth, the first column for both sort methods refer to the ranked variable position, the second to its original column position, the third to its denomination and finaly, the fourth to the algorithm rank score.
+
+![figure 9](/images/a_mrmr40_result.png)
+*figure 9 - Feature selection result* 
 
 * The resulting 700x40 feature vector from the previous step was rescaled to [0,1] with minMax normalisation. Other normalisation methods were also pondered as shown in [figure 6](/images/tool-norm-formulae.png). The resulting min. and max. values are also saved in a CSV file.
 
-* Next, we trained SVM classifiers incrementing progressively the number of features used and evaluating, at the same time, the classification performance using several statistical measures listed in [figure 7](/images/statistical_measures.png). The registered classification performance using cross-validation can be observed in [figure 9](/images/a_classification_stats.png).
+* Next, we trained SVM classifiers incrementing progressively the number of features used and evaluating, at the same time, the classification performance using several statistical measures listed in [figure 7](/images/statistical_measures.png). The registered classification performance using cross-validation can be observed in [figure 10](/images/a_classification_stats.png).
 
-![figure 9](/images/a_classification_stats.png)
-*figure 9 - Aesthetic classification performance with incremental feature number* 
+![figure 10](/images/a_classification_stats.png)
+*figure 10 - Aesthetic classification performance with incremental feature number* 
 
-* The selection of the best number of features(22) was made after pondering on the statistical measures of accuracy and F1 score and also on the SVM  parameters C and Gamma obtained from the classification results with incremental feature numbers, [figure 10](/images/a_classification_C.png) and [figure 11](/images/a_classification_G.png).
+* The selection of the best number of features(22) was made after pondering on the statistical measures of accuracy and F1 score and also on the SVM  parameters C and Gamma obtained from the classification results with incremental feature numbers, [figure 11](/images/a_classification_C.png) and [figure 12](/images/a_classification_G.png).
 
-![figure 10](/images/a_classification_C.png)
-*figure 10 - Aesthetic classification performance C parameter* 
+![figure 11](/images/a_classification_C.png)
+*figure 11 - Aesthetic classification performance C parameter* 
 
-![figure 11](/images/a_classification_G.png)
-*figure 11 - Aesthetic classification performance Gamma parameter* 
+![figure 12](/images/a_classification_G.png)
+*figure 12 - Aesthetic classification performance Gamma parameter* 
 
 ### Interestingness classifiers details
 
-The interestingness classification focused on specific events. Each specific event dataset was gathered from the event categories of the beforementioned Flickr interestingness video dataset. We can see a breakdown of the dataset event categories selected in [figure 12](/images/i_categories.png).
-Each event dataset comprises 40 positive and 40 negative samples, this samples were compiled from the top 10%(positives) and bottom 10% (negatives) from a total of 400 videos retrieved from Flickr keyword search  and sorted by interestingness.
+The interestingness classification focused on specific events. Each specific event dataset was gathered from the event categories of the beforementioned Flickr interestingness video dataset. We can see a breakdown of the dataset event categories selected in [figure 13](/images/i_categories.png).
+Each event dataset comprises 40 positive and 40 negative samples, this samples were compiled from the top 10%(positives) and bottom 10% (negatives) from a total of 400 videos retrieved from Flickr keyword search for each event and sorted by interestingness. The methodology used was the same used for aesthetic classification explained in the ### Aesthetic classifier details.
 
-![figure 12](/images/i_categories.png)
-*figure 12 - Interestingness event categories breakdown* 
+![figure 13](/images/i_categories.png)
+*figure 13 - Interestingness event categories breakdown* 
 
 #### Basketball classifier
 
-In [figure 13](/images/basket_graph.png) it is possible to to see the performance comparison between classifiers with progressively higher number of features used. The associated C and Gamma parameters evolution can also be seen at [figure 14](/images/basket_c.png) and [figure 15](/images/basket_g.png) respectively. The top 28 features were selected to train the final classifier.
+![figure 14](/images//images/basket_graph.png)
+*figure 14 - Basketball interestingness classifier performance*
 
+In [figure 14](/images/basket_graph.png) it is possible to to see the performance comparison between classifiers trained with progressively higher number of features. The associated C and Gamma parameters evolution can also be seen at [figure 15](/images/basket_c.png) and [figure 16](/images/basket_g.png) respectively. The top 28 features were selected to train the final classifier. The accuracy registered was 88% and the F-score 0.8.
+
+![figure 15](/images//images/basket_c.png)
+*figure 15 - Basketball interestingness classifier C parameter*
+
+![figure 16](/images//images/basket_g.png)
+*figure 16 - Basketball interestingness classifier Gamma parameter*
 
 
 ## References
