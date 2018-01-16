@@ -170,18 +170,13 @@ Topics related to saliency were adapted from the related OpenCV documentation. M
 
 All classifiers used the following SVM parameter setup:	
 
-    *svmType (C_SVC type of formulation) - C-Support Vector Classification. n-class classification, allows imperfect separation of classes with penalty multiplier C for outliers.
+    * svmType (C_SVC type of formulation) - C-Support Vector Classification. n-class classification, allows imperfect separation of classes with penalty multiplier C for outliers.
 
-    *kernelType (SVM::RBF) - Radial basis function (RBF), a good choice in most cases.
+    * kernelType (SVM::RBF) - Radial basis function (RBF), a good choice in most cases.
 
+    * Cvalue – Parameter C of a SVM optimization problem. The C parameter trades off misclassification of training examples against simplicity of the decision surface. A low C makes the decision surface smooth, while a high C aims at classifying all training examples correctly by giving the model freedom to select more samples as support vectors.
 
-    *Cvalue – Parameter C of a SVM optimization problem. The C parameter trades off misclassification of training examples against simplicity of the decision surface. A low C makes the decision surface smooth, while a high C aims at classifying all training examples correctly by giving the model freedom to select more samples as support vectors.
-
-    Exponential grid-search to find optimal value
-
-    *gamma – Parameter gamma of a kernel function. Intuitively, the gamma parameter defines how far the influence of a single training example reaches, with low values meaning "far" and high values meaning "close". The gamma parameters can be seen as the inverse of the radius of influence of samples selected by the model as support vectors.
-
-    Exponential grid-search to find optimal value
+    * gamma – Parameter gamma of a kernel function. Intuitively, the gamma parameter defines how far the influence of a single training example reaches, with low values meaning "far" and high values meaning "close". The gamma parameters can be seen as the inverse of the radius of influence of samples selected by the model as support vectors.
 
 
 ### Feature scaling
