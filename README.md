@@ -225,7 +225,7 @@ Often, there is an inverse relationship between precision and recall, where it i
 ![figure 10](/images/a_classification_stats.png)
 *figure 10 - Aesthetic classification performance with increasing number of feature* 
 
-* The selection of the best number of features(22) was made after pondering on the statistical measures of accuracy and F1 score and also on the SVM  parameters C and Gamma obtained from the classification results with incremental feature numbers, [figure 11](/images/a_classification_C.png) and [figure 12](/images/a_classification_G.png).
+* The selection of the best number of features(22 or 30) was made after pondering on the statistical measures of accuracy and F1 score and also on the SVM  parameters C and Gamma obtained from the classification results with incremental number of features [figure 11](/images/a_classification_C.png) and [figure 12](/images/a_classification_G.png).
 
 ![figure 11](/images/a_classification_C.png)
 *figure 11 - Aesthetic classification C parameter* 
@@ -263,7 +263,7 @@ In [figure 17](/images/parade_graph.png) it is possible to to see the performanc
 
 #### Music performance classifier
 
-In [figure 18](/images/music_graph.png) it is possible to to see the performance comparison between classifiers trained to predict interestingness of music events events with progressively higher number of features. as the audio information is very relevant on this event, the performance of the classification was overall lower than in the other events.
+In [figure 18](/images/music_graph.png) it is possible to to see the performance comparison between classifiers trained to predict interestingness of music events with progressively higher number of features. as the audio information is very relevant on this event, the performance of the classification was overall comparing with the other events.
 
 ![figure 18](/images/music_graph.png)
 *figure 18 - Music event interestingness classifier performance*
