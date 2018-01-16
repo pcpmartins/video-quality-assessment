@@ -49,7 +49,7 @@ The basis of color moments lays in the assumption that the distribution of color
 
 #### Color ratio
 
-Color moments are great as a measure to judge similarity between images or videos, but it's a concept hard to be directly interpreted by a human user, instead we devised a better feature for human interaction based on the color average given by the first moment, the color ratio. For a human is much easier to understand and use this concept.
+Color moments are great as a measure to judge similarity between images or videos, but it's a concept hard to be directly interpreted by a human user, instead we devised a better feature for human interaction based on the color average, the color ratio. For a human is much easier to understand and use this concept.
 
 #### Luminance
 
@@ -59,7 +59,7 @@ Luminance is arguable the most important visual components, humans are so much m
 
 Edges may indicate the boundaries of objects in the scene. Detecting sharp changes in brigthness between each pixel and its surroundings allow us to detect edges.
 
-We implented a simplified version of the method presented in ["Efficient Use of Local Edge Histogram Descriptor"](https://www.dcc.fc.up.pt/~mcoimbra/lectures/VC_1415/VC_1415_P8_LEH.pdf) where edge histograms MPEG-7 compliant features are extracted. We use a global and a local representation for edges, for the local one a support tool was used to split each frame by a 4x4 grid, resulting in 16 sub-images. Each one of this sub-images was convolved with 5 different oriented kernels (0-zero, 1-vertical, 2-horizontal, 3-45ª, 4-135ª, 5-non-directional) this process results in 16 local features representing the orientation of each sub-image. A global edge value is also computed.
+We implented a simplified version of the method presented in ["Efficient Use of Local Edge Histogram Descriptor"](https://www.dcc.fc.up.pt/~mcoimbra/lectures/VC_1415/VC_1415_P8_LEH.pdf) where edge histograms MPEG-7 compliant features are extracted. We use a global and a local representation for edges, for the local one a support tool was used to split each frame by a 4x4 grid, resulting in 16 sub-images. Each one of this sub-images was convolved with 5 different oriented kernels (0-zero, 1-vertical, 2-horizontal, 3-45º, 4-135º, 5-non-directional) this process results in 16 local features representing the orientation of each sub-image. A global edge value is also computed.
 
 #### Edge strenght
 
@@ -162,22 +162,38 @@ Optical flow is the pattern of apparent motion of image objects between two cons
 
 Topics related to saliency were adapted from the related OpenCV documentation. Many computer vision applications may benefit from understanding where humans focus given a scene. Other than cognitively understanding the way human perceive images and scenes, finding salient regions and objects in the images helps various tasks such as speeding up object detection, object recognition, object tracking and content-aware image editing.
 
-### Machine learning classification
+## Machine learning classification
 
-It was trained SVM binary classifiers, using our extracted features, to predict aesthetic and interestingness from video. The classifiers are based on two publicly available video datasets with ground truth data. One for aesthetic  concepts where the dataset was used with a scheme that exploits visual properties and movement to assess the aesthetic quality of video. Other for interestingness , used in the development of a computational system to compare the interestingness levels of videos. For more details please refer to the corresponding papers [[9]](https://www.researchgate.net/profile/Christos_Tzelepis/publication/307516039_Video_aesthetic_quality_assessment_using_kernel_Support_Vector_Machine_with_isotropic_Gaussian_sample_uncertainty_KSVM-IGSU/links/57d9074a08ae601b39b04749/Video-aesthetic-quality-assessment-using-kernel-Support-Vector-Machine-with-isotropic-Gaussian-sample-uncertainty-KSVM-IGSU.pdf) and [[10]](http://www.yugangjiang.info/publication/aaai13-interestingness.pdf).
+ SVM binary classifiers were trained, using our extracted features, to predict aesthetic and interestingness from video. The classifiers are based on two publicly available video datasets with ground truth data. One for aesthetic  concepts where the dataset was used with a scheme that exploits visual properties and movement to assess the aesthetic quality of video. Other for interestingness , used in the development of a computational system to compare the interestingness levels of videos. For more details please refer to the corresponding papers [[9]](https://www.researchgate.net/profile/Christos_Tzelepis/publication/307516039_Video_aesthetic_quality_assessment_using_kernel_Support_Vector_Machine_with_isotropic_Gaussian_sample_uncertainty_KSVM-IGSU/links/57d9074a08ae601b39b04749/Video-aesthetic-quality-assessment-using-kernel-Support-Vector-Machine-with-isotropic-Gaussian-sample-uncertainty-KSVM-IGSU.pdf) and [[10]](http://www.yugangjiang.info/publication/aaai13-interestingness.pdf).
+
+### Feature scaling
+
+In a pre-processing step data normalisation is performend. Since the range of values of raw data varies widely, in some machine learning algorithms, namely SVM, objective functions will not work properly without normalization.
 
 ![figure 6](/images/tool-norm-formulae.png)
 *figure 6 - Feature normalisation options* 
+
+## Statistical measures
+
+In an information retrieval scenario, the instances are documents and the task is to return a set of relevant documents given a search term; or equivalently, to assign each document to one of two categories, "relevant" and "not relevant". In this case, the "relevant" documents are simply those that belong to the "relevant" category. Recall is defined as the number of relevant documents retrieved by a search divided by the total number of existing relevant documents, while precision is defined as the number of relevant documents retrieved by a search divided by the total number of documents retrieved by that search.
+
+In a classification task, the precision for a class is the number of true positives (i.e. the number of items correctly labeled as belonging to the positive class) divided by the total number of elements labeled as belonging to the positive class (i.e. the sum of true positives and false positives, which are items incorrectly labeled as belonging to the class). Recall in this context is defined as the number of true positives divided by the total number of elements that actually belong to the positive class (i.e. the sum of true positives and false negatives, which are items which were not labeled as belonging to the positive class but should have been).
+
+In information retrieval, a perfect precision score of 1.0 means that every result retrieved by a search was relevant (but says nothing about whether all relevant documents were retrieved) whereas a perfect recall score of 1.0 means that all relevant documents were retrieved by the search (but says nothing about how many irrelevant documents were also retrieved).
+
+In a classification task, a precision score of 1.0 for a class C means that every item labeled as belonging to class C does indeed belong to class C (but says nothing about the number of items from class C that were not labeled correctly) whereas a recall of 1.0 means that every item from class C was labeled as belonging to class C (but says nothing about how many other items were incorrectly also labeled as belonging to class C).
+
+Often, there is an inverse relationship between precision and recall, where it is possible to increase one at the cost of reducing the other. Usually, precision and recall scores are not discussed in isolation. Instead, either values for one measure are compared for a fixed level at the other measure (e.g. precision at a recall level of 0.75) or both are combined into a single measure. Examples of measures that are a combination of precision and recall are the F-measure (the weighted harmonic mean of precision and recall).
 
 ![figure 7](/images/statistical_measures.png)
 *figure 7 - Statistical measures* 
 
 
-#### Aesthetic classifier details
+### Aesthetic classifier details
 
-* At start a rough pre-selection is made according to the concept to be classified, discarding redundant or not applicable groups of features. The overall extracted features were reduced by this process from the initial 98 columns to 48. 
+* At start a rough pre-selection was made according to the concept to be classified, discarding redundant or not applicable groups of features. The overall extracted features were reduced by this process from the initial 98 columns to 48. 
 
-* Feeding this 48 columns [initial feature vector](/docs/A2018C_49_cut_mrmr.csv), representing our features/attributes, together with the ground-truth class labels(on the first column) to the feature selection algorithm [minimum-Redundancy-Maximum-Relevance (mRMR)](http://home.penglab.com/proj/mRMR/), allowed to reorganize our variables taking into account not only the dependency and redundancy between variables but also their relevancy. during this step some variables were discarded, only the top 40 features were preserverd. It is possible to see the resulting algorithm output in [figure 8](/images/a_mrmr40_result.png). The 40 variables are shown sorted by relevancy only at the left side, and by mRMR at the rigth, the first column for both sort methods refer to the ranked variable position, the second to its original column position, the third to its denomination and finaly, the fourth to the algorithm rank score.
+* Feeding this 48 columns [initial feature vector](/docs/A2018C_49_cut_mrmr.csv), representing our features/attributes, together with the ground-truth class labels(on the first column) to the feature selection algorithm [minimum-Redundancy-Maximum-Relevance (mRMR)](http://home.penglab.com/proj/mRMR/), allowed to reorganize our variables taking into account not only the dependency and redundancy between variables but also their relevancy. during this step some variables were discarded, only the top 40 features were preserverd. It is possible to see the resulting algorithm output in [figure 8](/images/a_mrmr40_result.png). The 40 variables are shown sorted by relevancy only, at the left side, and by mRMR at the rigth, the first column for both sort methods refer to the ranked variable position, the second to its original column position, the third to its denomination and finaly, the fourth to the algorithm rank score.
 
 ![figure 8](/images/a_mrmr40_result.png)
 *figure 8 - Feature selection result* 
@@ -197,12 +213,19 @@ It was trained SVM binary classifiers, using our extracted features, to predict 
 ![figure 11](/images/a_classification_G.png)
 *figure 11 - Aesthetic classification performance Gamma parameter* 
 
-#### Interestingness classifier details
+### Interestingness classifiers details
 
 The interestingness classification focused on specific events. Each specific event dataset was gathered from the event categories of the beforementioned Flickr interestingness video dataset. We can see a breakdown of the dataset event categories selected in [figure 12](/images/i_categories.png).
+Each event dataset comprises 40 positive and 40 negative samples, this samples were compiled from the top 10%(positives) and bottom 10% (negatives) from a total of 400 videos retrieved from Flickr keyword search  and sorted by interestingness.
 
 ![figure 12](/images/i_categories.png)
 *figure 12 - Interestingness event categories breakdown* 
+
+#### Basketball classifier
+
+In [figure 13](/images/basket_graph.png) it is possible to to see the performance comparison between classifiers with progressively higher number of features used. The associated C and Gamma parameters evolution can also be seen at [figure 14](/images/basket_c.png) and [figure 15](/images/basket_g.png) respectively. The top 28 features were selected to train the final classifier.
+
+
 
 ## References
 
