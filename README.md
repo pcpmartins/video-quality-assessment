@@ -226,15 +226,15 @@ Each event dataset comprises 40 positive and 40 negative samples, this samples w
 
 #### Basketball classifier
 
-![figure 14](/images//images/basket_graph.png)
+![figure 14](/images/basket_graph.png)
 *figure 14 - Basketball interestingness classifier performance*
 
 In [figure 14](/images/basket_graph.png) it is possible to to see the performance comparison between classifiers trained with progressively higher number of features. The associated C and Gamma parameters evolution can also be seen at [figure 15](/images/basket_c.png) and [figure 16](/images/basket_g.png) respectively. The top 28 features were selected to train the final classifier. The accuracy registered was 88% and the F-score 0.8.
 
-![figure 15](/images//images/basket_c.png)
+![figure 15](/images/basket_c.png)
 *figure 15 - Basketball interestingness classifier C parameter*
 
-![figure 16](/images//images/basket_g.png)
+![figure 16](/images/basket_g.png)
 *figure 16 - Basketball interestingness classifier Gamma parameter*
 
 
