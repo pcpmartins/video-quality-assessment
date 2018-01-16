@@ -206,15 +206,15 @@ Often, there is an inverse relationship between precision and recall, where it i
 * Next, we trained SVM classifiers incrementing progressively the number of features used and evaluating, at the same time, the classification performance using several statistical measures listed in [figure 7](/images/statistical_measures.png). The registered classification performance using cross-validation can be observed in [figure 10](/images/a_classification_stats.png).
 
 ![figure 10](/images/a_classification_stats.png)
-*figure 10 - Aesthetic classification performance with incremental feature number* 
+*figure 10 - Aesthetic classification performance with increasing number of feature* 
 
 * The selection of the best number of features(22) was made after pondering on the statistical measures of accuracy and F1 score and also on the SVM  parameters C and Gamma obtained from the classification results with incremental feature numbers, [figure 11](/images/a_classification_C.png) and [figure 12](/images/a_classification_G.png).
 
 ![figure 11](/images/a_classification_C.png)
-*figure 11 - Aesthetic classification performance C parameter* 
+*figure 11 - Aesthetic classification C parameter* 
 
 ![figure 12](/images/a_classification_G.png)
-*figure 12 - Aesthetic classification performance Gamma parameter* 
+*figure 12 - Aesthetic classification Gamma parameter* 
 
 ### Interestingness classifiers details
 
