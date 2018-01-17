@@ -170,13 +170,13 @@ Topics related to saliency were adapted from the related OpenCV documentation. M
 
 All classifiers used the following SVM parameter setup:	
 
-    * svmType (C_SVC type of formulation) - C-Support Vector Classification. n-class classification, allows imperfect separation of classes with penalty multiplier C for outliers.
+svmType (C_SVC) - C-Support Vector Classification. n-class classification, this type of formulation allows imperfect separation of classes with penalty multiplier C for outliers.
 
-    * kernelType (RBF) - Radial basis function (RBF), a good choice in most cases.
+kernelType (RBF) - Radial basis function, a good choice in most cases.
 
-    * Cvalue – Parameter C of a SVM optimization problem. The C parameter trades off misclassification of training examples against simplicity of the decision surface. A low C makes the decision surface smooth, while a high C aims at classifying all training examples correctly by giving the model freedom to select more samples as support vectors.
+Cvalue – Parameter C of a SVM optimization problem. The C parameter trades off misclassification of training examples against simplicity of the decision surface. A low C makes the decision surface smooth, while a high C aims at classifying all training examples correctly by giving the model freedom to select more samples as support vectors.
 
-    * gamma – Parameter gamma of a kernel function. Intuitively, the gamma parameter defines how far the influence of a single training example reaches, with low values meaning "far" and high values meaning "close". The gamma parameters can be seen as the inverse of the radius of influence of samples selected by the model as support vectors.
+gamma – Parameter gamma of a kernel function. Intuitively, the gamma parameter defines how far the influence of a single training example reaches, with low values meaning "far" and high values meaning "close". The gamma parameters can be seen as the inverse of the radius of influence of samples selected by the model as support vectors.
 
 ### Feature scaling
 
@@ -226,8 +226,8 @@ Often, there is an inverse relationship between precision and recall, where it i
 
 ### Interestingness classifiers details
 
-The interestingness classification focused on specific events. Each specific event dataset was gathered from the event categories of the beforementioned Flickr interestingness video dataset. We can see a breakdown of the dataset event categories selected in [figure 13](/images/i_categories.png).
-Each event dataset comprises 40 positive and 40 negative samples, this samples were compiled from the top 10% (positives) and bottom 10% (negatives) from a total of 400 videos retrieved from Flickr keyword search for each event and sorted by interestingness. The methodology used was the same used for aesthetic classification explained in the [Aesthetic classifier details section](### Aesthetic classifier details).
+The interestingness classification focused on specific events. Each specific event dataset was gathered from the event categories of the beforementioned Flickr interestingness video dataset. We can see a breakdown and the event categories selected in [figure 13](/images/i_categories.png).
+Each event dataset comprises 40 positive and 40 negative samples, this samples were compiled from the top 10% (positives) and bottom 10% (negatives) from a total of 400 videos retrieved from Flickr keyword search for each event and sorted by interestingness. The methodology used was the same used for aesthetic classification explained in the [Aesthetic classifier details section](###Aesthetic classifier details).
 
 ![figure 13](/images/i_categories.png)
 *figure 13 - Interestingness event categories breakdown* 
@@ -254,7 +254,7 @@ In [figure 17](/images/parade_graph.png) it is possible to to see the performanc
 
 #### Music performance classifier
 
-In [figure 18](/images/music_graph.png) it is possible to to see the performance comparison between classifiers trained to predict interestingness of music events with progressively higher number of features. as the audio information is very relevant on this event, the performance of the classification was overall comparing with the other events.
+In [figure 18](/images/music_graph.png) it is possible to to see the performance comparison between classifiers trained to predict interestingness of music events with progressively higher number of features. as the audio information is very relevant on this event, the overall performance of the classification was worst comparing with the other events.
 
 ![figure 18](/images/music_graph.png)
 *figure 18 - Music event interestingness classifier performance*
