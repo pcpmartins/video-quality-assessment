@@ -606,7 +606,12 @@ bool Gallery::extractVideoData() {
 
 		}
 		json jsonA = ex.getJsonA();
+
 		json jsonI = ex.getJsonI();
+
+		//cout <<jsonA<<endl;
+
+		//cout << jsonI << endl;
 
 		aesthetic = mlc.predictSample(jsonA, 0);
 

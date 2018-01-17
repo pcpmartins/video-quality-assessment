@@ -12,6 +12,10 @@ using namespace cv::ml;
 using namespace saliency;
 using namespace cv::dnn;
 
+#ifndef isnan
+#define isnan(a) (a != a)
+#endif
+
 //feature extraction configuration parsed from extractor_config.xml
 
 int samplingFactor = 1;                     
@@ -49,7 +53,8 @@ runstatStdColorfullness,runstatColofull, runstatSaturation, runstatBrightness;
 double R1, R2, R3, R4, G1, G2, G3, G4, B1, B2, B3, B4, LU1, LU2, LU3, LU4,
 E1, E2, E3, E4, H1, H2, H3, H4, F1, F2, F3, F4, UFLOWX1, UFLOWX2, UFLOWX3, UFLOWX4,
 UFLOWY1, UFLOWY2, UFLOWY3, UFLOWY4, SFLOWX1, SFLOWX2, SFLOWX3, SFLOWX4,
-SFLOWY1, SFLOWY2, SFLOWY3, SFLOWY4, MAG1, MAG2, MAG3, MAG4, RG1, RG2, YB1, YB2, SAT1, SAT2, BRI1, BRI2, CF1, CF2;
+SFLOWY1, SFLOWY2, SFLOWY3, SFLOWY4, MAG1, MAG2, MAG3, MAG4, RG1, RG2,
+YB1, YB2, SAT1, SAT2, BRI1, BRI2, CF1, CF2;
 
 // semantic analysis variables and data structures
 
@@ -191,7 +196,6 @@ void extractor::processColors(Mat colorMat) {
 	runstatLuminance.Push(greyAvg[0]);
 
 	//colorfullness vars
-
 	if (colorfullness)
 	{
 		// C++ algorithm implementation of the
@@ -244,11 +248,28 @@ void extract(int frameCount) {
 	F3 = runstatFocus.Skewness() / 50;
 	F4 = runstatFocus.Kurtosis() /300 ; //adhoc norm [0,1]
 
+	if (isnan(E1)) E1 = 0.0;
+	if (isnan(E2)) E2 = 0.0;
+	if (isnan(E3)) E3 = 0.0;
+	if (isnan(E4)) E4 = 0.0;
+	if (isnan(H1)) H1 = 0.0;
+	if (isnan(H2)) H2 = 0.0;
+	if (isnan(H3)) H3 = 0.0;
+	if (isnan(H4)) H4 = 0.0;
+	if (isnan(F1)) F1 = 0.0;
+	if (isnan(F2)) F2 = 0.0;
+	if (isnan(F3)) F3 = 0.0;
+	if (isnan(F4)) F4 = 0.0;
+
 	double total = R1 + G1 + B1;
 	redRatio = R1 / total;
 	greenRatio = G1 / total;
 	blueRatio = B1 / total;
 
+	if (B4 > 1) B4 = 1;
+	if (E4 > 1) E4 = 1;
+	if (F2 > 1) F2 = 1;
+	if (F4 > 1) F4 = 1;
 	if (H1 > 1) H1 = 1;
 	if (F1 > 1) F1 = 1;
 
@@ -273,11 +294,27 @@ void extract(int frameCount) {
 	SFLOWY3 = runstatSflowx.Skewness() / 100;
 	SFLOWY4 = runstatSflowx.Kurtosis() / 3500; //adhoc norm [0,1]
 
+	if (isnan(MAG1)) MAG1 = 0.0;
+	if (isnan(MAG2)) MAG2 = 0.0;
+	if (isnan(MAG3)) MAG3 = 0.0;
+	if (isnan(MAG4)) MAG4 = 0.0;
+	if (isnan(UFLOWX1)) UFLOWX1 = 0.0;
+	if (isnan(UFLOWX2)) UFLOWX2 = 0.0;
+	if (isnan(UFLOWX3)) UFLOWX3 = 0.0;
+	if (isnan(UFLOWX4)) UFLOWX4 = 0.0;
+	if (isnan(UFLOWY1)) UFLOWY1 = 0.0;
+	if (isnan(UFLOWY2)) UFLOWY2 = 0.0;
+	if (isnan(UFLOWY3)) UFLOWY3 = 0.0;
+	if (isnan(UFLOWY4)) UFLOWY4 = 0.0;
+	if (isnan(SFLOWX1)) SFLOWX1 = 0.0;
+	if (isnan(SFLOWX2)) SFLOWX2 = 0.0;
+	if (isnan(SFLOWX3)) SFLOWX3 = 0.0;
+	if (isnan(SFLOWX4)) SFLOWX4 = 0.0;
+	if (isnan(SFLOWY1)) SFLOWY1 = 0.0;
+	if (isnan(SFLOWY2)) SFLOWY2 = 0.0;
+	if (isnan(SFLOWY3)) SFLOWY3 = 0.0;
+	if (isnan(SFLOWY4)) SFLOWY4 = 0.0;
 
-	if (B4 > 1) B4 = 1;
-	if (E4 > 1) E4 = 1;
-	if (F2 > 1) F2 = 1;
-	if (F4 > 1) F4 = 1;
 	if (MAG4 > 1) MAG4 = 1;
 	if (UFLOWX4 > 1) UFLOWX4 = 1;
 	if (UFLOWY4 > 1) UFLOWY4 = 1;
@@ -724,6 +761,11 @@ void extractor::extractFromVideo(string filePath, int nv) {
 		if (opticalFlow) {
 			shackiness = (double)shakes / frameCount;
 		}
+	/*	else {
+			UFLOWX1 = UFLOWX2 = MAG1 = MAG2 = MAG3 = MAG4 = UFLOWX3 = UFLOWX4 = UFLOWY1 =
+			UFLOWY2 = UFLOWY3 = UFLOWY4 = SFLOWX1 = SFLOWX2 = SFLOWX3 = SFLOWX4 =
+			SFLOWY1 = SFLOWY2 = SFLOWY3 = SFLOWY4 = 0.0;
+		}*/
 		
 	    vector<double> frameBgData = vector<double>(5, 0);
 		if (bgSub) {
