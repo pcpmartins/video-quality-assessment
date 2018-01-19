@@ -11,31 +11,32 @@ public:
 	filtersPanel();
 	~filtersPanel();
 
-	void draw();							//Draw gui window
-	void filter(VideoFile files[], int length,int choosenFileIndex);	//Filters array 
-	void setup();					//Setup gui in coordinates. Length is for hashList
+	void draw();							                            //Draw gui window
+	void filter(VideoFile files[], int length, int choosenFileIndex);	//Filters array 
+	void setup();
+	//Check if similarity title or value was clicked
+	bool isSimilarityClicked(int x, int y);
+	//Check if similarity data was already extracted
+	int isSimilarityExtracted;
 
-	bool isSimilarityClicked(int x, int y); //Check if similarity title or value was clicked
-	int isSimilarityExtracted; //Check if similarity data was already extracted
-
-	bool isFiltersClicked(int x, int y);	//Check if filters title or value clicked
+	bool isFiltersClicked(int x, int y);	    //Check if filters title or value clicked
 	bool isFiltersMoreClicked(int x, int y);	//Check if filters title or value clicked
-	bool isRankingClicked(int x, int y);	//Check if ranking title or value clicked
-	bool isRateClicked(int x, int y);		//Check if rate title or value clicked
-	bool isRateValueClicked(int x, int y);	//Check if rate clicked
-	bool isToolbarClicked(int x, int y);	//Check if toolbar clicked
+	bool isRankingClicked(int x, int y);     	//Check if ranking title or value clicked
+	bool isRateClicked(int x, int y);	    	//Check if rate title or value clicked
+	bool isRateValueClicked(int x, int y);   	//Check if rate clicked
+	bool isToolbarClicked(int x, int y);	    //Check if toolbar clicked
 
 	int getRate();
-	bool ifFiltersON();						//Getter of filtersFlag
+	bool ifFiltersON();						    //Getter of filtersFlag
 	bool ifFiltersMoreON();						//Getter of filtersFlag
-	bool isRankingON();						//Getter of rankingsFlag
+	bool isRankingON();						    //Getter of rankingsFlag
 
 
 
 private:
-	ButtonManager buttons;		//Toolbar
+	ButtonManager buttons;		        //Toolbar
 
-	ButtonPanel * ugcRateBP;		//UGC Rate panel
+	ButtonPanel * ugcRateBP;		    //UGC Rate panel
 	int ugcRateBP_choosenRate;			//Choosen rate
 	enum {
 		RATE_0,
@@ -46,24 +47,24 @@ private:
 		RATE_5
 	};
 
-	ButtonPanel * moreBP;		//more panel
-	bool moreBP_ON;              //Flag if aply filters or not
+	ButtonPanel * moreBP;		   //more panel
+	bool moreBP_ON;                //Flag if aply filters or not
 
 	bool moreBP_v;
 	bool moreBP_h;
 	bool moreBP_45;
 	bool moreBP_135;
 
-	ButtonPanel * normalBP;		//Normal panel	
+	ButtonPanel * normalBP;		   //Normal panel	
 	bool normalBP_ON;              //Flag if aply filters or not
 
 	float normalBP_redRatioP;		//Red ratio colour param
-	float normalBP_greenRatioP;	//Green ratio colour param					
+	float normalBP_greenRatioP;  	//Green ratio colour param					
 	float normalBP_blueRatioP;		//Blue ratio colour param
 	float normalBP_luminaceP;		//Luminance param
-	float normalBP_sharpness;        //Shapness param
+	float normalBP_sharpness;       //Shapness param
 	float normalBP_rateP;			//Rate param
-	float normalBP_abruptness;			//Abruptness param
+	float normalBP_abruptness;		//Abruptness param
 	float normalBP_motion;			//motion param
 	float normalBP_entropy;			//motion param
 	float normalBP_dif_hues;
@@ -76,7 +77,7 @@ private:
 	float normalBP_smiles;			//Rate param
 
 	float normalBP_fgArea;			//Abruptness param
-	float normalBP_focus_dif;			//motion param
+	float normalBP_focus_dif;		//motion param
 	float normalBP_shake;			//shake param
 	float normalBP_luminance_std;
 	float normalBP_ranksum;
@@ -84,12 +85,13 @@ private:
 
 	bool normalBP_predict;
 	bool normalBP_interest_1;
+	bool normalBP_semantic;
 
 	ButtonPanel * sortBP;		//Sort panel
 
 	bool sortBP_ON;				//Flag if ranking on
 
-	int sortBP_sortType;			//Choosen rate
+	int sortBP_sortType;		//Choosen rate
 	enum {
 		SORT_0,
 		SORT_1,
@@ -103,7 +105,7 @@ private:
 		SORT_9,
 		SORT_10,
 		SORT_11,
-	    SORT_12,
+		SORT_12,
 		SORT_13,
 		SORT_14,
 		SORT_15,
@@ -115,21 +117,27 @@ private:
 		SORT_21
 	};
 
-	bool resetFilterValues;				//reset values
+	bool resetFilterValues;			//reset values
 
 	ButtonPanel * similarityBP;		//Similarity index panel
-	bool lockTargetVideo;				//reset values
+	bool lockTargetVideo;
 	bool colorSimilarityON;
 	bool edgeSimilarityON;
 	bool entropySimilarityON;
 	bool motionSimilarityON;
-	
 
+	string userInputText;
+	bool lockSemantic;
+
+	bool haveKey(VideoFile file, string keywords);
+	vector<int> split(const string &s, char delim);
 	vector<VideoFile> sortVector;		//Vector of ranked files
 	int numberOfSortedFiles;		//Number of ranked files
 
 	void ranking(vector<VideoFile> &files);		//Rank array (sort)
-	void sortFiles(vector<VideoFile> &files, int length);						//Sort 
-	void hideUnrankedFiles(vector<VideoFile> rankedFiles, VideoFile allFiles[], int allLenght);	//Show only top ranked files
+	void sortFiles(vector<VideoFile> &files, int length);	//Sort 
+	//Show only top ranked files
+	void hideUnrankedFiles(vector<VideoFile> rankedFiles, VideoFile allFiles[], int allLenght);
+
 };
 

@@ -30,10 +30,14 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 {
 	float colorSimilarity = 0.0, edgeSimilarity = 0.0, entropySimilarity = 0.0, motionSimilarity = 0.0;
 	int nsim = 0;
-	float  red1, green1, blue1, red2, green2, blue2;
-	int eh1, eh2, eh3, eh4, eh5, eh6, eh7, eh8, eh9, eh10, eh11, eh12, eh13, eh14, eh15, eh16, ehGlobal;
-	double entropy, motion;
+	float  red1, green1, blue1, red2, green2, blue2 = 0.0;
+	int eh1, eh2, eh3, eh4, eh5, eh6, eh7, eh8, eh9, eh10, eh11, eh12, eh13, eh14, eh15, eh16, ehGlobal = 0;
+	double entropy, motion = 0.0;
 
+	if (lockSemantic) {
+		userInputText = ofSystemTextBoxDialog("Keywords?", userInputText);
+		cout << "New keywords: " << userInputText << endl;
+	}
 
 	if (lockTargetVideo)     //if similarity button is clicked on similarity menu
 	{
@@ -90,7 +94,7 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 				if (colorSimilarityON)
 				{
 
-					colorSimilarity = sqrt(		                         //Calculate color similarity 
+					colorSimilarity = sqrt(		        //Calculate color similarity 
 						pow(red1 - files[i].redMoments.first, 2) +
 						pow(green1 - files[i].greenMoments.first, 2) +
 						pow(blue1 - files[i].blueMoments.first, 2) +
@@ -132,12 +136,12 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 				}
 				if (entropySimilarityON)
 				{
-					entropySimilarity = 1 - sqrt(		                         //Calculate color similarity 
+					entropySimilarity = 1 - sqrt(		  //Calculate color similarity 
 						pow(entropy - files[i].entropy, 2));
 				}
 				if (motionSimilarityON)
 				{
-					motionSimilarity = 1 - sqrt(		                         //Calculate color similarity 
+					motionSimilarity = 1 - sqrt(		   //Calculate color similarity 
 						pow(motion - files[i].motion, 2));
 				}
 
@@ -226,10 +230,10 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 				}
 			}
 			//////Aesthetic filtering////////
-			if (normalBP_predict)								//If human face filtering is set
+			if (normalBP_predict)
 			{
-				if (files[i].getVisible()) {						//And file was visible
-					files[i].setVisible(files[i].predict);			//Set visible if there is human face
+				if (files[i].getVisible()) {
+					files[i].setVisible(files[i].predict);
 				}
 			}
 			//////Interestingness filtering////////
@@ -239,35 +243,44 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 					files[i].setVisible(files[i].interest_1);			//Set visible if there is max interest
 				}
 			}
-			
-			if (moreBP_v)								//If max interest filtering is set
+
+			//////Keyword filtering////////
+			if (normalBP_semantic)
 			{
-				if (files[i].getVisible()) {						//And file was visible
-					files[i].setVisible(files[i].ehGlobal == 1);			//Set visible if there is max interest
+				if (files[i].getVisible()) {
+
+					files[i].setVisible(haveKey(files[i], userInputText));
+				}
+			}
+
+			if (moreBP_v)
+			{
+				if (files[i].getVisible()) {
+					files[i].setVisible(files[i].ehGlobal == 1);
 				}
 
 			}
-			else if (moreBP_h)								//If max interest filtering is set
+			else if (moreBP_h)
 			{
-				if (files[i].getVisible()) {						//And file was visible
-					files[i].setVisible(files[i].ehGlobal == 2);			//Set visible if there is max interest
+				if (files[i].getVisible()) {
+					files[i].setVisible(files[i].ehGlobal == 2);
 				}
 
 			}
-			else if (moreBP_45)								//If max interest filtering is set
+			else if (moreBP_45)
 			{
-				if (files[i].getVisible()) {						//And file was visible
-					files[i].setVisible(files[i].ehGlobal == 3);			//Set visible if there is max interest
+				if (files[i].getVisible()) {
+					files[i].setVisible(files[i].ehGlobal == 3);
 				}
 
 			}
-		    else if (moreBP_135)								//If max interest filtering is set
+			else if (moreBP_135)
 			{
-				if (files[i].getVisible()) {						//And file was visible
-					files[i].setVisible(files[i].ehGlobal == 4);			//Set visible if there is max interest
+				if (files[i].getVisible()) {
+					files[i].setVisible(files[i].ehGlobal == 4);
 				}
 
-			}		
+			}
 
 			if (sortBP_ON && files[i].getVisible())			//Add all visible files to ranking
 			{
@@ -317,14 +330,15 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 		normalBP_shadow = 0;
 		normalBP_predict = false;
 		normalBP_interest_1 = false;
+		normalBP_semantic = false;
 		cout << "Values reseted!" << endl;
 		resetFilterValues = false;
 		sortBP_ON = false;
-	
-		moreBP_v = false;		
-		moreBP_h = false;		
-		moreBP_45 = false;	
-		moreBP_135 = false;				
+
+		moreBP_v = false;
+		moreBP_h = false;
+		moreBP_45 = false;
+		moreBP_135 = false;
 
 		for (int i = 0; i < length; ++i) { 				//All files visible
 			files[i].setVisible(true);
@@ -368,14 +382,15 @@ void filtersPanel::setup()
 	normalBP_static_saliency = 0;
 	normalBP_ranksum = 0;
 	normalBP_shadow = 0;
-	normalBP_humanFace = false;		//Default human face filter is off
-	normalBP_predict = false;		//Initialize to false
-	normalBP_interest_1 = false;		//Initialize to false
+	normalBP_humanFace = false;
+	normalBP_predict = false;
+	normalBP_interest_1 = false;
+	normalBP_semantic = false;
 
-	moreBP_v = false;		
-	moreBP_h = false;		
-	moreBP_45 = false;		
-	moreBP_135 = false;		
+	moreBP_v = false;
+	moreBP_h = false;
+	moreBP_45 = false;
+	moreBP_135 = false;
 
 	resetFilterValues = false;
 	sortBP_ON = false;
@@ -386,6 +401,8 @@ void filtersPanel::setup()
 	entropySimilarityON = false;
 	motionSimilarityON = false;
 
+	userInputText = "";
+	lockSemantic = false;
 
 	normalBP_abruptness = 1;
 	normalBP_shake = 0.5;
@@ -396,7 +413,7 @@ void filtersPanel::setup()
 	ofSetVerticalSync(true);
 
 	buttons.setup(); // this sets up the events etc..
-	
+
 	//UGC rating panel
 	ugcRateBP = buttons.addButtonPanel("      RATING");
 	ugcRateBP->addSelectionItem("      0             ", ugcRateBP_choosenRate, RATE_0);
@@ -411,7 +428,7 @@ void filtersPanel::setup()
 	normalBP = buttons.addButtonPanel("      FILTER 1");
 	normalBP->addFlashItem("Clear values", resetFilterValues);
 	normalBP->addSliderItem("Rating          ", 0, 5, normalBP_rateP);
-	normalBP->addSliderItem("Obj. index      ", 0, 0.5, normalBP_ranksum);	                      
+	normalBP->addSliderItem("Obj. index      ", 0, 0.5, normalBP_ranksum);
 	normalBP->addListItem("Color:");
 	normalBP->addSliderItem("Red             ", 0, 1, normalBP_redRatioP);
 	normalBP->addSliderItem("Green           ", 0, 1, normalBP_greenRatioP);
@@ -446,7 +463,9 @@ void filtersPanel::setup()
 	moreBP->addListItem("Classification:");
 	moreBP->addToggleItem("Aesthetics", normalBP_predict);
 	moreBP->addToggleItem("Interest", normalBP_interest_1);
-	
+	moreBP->addListItem("Semantic analysis:");
+	moreBP->addToggleItem("Keyword filter", normalBP_semantic);
+
 
 	//Sortpanel
 	sortBP = buttons.addButtonPanel("        SORT");
@@ -478,12 +497,15 @@ void filtersPanel::setup()
 
 
 	//indexing panel
-	similarityBP = buttons.addButtonPanel("     SIMILARITY");
+	similarityBP = buttons.addButtonPanel("        OTHER");
+	similarityBP->addListItem("Similarity:");
 	similarityBP->addFlashItem("Generate index", lockTargetVideo);
 	similarityBP->addToggleItem("COLOR", colorSimilarityON);
 	similarityBP->addToggleItem("ORIENTATION", edgeSimilarityON);
 	similarityBP->addToggleItem("ENTROPY", entropySimilarityON);
 	similarityBP->addToggleItem("MOTION", motionSimilarityON);
+	similarityBP->addListItem("Semantic analysis:");
+	similarityBP->addFlashItem("Change keywords", lockSemantic);
 
 
 }
@@ -694,8 +716,37 @@ void filtersPanel::hideUnrankedFiles(vector<VideoFile> rankedFiles, VideoFile al
 	}
 }
 
+bool filtersPanel::haveKey(VideoFile file, string keywords)
+{
+	bool retval = false;
 
+	if (keywords == "") {
+		retval = true;
+	}
+	else {
+		    vector<int> v = split(keywords, ',');
 
+			for (int i = 0; i < v.size(); i++) {
 
+				if (file.semanticID_1 == v[i] || file.semanticID_2 == v[i] || file.semanticID_3 == v[i]
+					|| file.semanticID_4 == v[i] || file.semanticID_5 == v[i])
+				{
+					retval = true;
+				}
+			}
+	}
+	return retval;
+}
 
+vector<int> filtersPanel::split(const string &s, char delim) {
+	vector<int> result;
+	stringstream ss(s);
+	string item;
 
+	while (getline(ss, item, delim)) {
+
+		result.push_back(stoi(item));
+	}
+
+	return result;
+}

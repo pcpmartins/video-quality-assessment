@@ -910,14 +910,14 @@ bool Gallery::parseCsvFeatureVector() {
 		int l = 0;
 		int w = 0;
 
-		csvData.assign(totalFiles, vector<string>(100, ""));
+		csvData.assign(totalFiles, vector<string>(150, ""));
 
 		while (getline(myReadFile, line)) {
 
 			stringstream temp(line);
 			string word;
 			vector <string> linevec;
-			linevec.assign(100, "");
+			linevec.assign(150, "");
 
 			while (getline(temp, word, ',')) {
 
