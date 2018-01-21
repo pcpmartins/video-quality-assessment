@@ -315,7 +315,7 @@ For this we use the feature selection algorithm [minimum-Redundancy-Maximum-Rele
 ### Interestingness classifiers details
 
 The interestingness classification focused on specific events. Each specific event dataset was gathered from the event categories of the beforementioned Flickr interestingness video dataset. We can see a breakdown and the event categories selected in [figure 13](/images/i_categories.png).
-Each event dataset comprises 40 positive and 40 negative samples, this samples were compiled from the top 10% (positives) and bottom 10% (negatives) from a total of 400 videos retrieved from Flickr keyword search for each event and sorted by interestingness. The methodology used was the same used for aesthetic classification explained in the #Aesthetic-classifier-details section .
+Each event dataset comprises 40 positive and 40 negative samples, this samples were compiled from the top 10% (positives) and bottom 10% (negatives) from a total of 400 videos retrieved from Flickr keyword search for each event and sorted by interestingness. The methodology used was the same used for aesthetic classification explained in the ###Aesthetic-classifier-details section .
 
 ![figure 13](/images/i_categories.png)
 *figure 13 - Interestingness event categories breakdown* 
