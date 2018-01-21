@@ -15,14 +15,14 @@ public:
 	void filter(VideoFile files[], int length, int choosenFileIndex);	//Filters array 
 	void setup();
 	//Check if similarity title or value was clicked
-	bool isSimilarityClicked(int x, int y);
+	bool isOtherClicked(int x, int y);
 	//Check if similarity data was already extracted
 	int isSimilarityExtracted;
 
-	bool isFiltersClicked(int x, int y);	    //Check if filters title or value clicked
-	bool isFiltersMoreClicked(int x, int y);	//Check if filters title or value clicked
-	bool isRankingClicked(int x, int y);     	//Check if ranking title or value clicked
-	bool isRateClicked(int x, int y);	    	//Check if rate title or value clicked
+	bool isSimpleFiltersClicked(int x, int y);	    //Check if filters title or value clicked
+	bool isAdvancedFiltersClicked(int x, int y);	//Check if filters title or value clicked
+	bool isSortClicked(int x, int y);     	//Check if ranking title or value clicked
+	bool isGroupClicked(int x, int y);	    	//Check if rate title or value clicked
 	bool isRateValueClicked(int x, int y);   	//Check if rate clicked
 	bool isToolbarClicked(int x, int y);	    //Check if toolbar clicked
 
@@ -36,7 +36,7 @@ public:
 private:
 	ButtonManager buttons;		        //Toolbar
 
-	ButtonPanel * ugcRateBP;		    //UGC Rate panel
+	ButtonPanel * groupBP;		    //UGC Rate panel
 	int ugcRateBP_choosenRate;			//Choosen rate
 	enum {
 		RATE_0,
@@ -47,7 +47,7 @@ private:
 		RATE_5
 	};
 
-	ButtonPanel * moreBP;		   //more panel
+	ButtonPanel * advanceFilterBP;		   //more panel
 	bool moreBP_ON;                //Flag if aply filters or not
 
 	bool moreBP_v;
@@ -55,7 +55,7 @@ private:
 	bool moreBP_45;
 	bool moreBP_135;
 
-	ButtonPanel * normalBP;		   //Normal panel	
+	ButtonPanel * simpleFilterBP;		   //Normal panel	
 	bool normalBP_ON;              //Flag if aply filters or not
 
 	float normalBP_redRatioP;		//Red ratio colour param
@@ -119,23 +119,28 @@ private:
 
 	bool resetFilterValues;			//reset values
 
-	ButtonPanel * similarityBP;		//Similarity index panel
+	ButtonPanel * otherBP;		//Similarity index panel
 	bool lockTargetVideo;
 	bool colorSimilarityON;
 	bool edgeSimilarityON;
 	bool entropySimilarityON;
 	bool motionSimilarityON;
 
-	string userInputText;
-	bool lockSemantic;
+	string userInsertKeywords;
+	bool lockSemanticInsert;
+	string userRemoveKeywords;
+	bool lockSemanticRemove;
+	bool unionIntersect;
 
-	bool haveKey(VideoFile file, string keywords);
+
+	bool haveKey(VideoFile file, string keywords, bool ui);
+	bool haveNotKey(VideoFile file, string keywords);
 	vector<int> split(const string &s, char delim);
 	vector<VideoFile> sortVector;		//Vector of ranked files
-	int numberOfSortedFiles;		//Number of ranked files
+	size_t numberOfSortedFiles;		//Number of ranked files
 
 	void ranking(vector<VideoFile> &files);		//Rank array (sort)
-	void sortFiles(vector<VideoFile> &files, int length);	//Sort 
+	void sortFiles(vector<VideoFile> &files, size_t length);	//Sort 
 	//Show only top ranked files
 	void hideUnrankedFiles(vector<VideoFile> rankedFiles, VideoFile allFiles[], int allLenght);
 

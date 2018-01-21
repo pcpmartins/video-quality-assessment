@@ -116,7 +116,7 @@ C:\of_v0.9.3_vs_release\addons\ofxSaliencyMap\src</AdditionalIncludeDirectories>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\..\addons\ofxGui\src;..\..\..\..\addons\ofxXmlSettings\libs;..\..\..\..\addons\ofxXmlSettings\src;C:\opencv-3.2.0\build\install\include\opencv2;C:\opencv-3.2.0\build\install\include\opencv;C:\opencv-3.2.0\build\install\include</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>

@@ -21,34 +21,6 @@ processing::~processing() {
 	//dtor
 }
 
-
-/**
-*DEPRECATED---------------------------------------------------------------------
-*Outputs average, standard deviations pairs
-*Receives a vector with the distribution
-**/
-/*
-pair<double, double> processing::processMoments(vector<pair<double, double> > vec) {
-	pair<double, double> moments;
-	if (vec.size() == 1)  //It's an image
-	{
-		moments = vec[0];
-	}
-	else     //It's a video
-	{
-		//Compute average value
-		DistCenter mean((unsigned int)vec.size());
-		double avg = std::accumulate(vec.begin(), vec.end(), 0.0, mean);
-
-		//Compute variance
-		DistSpread var((unsigned int)vec.size(), avg);
-		double stdv = sqrt(std::accumulate(vec.begin(), vec.end(), 0.0, var));
-
-		moments = make_pair(avg, stdv);
-	}
-	return moments;
-}
-*/
 double processing::processFocus(Mat colorMat) {
 
 	Mat greyMat;

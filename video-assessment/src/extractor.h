@@ -42,6 +42,11 @@ public:
 
 	String getClassTextFromID(int ID);
 
+	double ensureFormat(double input);
+
+	void extract(int frameCount);
+
+
 	json getJsonA();
 	json getJsonI();
 	json getJsonAll();
@@ -80,12 +85,7 @@ public:
 	//background subtraction
 	Mat fgmask, fgimg, backimg, bgmask;
 
-	//opticflow
-	//float totalFlowX;
-	//float totalFlowY;
-	//total and average flow
 	double shackiness;
-	//double shackiness;
 
 	float accumStaticSaliency;
 	double staticSaliencyVec;
@@ -96,5 +96,8 @@ public:
 
 private:
 	void getConfigParams();
+	
 
 };
+
+void extract(int frameCount);

@@ -12,7 +12,7 @@ void metadataPanel::getData(const VideoFile * vid)
 {
 	metadataString = "\n   File name: " + vid->name + vid->extension + "\n";	
 	metadataString += "   Resolution: " + std::to_string(vid->resX) + " x " + std::to_string(vid->resY) + "\n";
-	metadataString += "   Objective index: " + toString(vid->ranksum) +"              User Rating: " + std::to_string(vid->rate) +"\n\n";
+	metadataString += "   Objective index: " + toString(vid->ranksum) +"                         Group: " + std::to_string(vid->rate) +"\n\n";
 	metadataString += "       Edge strenght: " + std::to_string(vid->edgeStrenght).substr(0,4) + "                      Color Ratio " + "\n";
 	metadataString += "       Edge orientation: " + std::to_string(vid->ehGlobal) + "                          R: " + toString(vid->redRatio) + "\n";
 	metadataString += "             " + std::to_string(vid->eh1) + "   " + std::to_string(vid->eh2) + "   " + std::to_string(vid->eh3) + "   " +

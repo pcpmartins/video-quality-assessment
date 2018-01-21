@@ -1,3 +1,6 @@
 video-assessment/Debug/
 video-assessment/obj/
 video-assessment/video-assessment.VC.db
+video-assessment/bin/data/xmlCopy/
+video-assessment/bin/data/thumbnailsCopy/
+video-assessment/bin/data/filesCopy/

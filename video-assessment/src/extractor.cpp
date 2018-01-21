@@ -217,109 +217,62 @@ void extractor::processColors(Mat colorMat) {
 	}
 }
 
-void extract(int frameCount) {
+void extractor::extract(int frameCount) {
 
 	R1 = runstatRed.Mean() / 255;
 	R2 = runstatRed.StandardDeviation() / 255;
-	R3 = runstatRed.Skewness() / 255;
-	R4 = runstatRed.Kurtosis() / 255;
+	R3 = ensureFormat( runstatRed.Skewness() / 255 );
+	R4 = ensureFormat( runstatRed.Kurtosis() / 255 );
 	G1 = runstatGreen.Mean() / 255;
 	G2 = runstatGreen.StandardDeviation() / 255;
-	G3 = runstatGreen.Skewness() / 255;
-	G4 = runstatGreen.Kurtosis() / 255;
+	G3 = ensureFormat( runstatGreen.Skewness() / 255 );
+	G4 = ensureFormat( runstatGreen.Kurtosis() / 255 );
 	B1 = runstatBlue.Mean() / 255;
 	B2 = runstatBlue.StandardDeviation() / 255;
-	B3 = runstatBlue.Skewness() / 255;
-	B4 = runstatBlue.Kurtosis() / 255;
+	B3 = ensureFormat( runstatBlue.Skewness() / 255 );
+	B4 = ensureFormat( runstatBlue.Kurtosis() / 255 );
 	LU1 = runstatLuminance.Mean() / 255;
 	LU2 = runstatLuminance.StandardDeviation() / 255;
-	LU3 = runstatLuminance.Skewness() / 255;
-	LU4 = runstatLuminance.Kurtosis() / 255;
-	E1 = runstatEntropy.Mean() /12;
-	E2 = runstatEntropy.StandardDeviation() / 5; //adhoc norm [0,1]
-	E3 = runstatEntropy.Skewness() / 20; //adhoc norm [0,1] 
-	E4 = runstatEntropy.Kurtosis() / 1000; //adhoc norm [0,1]
-	H1 = runstatHues.Mean() / 50;
-	H2 = runstatHues.StandardDeviation() /50;
-	H3 = runstatHues.Skewness() / 50;
-	H4 = runstatHues.Kurtosis() /50;
-	F1 = runstatFocus.Mean() / 4000;
-	F2 = runstatFocus.StandardDeviation() /10000 ; //adhoc norm [0,1]
-	F3 = runstatFocus.Skewness() / 50;
-	F4 = runstatFocus.Kurtosis() /300 ; //adhoc norm [0,1]
-
-	if (isnan(E1)) E1 = 0.0;
-	if (isnan(E2)) E2 = 0.0;
-	if (isnan(E3)) E3 = 0.0;
-	if (isnan(E4)) E4 = 0.0;
-	if (isnan(H1)) H1 = 0.0;
-	if (isnan(H2)) H2 = 0.0;
-	if (isnan(H3)) H3 = 0.0;
-	if (isnan(H4)) H4 = 0.0;
-	if (isnan(F1)) F1 = 0.0;
-	if (isnan(F2)) F2 = 0.0;
-	if (isnan(F3)) F3 = 0.0;
-	if (isnan(F4)) F4 = 0.0;
+	LU3 = ensureFormat( runstatLuminance.Skewness() / 255 );
+	LU4 = ensureFormat( runstatLuminance.Kurtosis() / 255 );
+	E1 = runstatEntropy.Mean() /12 ;
+	E2 = ensureFormat( runstatEntropy.StandardDeviation() / 5 ); //adhoc norm [0,1]
+	E3 = ensureFormat( runstatEntropy.Skewness() / 20 ); //adhoc norm [0,1] 
+	E4 = ensureFormat( runstatEntropy.Kurtosis() / 1000 ); //adhoc norm [0,1]
+	H1 = ensureFormat( runstatHues.Mean() / 50 );
+	H2 = ensureFormat( runstatHues.StandardDeviation() /50);
+	H3 = ensureFormat( runstatHues.Skewness() / 50);
+	H4 = ensureFormat( runstatHues.Kurtosis() /50);
+	F1 = ensureFormat( runstatFocus.Mean() / 4000 );
+	F2 = ensureFormat( runstatFocus.StandardDeviation() /10000 ); //adhoc norm [0,1]
+	F3 = ensureFormat( runstatFocus.Skewness() / 50 );
+	F4 = ensureFormat( runstatFocus.Kurtosis() /300 ); //adhoc norm [0,1]
 
 	double total = R1 + G1 + B1;
 	redRatio = R1 / total;
 	greenRatio = G1 / total;
 	blueRatio = B1 / total;
 
-	if (B4 > 1) B4 = 1;
-	if (E4 > 1) E4 = 1;
-	if (F2 > 1) F2 = 1;
-	if (F4 > 1) F4 = 1;
-	if (H1 > 1) H1 = 1;
-	if (F1 > 1) F1 = 1;
-
-	MAG1 = runstatMag.Mean() / 20000;
-	MAG2 = runstatMag.StandardDeviation()/20000;
-	MAG3 = runstatMag.Skewness() / 100;
-	MAG4 = runstatMag.Kurtosis() / 3500;
-	UFLOWX1 = runstatUflowx.Mean()/20000;
-	UFLOWX2 = runstatUflowx.StandardDeviation()/20000;
-	UFLOWX3 = runstatUflowx.Skewness() / 100;
-	UFLOWX4 = runstatUflowx.Kurtosis() / 3500;
-	UFLOWY1 = runstatUflowy.Mean() / 20000;
-	UFLOWY2 = runstatUflowy.StandardDeviation() / 20000;
-	UFLOWY3 = runstatUflowy.Skewness() / 100;
-	UFLOWY4 = runstatUflowy.Kurtosis() / 2000; //adhoc norm [0,1]
-	SFLOWX1 = runstatSflowx.Mean() / 20000;
-	SFLOWX2 = runstatSflowx.StandardDeviation() / 20000;
-	SFLOWX3 = runstatSflowx.Skewness() / 100;
-	SFLOWX4 = runstatSflowx.Kurtosis() / 3500; //adhoc norm [0,1]
-	SFLOWY1 = runstatSflowy.Mean() / 20000;
-	SFLOWY2 = runstatSflowy.StandardDeviation() / 20000;
-	SFLOWY3 = runstatSflowx.Skewness() / 100;
-	SFLOWY4 = runstatSflowx.Kurtosis() / 3500; //adhoc norm [0,1]
-
-	if (isnan(MAG1)) MAG1 = 0.0;
-	if (isnan(MAG2)) MAG2 = 0.0;
-	if (isnan(MAG3)) MAG3 = 0.0;
-	if (isnan(MAG4)) MAG4 = 0.0;
-	if (isnan(UFLOWX1)) UFLOWX1 = 0.0;
-	if (isnan(UFLOWX2)) UFLOWX2 = 0.0;
-	if (isnan(UFLOWX3)) UFLOWX3 = 0.0;
-	if (isnan(UFLOWX4)) UFLOWX4 = 0.0;
-	if (isnan(UFLOWY1)) UFLOWY1 = 0.0;
-	if (isnan(UFLOWY2)) UFLOWY2 = 0.0;
-	if (isnan(UFLOWY3)) UFLOWY3 = 0.0;
-	if (isnan(UFLOWY4)) UFLOWY4 = 0.0;
-	if (isnan(SFLOWX1)) SFLOWX1 = 0.0;
-	if (isnan(SFLOWX2)) SFLOWX2 = 0.0;
-	if (isnan(SFLOWX3)) SFLOWX3 = 0.0;
-	if (isnan(SFLOWX4)) SFLOWX4 = 0.0;
-	if (isnan(SFLOWY1)) SFLOWY1 = 0.0;
-	if (isnan(SFLOWY2)) SFLOWY2 = 0.0;
-	if (isnan(SFLOWY3)) SFLOWY3 = 0.0;
-	if (isnan(SFLOWY4)) SFLOWY4 = 0.0;
-
-	if (MAG4 > 1) MAG4 = 1;
-	if (UFLOWX4 > 1) UFLOWX4 = 1;
-	if (UFLOWY4 > 1) UFLOWY4 = 1;
-	if (SFLOWX4 > 1) SFLOWX4 = 1;
-	if (SFLOWY4 > 1) SFLOWY4 = 1;
+	MAG1 = ensureFormat( runstatMag.Mean() / 20000 );
+	MAG2 = ensureFormat( runstatMag.StandardDeviation()/20000 );
+	MAG3 = ensureFormat( runstatMag.Skewness() / 100 );
+	MAG4 = ensureFormat( runstatMag.Kurtosis() / 3500 );
+	UFLOWX1 = ensureFormat( runstatUflowx.Mean()/20000 );
+	UFLOWX2 = ensureFormat( runstatUflowx.StandardDeviation()/20000 );
+	UFLOWX3 = ensureFormat(runstatUflowx.Skewness() / 100 );
+	UFLOWX4 = ensureFormat( runstatUflowx.Kurtosis() / 3500 );
+	UFLOWY1 = ensureFormat( runstatUflowy.Mean() / 20000 );
+	UFLOWY2 = ensureFormat( runstatUflowy.StandardDeviation() / 20000 );
+	UFLOWY3 = ensureFormat( runstatUflowy.Skewness() / 100 );
+	UFLOWY4 = ensureFormat( runstatUflowy.Kurtosis() / 2000 ); //adhoc norm [0,1]
+	SFLOWX1 = ensureFormat( runstatSflowx.Mean() / 20000 );
+	SFLOWX2 = ensureFormat( runstatSflowx.StandardDeviation() / 20000 );
+	SFLOWX3 = ensureFormat( runstatSflowx.Skewness() / 100 );
+	SFLOWX4 = ensureFormat( runstatSflowx.Kurtosis() / 3500 ); //adhoc norm [0,1]
+	SFLOWY1 = ensureFormat( runstatSflowy.Mean() / 20000 );
+	SFLOWY2 = ensureFormat( runstatSflowy.StandardDeviation() / 20000 );
+	SFLOWY3 = ensureFormat( runstatSflowx.Skewness() / 100 );
+	SFLOWY4 = ensureFormat( runstatSflowx.Kurtosis() / 3500 ); //adhoc norm [0,1]
 
 	RG1 = runstatMeanColorfullness.Mean() / 255;
 	RG2 = runstatMeanColorfullness.StandardDeviation() / 255;
@@ -335,7 +288,6 @@ void extract(int frameCount) {
 
 
 	//cout << "\n [C] colorfullness: " << RG1 << " " << YB1 << " " << RG2 << " " << YB2 << " " << endl;
-
 	//cout << "\n [E] entropy stats: " << E1 << " " << E2 << " " << E3 << " " << E4 << " " << endl;
 	//cout << " [H] hues stats: " << H1 << " " << H2 << " " << H3 << " " << H4 << " " << endl;
 	//cout << " [F] focus stats: " << F1 << " " << F2 << " " << F3 << " " << F4 << " " << endl;
@@ -344,10 +296,6 @@ void extract(int frameCount) {
 	//cout << " [FLOW] uflowy stats: " << UFLOWY1 << " " << UFLOWY2 << " " << UFLOWY3 << " " << UFLOWY4 << " " << endl;
 	//cout << " [FLOW] sflowx stats: " << SFLOWX1 << " " << SFLOWX2 << " " << SFLOWX3 << " " << SFLOWX4 << " " << endl;
 	//cout << " [FLOW] sflowy stats: " << SFLOWY1 << " " << SFLOWY2 << " " << SFLOWY3 << " " << SFLOWY4 << " " << endl;
-
-
-	///print results
-	double divider = frameCount / samplingFactor;
 
 }
 vector <pair <double, int > > extractor::getSemanticMap() {
@@ -1025,6 +973,16 @@ void extractor::getConfigParams() {
 		saveDominantPallete = xml->getValue<bool>("//SAVEPALLETE");
 		colorfullness = xml->getValue<bool>("//COLORFULLNESS");
 	}
+
+}
+
+double extractor::ensureFormat(double input) {
+	
+	double output = input;
+	if (isnan(input)) output = 0.0;
+	if (output > 1) output = 1;
+
+	return output;
 
 }
 string extractor::thumbnailFolderPath = "../bin/data/thumbnails/videos/";

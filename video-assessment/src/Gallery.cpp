@@ -376,7 +376,7 @@ void Gallery::mousePressed(int x, int y, int button) {
 
 	//Check if thumbnail clicked
 	//If we have choose rate or filters, don't check for thumbnail clicking
-	if (filtersPanel.isRateClicked(x, y))							//Rate choosen ( tittle or value). Don't change choosenFileIndex or thumbnailClicked Flag now
+	if (filtersPanel.isGroupClicked(x, y))							//Rate choosen ( tittle or value). Don't change choosenFileIndex or thumbnailClicked Flag now
 	{
 		cout << "Rate clicked. Index: " << choosenFileIndex << endl;
 		if (thumbnailClicked)										//If some file was choosen earlier
@@ -390,20 +390,20 @@ void Gallery::mousePressed(int x, int y, int button) {
 
 		}
 	}
-	else  if (filtersPanel.isFiltersClicked(x, y))					//Filter choosen. Don't change choosenFileIndex or thumbnailClicked flag now
+	else  if (filtersPanel.isSimpleFiltersClicked(x, y))					//Filter choosen. Don't change choosenFileIndex or thumbnailClicked flag now
 	{
 		cout << "Filters clicked. Index: " << choosenFileIndex << endl;
 	}
-	else  if (filtersPanel.isFiltersMoreClicked(x, y))					//Filter choosen. Don't change choosenFileIndex or thumbnailClicked flag now
+	else  if (filtersPanel.isAdvancedFiltersClicked(x, y))					//Filter choosen. Don't change choosenFileIndex or thumbnailClicked flag now
 	{
 		cout << "Filters clicked. Index: " << choosenFileIndex << endl;
 	}
-	else  if (filtersPanel.isRankingClicked(x, y))					//Ranking choosen. Don't change choosenFileIndex or thumbnailClicked flag now
+	else  if (filtersPanel.isSortClicked(x, y))					//Ranking choosen. Don't change choosenFileIndex or thumbnailClicked flag now
 	{
 
 		cout << "Sort clicked. Index: " << choosenFileIndex << endl;
 	}
-	else  if (filtersPanel.isSimilarityClicked(x, y))					//Filter choosen. Don't change choosenFileIndex or thumbnailClicked flag now
+	else  if (filtersPanel.isOtherClicked(x, y))					//Filter choosen. Don't change choosenFileIndex or thumbnailClicked flag now
 	{
 		cout << "Similarity clicked. Index: " << choosenFileIndex << endl;
 	}
@@ -458,8 +458,8 @@ void Gallery::mousePressed(int x, int y, int button) {
 void Gallery::mouseReleased(int x, int y, int button) {
 	isDraggingGrip = false;
 
-	if (filtersPanel.isFiltersClicked(x, y) || filtersPanel.isFiltersMoreClicked(x, y) || filtersPanel.isRankingClicked(x, y)
-		|| filtersPanel.isSimilarityClicked(x, y))
+	if (filtersPanel.isSimpleFiltersClicked(x, y) || filtersPanel.isAdvancedFiltersClicked(x, y) || filtersPanel.isSortClicked(x, y)
+		|| filtersPanel.isOtherClicked(x, y))
 	{
 		high_resolution_clock::time_point t1 = high_resolution_clock::now(); // note time before execution
 		filtersPanel.filter(&allFiles[0], allFiles.size(), choosenFileIndex);
@@ -937,20 +937,26 @@ bool Gallery::parseCsvFeatureVector() {
 
 vector<string> Gallery::getIndividualSample(string name) {
 
+	vector<string> vecStr;
+
 	if (csvData.size() > 0)
 	{
 		int i = 0;
 		while (i < csvData.size())
 		{
-			if (csvData[i][0] == name) return csvData[i];
+			if (csvData[i][0] == name)
+			{
+				vecStr = csvData[i];
+				break;
+			}
 			i++;
 		}
 	}
 	else {
-		vector<string> vecStr;
-		vecStr.assign(1, "");
-		return vecStr;
+		vecStr.assign(1, "");	
 	}
+
+	return vecStr;
 }
 
 std::vector<String> Gallery::readClassNames()

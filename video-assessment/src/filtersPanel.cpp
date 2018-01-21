@@ -30,13 +30,19 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 {
 	float colorSimilarity = 0.0, edgeSimilarity = 0.0, entropySimilarity = 0.0, motionSimilarity = 0.0;
 	int nsim = 0;
-	float  red1, green1, blue1, red2, green2, blue2 = 0.0;
-	int eh1, eh2, eh3, eh4, eh5, eh6, eh7, eh8, eh9, eh10, eh11, eh12, eh13, eh14, eh15, eh16, ehGlobal = 0;
+	float  red1 = 0.0, green1 = 0.0, blue1 = 0.0, red2 = 0.0, green2 = 0.0, blue2 = 0.0;
+	int eh1 = 0, eh2 = 0, eh3 = 0, eh4 = 0, eh5 = 0, eh6, eh7 = 0, eh8 = 0, eh9 = 0, eh10 = 0,
+		eh11 = 0, eh12 = 0, eh13 = 0, eh14 = 0, eh15 = 0, eh16 = 0, ehGlobal = 0;
 	double entropy, motion = 0.0;
 
-	if (lockSemantic) {
-		userInputText = ofSystemTextBoxDialog("Keywords?", userInputText);
-		cout << "New keywords: " << userInputText << endl;
+	if (lockSemanticInsert) {
+		userInsertKeywords = ofSystemTextBoxDialog("Insert Keywords:", userInsertKeywords);
+		cout << "Inserted keywords: " << userInsertKeywords << endl;
+	}
+
+	if (lockSemanticRemove) {
+		userRemoveKeywords = ofSystemTextBoxDialog("Remove Keywords:", userRemoveKeywords);
+		cout << "Removed keywords: " << userRemoveKeywords << endl;
 	}
 
 	if (lockTargetVideo)     //if similarity button is clicked on similarity menu
@@ -249,7 +255,7 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 			{
 				if (files[i].getVisible()) {
 
-					files[i].setVisible(haveKey(files[i], userInputText));
+					files[i].setVisible(haveKey(files[i], userInsertKeywords, unionIntersect) && haveNotKey(files[i], userRemoveKeywords));
 				}
 			}
 
@@ -349,7 +355,7 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 
 void filtersPanel::ranking(vector<VideoFile> &files)
 {
-	int length = files.size();
+	size_t length = files.size();
 	if (length > 0) {
 
 		sortFiles(files, numberOfSortedFiles);
@@ -401,8 +407,11 @@ void filtersPanel::setup()
 	entropySimilarityON = false;
 	motionSimilarityON = false;
 
-	userInputText = "";
-	lockSemantic = false;
+	userInsertKeywords = "";
+	userRemoveKeywords = "";
+	lockSemanticInsert = false;
+	lockSemanticRemove = false;
+	unionIntersect = false;
 
 	normalBP_abruptness = 1;
 	normalBP_shake = 0.5;
@@ -414,62 +423,63 @@ void filtersPanel::setup()
 
 	buttons.setup(); // this sets up the events etc..
 
-	//UGC rating panel
-	ugcRateBP = buttons.addButtonPanel("      RATING");
-	ugcRateBP->addSelectionItem("      0             ", ugcRateBP_choosenRate, RATE_0);
-	ugcRateBP->addSelectionItem("      1             ", ugcRateBP_choosenRate, RATE_1);
-	ugcRateBP->addSelectionItem("      2             ", ugcRateBP_choosenRate, RATE_2);
-	ugcRateBP->addSelectionItem("      3             ", ugcRateBP_choosenRate, RATE_3);
-	ugcRateBP->addSelectionItem("      4             ", ugcRateBP_choosenRate, RATE_4);
-	ugcRateBP->addSelectionItem("      5             ", ugcRateBP_choosenRate, RATE_5);
+	//File groups
+	groupBP = buttons.addButtonPanel("FILE GROUPS");
+	groupBP->addSelectionItem("      0             ", ugcRateBP_choosenRate, RATE_0);
+	groupBP->addSelectionItem("      1             ", ugcRateBP_choosenRate, RATE_1);
+	groupBP->addSelectionItem("      2             ", ugcRateBP_choosenRate, RATE_2);
+	groupBP->addSelectionItem("      3             ", ugcRateBP_choosenRate, RATE_3);
+	groupBP->addSelectionItem("      4             ", ugcRateBP_choosenRate, RATE_4);
+	groupBP->addSelectionItem("      5             ", ugcRateBP_choosenRate, RATE_5);
 	//ugcRateBP->addToggleItem("testing", moreBP_v);
 
 	//Normal filters Panel
-	normalBP = buttons.addButtonPanel("      FILTER 1");
-	normalBP->addFlashItem("Clear values", resetFilterValues);
-	normalBP->addSliderItem("Rating          ", 0, 5, normalBP_rateP);
-	normalBP->addSliderItem("Obj. index      ", 0, 0.5, normalBP_ranksum);
-	normalBP->addListItem("Color:");
-	normalBP->addSliderItem("Red             ", 0, 1, normalBP_redRatioP);
-	normalBP->addSliderItem("Green           ", 0, 1, normalBP_greenRatioP);
-	normalBP->addSliderItem("Blue            ", 0, 1, normalBP_blueRatioP);
-	normalBP->addListItem("Orientation:");
-	normalBP->addToggleItem("Vertical", moreBP_v);
-	normalBP->addToggleItem("Horizontal", moreBP_h);
-	normalBP->addToggleItem("45 degrees", moreBP_45);
-	normalBP->addToggleItem("135 degrees", moreBP_135);
-	normalBP->addSliderItem("Entropy         ", 0, 1, normalBP_entropy);
-	normalBP->addSliderItem("Luminance       ", 0, 1, normalBP_luminaceP);
-	normalBP->addSliderItem("Sharpness       ", 0, 1, normalBP_sharpness);
-	normalBP->addSliderItem("Hue count       ", 0, 1, normalBP_dif_hues);
-	normalBP->addSliderItem("Saliency        ", 0, 0.3, normalBP_static_saliency);
-	normalBP->addToggleItem("Human face", normalBP_humanFace);
-	normalBP->addSliderItem("Avg faces       ", 0, 1, normalBP_avgFaces);
-	normalBP->addSliderItem("Faces area      ", 0, 0.4, normalBP_faceArea);
-	normalBP->addSliderItem("Rule of thirds  ", 0, 0.3, normalBP_rule3);
-	normalBP->addSliderItem("Smiles          ", 0, 0.5, normalBP_smiles);
+	simpleFilterBP = buttons.addButtonPanel("SIMPLE FILTERS");
+	simpleFilterBP->addFlashItem("Clear values", resetFilterValues);
+	simpleFilterBP->addSliderItem("Group           ", 0, 5, normalBP_rateP);
+	simpleFilterBP->addSliderItem("Obj. index      ", 0, 0.5, normalBP_ranksum);
+	simpleFilterBP->addListItem("Color:");
+	simpleFilterBP->addSliderItem("Red             ", 0, 1, normalBP_redRatioP);
+	simpleFilterBP->addSliderItem("Green           ", 0, 1, normalBP_greenRatioP);
+	simpleFilterBP->addSliderItem("Blue            ", 0, 1, normalBP_blueRatioP);
+	simpleFilterBP->addListItem("Orientation:");
+	simpleFilterBP->addToggleItem("Vertical", moreBP_v);
+	simpleFilterBP->addToggleItem("Horizontal", moreBP_h);
+	simpleFilterBP->addToggleItem("45 degrees", moreBP_45);
+	simpleFilterBP->addToggleItem("135 degrees", moreBP_135);
+	simpleFilterBP->addSliderItem("Entropy         ", 0, 1, normalBP_entropy);
+	simpleFilterBP->addSliderItem("Luminance       ", 0, 1, normalBP_luminaceP);
+	simpleFilterBP->addSliderItem("Sharpness       ", 0, 1, normalBP_sharpness);
+	simpleFilterBP->addSliderItem("Hue count       ", 0, 1, normalBP_dif_hues);
+	simpleFilterBP->addSliderItem("Saliency        ", 0, 0.3, normalBP_static_saliency);
+	simpleFilterBP->addToggleItem("Human face", normalBP_humanFace);
+	simpleFilterBP->addSliderItem("Avg faces       ", 0, 1, normalBP_avgFaces);
+	simpleFilterBP->addSliderItem("Faces area      ", 0, 0.4, normalBP_faceArea);
+	simpleFilterBP->addSliderItem("Rule of thirds  ", 0, 0.3, normalBP_rule3);
+	simpleFilterBP->addSliderItem("Smiles          ", 0, 0.5, normalBP_smiles);
 
 
 	//filter more
-	moreBP = buttons.addButtonPanel("      FILTER 2");
-	moreBP->addFlashItem("Clear values", resetFilterValues);
-	moreBP->addSliderItem("Lum. std        ", 0, 0.5, normalBP_luminance_std);
-	moreBP->addSliderItem("Foreg. area     ", 0, 0.2, normalBP_fgArea);
-	moreBP->addSliderItem("Shadow          ", 0, 0.3, normalBP_shadow);
-	moreBP->addSliderItem("Focus diff.     ", 0, 1, normalBP_focus_dif);
-	moreBP->addSliderItem("Motion          ", 0, 0.5, normalBP_motion);
-	moreBP->addSliderItem("Abruptness      ", 0, 1, normalBP_abruptness);
-	moreBP->addSliderItem("Shakiness       ", 0, 0.5, normalBP_shake);
-	moreBP->addListItem("Classification:");
-	moreBP->addToggleItem("Aesthetics", normalBP_predict);
-	moreBP->addToggleItem("Interest", normalBP_interest_1);
-	moreBP->addListItem("Semantic analysis:");
-	moreBP->addToggleItem("Keyword filter", normalBP_semantic);
+	advanceFilterBP = buttons.addButtonPanel("ADVANCED FILTERS");
+	advanceFilterBP->addFlashItem("Clear values", resetFilterValues);
+	advanceFilterBP->addSliderItem("Lum. std        ", 0, 0.5, normalBP_luminance_std);
+	advanceFilterBP->addSliderItem("Foreg. area     ", 0, 0.2, normalBP_fgArea);
+	advanceFilterBP->addSliderItem("Shadow          ", 0, 0.3, normalBP_shadow);
+	advanceFilterBP->addSliderItem("Focus diff.     ", 0, 1, normalBP_focus_dif);
+	advanceFilterBP->addSliderItem("Motion          ", 0, 0.5, normalBP_motion);
+	advanceFilterBP->addSliderItem("Abruptness      ", 0, 1, normalBP_abruptness);
+	advanceFilterBP->addSliderItem("Shakiness       ", 0, 0.5, normalBP_shake);
+	advanceFilterBP->addListItem("Classification:");
+	advanceFilterBP->addToggleItem("Aesthetics", normalBP_predict);
+	advanceFilterBP->addToggleItem("Interest", normalBP_interest_1);
+	advanceFilterBP->addListItem("Semantic analysis:");
+	advanceFilterBP->addToggleItem("Keyword filter", normalBP_semantic);
+	advanceFilterBP->addToggleItem("Union-Intersect", unionIntersect);
 
 
 	//Sortpanel
-	sortBP = buttons.addButtonPanel("        SORT");
-	sortBP->addSelectionItem("Rating", sortBP_sortType, SORT_0);
+	sortBP = buttons.addButtonPanel("FILE SORT");
+	sortBP->addSelectionItem("Group", sortBP_sortType, SORT_0);
 	sortBP->addSelectionItem("Obj. index", sortBP_sortType, SORT_1);
 	sortBP->addSelectionItem("Red", sortBP_sortType, SORT_2);
 	sortBP->addSelectionItem("Green", sortBP_sortType, SORT_3);
@@ -497,23 +507,25 @@ void filtersPanel::setup()
 
 
 	//indexing panel
-	similarityBP = buttons.addButtonPanel("        OTHER");
-	similarityBP->addListItem("Similarity:");
-	similarityBP->addFlashItem("Generate index", lockTargetVideo);
-	similarityBP->addToggleItem("COLOR", colorSimilarityON);
-	similarityBP->addToggleItem("ORIENTATION", edgeSimilarityON);
-	similarityBP->addToggleItem("ENTROPY", entropySimilarityON);
-	similarityBP->addToggleItem("MOTION", motionSimilarityON);
-	similarityBP->addListItem("Semantic analysis:");
-	similarityBP->addFlashItem("Change keywords", lockSemantic);
+	otherBP = buttons.addButtonPanel("MODIFY");
+	otherBP->addListItem("Similarity:");
+	otherBP->addFlashItem("Generate index", lockTargetVideo);
+	otherBP->addToggleItem("COLOR", colorSimilarityON);
+	otherBP->addToggleItem("ORIENTATION", edgeSimilarityON);
+	otherBP->addToggleItem("ENTROPY", entropySimilarityON);
+	otherBP->addToggleItem("MOTION", motionSimilarityON);
+	otherBP->addListItem("Semantic analysis:");
+	otherBP->addFlashItem("Add keywords", lockSemanticInsert);
+	otherBP->addFlashItem("Remove keywords", lockSemanticRemove);
+
 
 
 }
-bool filtersPanel::isSimilarityClicked(int x, int y)
+bool filtersPanel::isOtherClicked(int x, int y)
 {
-	if (similarityBP->checkTitleClick(x, y) || similarityBP->checkClick(x, y))		//If value or title clicked
+	if (otherBP->checkTitleClick(x, y) || otherBP->checkClick(x, y))		//If value or title clicked
 	{
-		similarityBP->checkClick(x, y);	//Number of checkClick calls have to be odd, so toggle button change
+		otherBP->checkClick(x, y);	//Number of checkClick calls have to be odd, so toggle button change
 		return true;
 	}
 	else
@@ -522,11 +534,11 @@ bool filtersPanel::isSimilarityClicked(int x, int y)
 	}
 }
 
-bool filtersPanel::isFiltersClicked(int x, int y)
+bool filtersPanel::isSimpleFiltersClicked(int x, int y)
 {
-	if (normalBP->checkTitleClick(x, y) || normalBP->checkClick(x, y))		//If value or title clicked
+	if (simpleFilterBP->checkTitleClick(x, y) || simpleFilterBP->checkClick(x, y))		//If value or title clicked
 	{
-		normalBP->checkClick(x, y);	//Number of checkClick calls have to be odd, so toggle button change
+		simpleFilterBP->checkClick(x, y);	//Number of checkClick calls have to be odd, so toggle button change
 		return true;
 	}
 	else
@@ -534,11 +546,11 @@ bool filtersPanel::isFiltersClicked(int x, int y)
 		return false;
 	}
 }
-bool filtersPanel::isFiltersMoreClicked(int x, int y)
+bool filtersPanel::isAdvancedFiltersClicked(int x, int y)
 {
-	if (moreBP->checkTitleClick(x, y) || moreBP->checkClick(x, y))		//If value or title clicked
+	if (advanceFilterBP->checkTitleClick(x, y) || advanceFilterBP->checkClick(x, y))		//If value or title clicked
 	{
-		moreBP->checkClick(x, y);	//Number of checkClick calls have to be odd, so toggle button change
+		advanceFilterBP->checkClick(x, y);	//Number of checkClick calls have to be odd, so toggle button change
 		return true;
 	}
 	else
@@ -547,7 +559,7 @@ bool filtersPanel::isFiltersMoreClicked(int x, int y)
 	}
 }
 
-bool filtersPanel::isRankingClicked(int x, int y)
+bool filtersPanel::isSortClicked(int x, int y)
 {
 	if (sortBP->checkTitleClick(x, y) || sortBP->checkClick(x, y))		//If value or title clicked
 	{
@@ -560,9 +572,9 @@ bool filtersPanel::isRankingClicked(int x, int y)
 	}
 }
 
-bool filtersPanel::isRateClicked(int x, int y)
+bool filtersPanel::isGroupClicked(int x, int y)
 {
-	if (ugcRateBP->checkTitleClick(x, y) || ugcRateBP->checkClick(x, y))		//If value or title clicked
+	if (groupBP->checkTitleClick(x, y) || groupBP->checkClick(x, y))		//If value or title clicked
 	{
 		return true;
 	}
@@ -574,7 +586,7 @@ bool filtersPanel::isRateClicked(int x, int y)
 
 bool filtersPanel::isRateValueClicked(int x, int y)
 {
-	return ugcRateBP->checkClick(x, y);
+	return groupBP->checkClick(x, y);
 }
 
 bool filtersPanel::isToolbarClicked(int x, int y)
@@ -603,13 +615,13 @@ bool filtersPanel::isRankingON()
 	return sortBP_ON;
 }
 
-void filtersPanel::sortFiles(vector<VideoFile> &files, int length)
+void filtersPanel::sortFiles(vector<VideoFile> &files, size_t length)
 {
 
 	if (length > 1) {
 
-		int i, change;
-		bool test;
+		size_t i, change;
+		bool test = false;
 		do {
 			change = 0;
 			i = length - 1;
@@ -716,24 +728,68 @@ void filtersPanel::hideUnrankedFiles(vector<VideoFile> rankedFiles, VideoFile al
 	}
 }
 
-bool filtersPanel::haveKey(VideoFile file, string keywords)
+bool filtersPanel::haveKey(VideoFile file, string keywords, bool ui)
 {
 	bool retval = false;
+	int numberOfKeys = 0;
+	int detectedConcepts = 0;
 
 	if (keywords == "") {
 		retval = true;
 	}
 	else {
-		    vector<int> v = split(keywords, ',');
+		vector<int> v = split(keywords, ',');
+		numberOfKeys = v.size();
 
-			for (int i = 0; i < v.size(); i++) {
+		if (!ui) {
 
+			for (int i = 0; i < v.size(); i++)
+			{
 				if (file.semanticID_1 == v[i] || file.semanticID_2 == v[i] || file.semanticID_3 == v[i]
 					|| file.semanticID_4 == v[i] || file.semanticID_5 == v[i])
 				{
 					retval = true;
 				}
 			}
+		}
+		else {
+
+			for (int i = 0; i < v.size(); i++)
+			{
+				if (file.semanticID_1 == v[i]) { detectedConcepts++; }
+				if (file.semanticID_2 == v[i]) { detectedConcepts++; }
+				if (file.semanticID_3 == v[i]) { detectedConcepts++; }
+				if (file.semanticID_4 == v[i]) { detectedConcepts++; }
+				if (file.semanticID_5 == v[i]) { detectedConcepts++; }
+
+				if (detectedConcepts == numberOfKeys)
+				{
+					retval = true;
+				}
+			}
+		}
+	}
+	return retval;
+}
+
+bool filtersPanel::haveNotKey(VideoFile file, string keywords)
+{
+	bool retval = true;
+
+	if (keywords == "") {
+		retval = true;
+	}
+	else {
+		vector<int> v = split(keywords, ',');
+
+		for (int i = 0; i < v.size(); i++) {
+
+			if (file.semanticID_1 == v[i] || file.semanticID_2 == v[i] || file.semanticID_3 == v[i]
+				|| file.semanticID_4 == v[i] || file.semanticID_5 == v[i])
+			{
+				retval = false;
+			}
+		}
 	}
 	return retval;
 }

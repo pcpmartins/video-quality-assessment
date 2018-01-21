@@ -165,7 +165,7 @@ Ptr<SVM> mlclass::processSVM(string binary_scores, string feature_vector,
 int mlclass::predictSample(json jSample, int c) {
 
 
-	int sSize = jSample.size();
+	size_t sSize = jSample.size();
 	float* sampleData = new float[sSize];
 	float* sampleNormData = new float[sSize];
 	int ps = 0;
