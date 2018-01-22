@@ -1,6 +1,8 @@
 
 CBMI-2017 [ACM paper](https://dl.acm.org/citation.cfm?id=3095748) - [Semi-automatic Video Assessment System](https://novasearch.org/w/images/1/11/Semiautomatic_video_assessment_system.pdf)
 
+# Semi-automatic Video Assessment System
+
 **Table of Contents**
 
 - [Semi-automatic Video Assessment System](#semi-automatic-video-assessment-system)
@@ -49,7 +51,6 @@ CBMI-2017 [ACM paper](https://dl.acm.org/citation.cfm?id=3095748) - [Semi-automa
 			- [Beach performance classifier](#beach-performance-classifier)
 	- [References](#references)
 
-# Semi-automatic Video Assessment System
 
 ## Introduction
 
