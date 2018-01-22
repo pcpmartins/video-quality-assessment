@@ -1,7 +1,7 @@
 
 CBMI-2017 [ACM paper](https://dl.acm.org/citation.cfm?id=3095748) - [Semi-automatic Video Assessment System](https://novasearch.org/w/images/1/11/Semiautomatic_video_assessment_system.pdf)
 
-**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+**Table of Contents**
 
 - [Semi-automatic Video Assessment System](#semi-automatic-video-assessment-system)
 	- [Introduction](#Introduction)
@@ -10,44 +10,44 @@ CBMI-2017 [ACM paper](https://dl.acm.org/citation.cfm?id=3095748) - [Semi-automa
 		- [Aesthetic related features](#aesthetic-related-features)
 			- [Colour moments](#colour-moments)
 			- [Colour ratio](#colour-ratio)
-			- [Luminance](#Luminance)
-			- [Edge orientation](#)
-			- [Edge strength](#)
-			- [Color diversity](#)
-			- [Colourfulness](#)
-			- [Rule of thirds](#)
-			- [Foreground area](#)
-			- [Shadow area](#)
-			- [Camera moves](#)
-			- [Entropy](#)
-		- [Attention related features](#)
-			- [Focus](#)
-			- [Faces](#)
-			- [Face area](#)
-			- [Smiles](#)
-			- [static saliency](#)
-			- [Focus difference](#)
-			- [Motion magnitude](#)
-			- [Shakiness](#)
-			- [Objective index](#)
-	- [Algorithm categories](#)
-		- [Object detection](#)
-		- [Background Subtraction](#)
-		- [Optical flow](#)
-		- [Saliency](#)
-		- [Semantic analysis](#)
-	- [Machine learning classification](#)
-		- [SVM setup and parameters](#)
-		- [Feature scaling](#)
-		- [Statistical measures](#)
-		- [Feature selection](#)
-		- [Binary classification of aesthetics](#)
-			- [Binary classification of interestingness](#)
-			- [Basketball classifier](#)
-			- [Parade classifier](#)
-			- [Music performance classifier](#)
-			- [Beach performance classifier](#)
-	- [References](#)
+			- [Luminance](#luminance)
+			- [Edge orientation](#edge-orientation)
+			- [Edge strength](#edge-strength)
+			- [Colour diversity](#colour-diversity)
+			- [Colourfulness](#colourfulness)
+			- [Rule of thirds](#rule-of-thirds)
+			- [Foreground area](#foreground-area)
+			- [Shadow area](#shadow-area)
+			- [Camera moves](#camera-moves)
+			- [Entropy](#entropy)
+		- [Attention related features](#attention-related-features)
+			- [Focus](#focus)
+			- [Faces](#faces)
+			- [Face area](#face-area)
+			- [Smiles](#smiles)
+			- [static saliency](#static-saliency)
+			- [Focus difference](#focus-difference)
+			- [Motion magnitude](#motion-magnitude)
+			- [Shakiness](#shakiness)
+			- [Objective index](#objective-index)
+	- [Algorithm categories](#algorithm-categories)
+		- [Object detection](#object-detection)
+		- [Background Subtraction](#background-subtraction)
+		- [Optical flow](#optical-flow)
+		- [Saliency](#saliency)
+		- [Semantic analysis](#semantic-analysis)
+	- [Machine learning classification](#machine-learning-classification)
+		- [SVM setup and parameters](#svm-setup-and-parameters)
+		- [Feature scaling](#feature-scaling)
+		- [Statistical measures](#statistical-measures)
+		- [Feature selection](#feature-selection)
+		- [Binary classification of aesthetics](#binary-classification-of-aesthetics)
+		- [Binary classification of interestingness](#binary-classification-of-interestingness)
+			- [Basketball classifier](#basketball-classifier)
+			- [Parade classifier](#parade-classifier)
+			- [Music performance classifier](#music-performance-classifier)
+			- [Beach performance classifier](#beach-performance-classifier)
+	- [References](#references)
 
 # Semi-automatic Video Assessment System
 
@@ -114,7 +114,7 @@ It was implemented a simplified version of the method presented in ["Efficient U
 
 The amount of edges detected.
 
-#### Color diversity
+#### Colour diversity
 
 Colour diversity is a property related to visual aesthetics. We count different groups of hues. On the hue histogram (computed from the H channel of HSV) we count any variation of hue bigger than a certain threshold.
 
@@ -303,7 +303,7 @@ For this we use the feature selection algorithm [minimum-Redundancy-Maximum-Rele
 ![figure 12](/images/a_classification_G.png)
 *figure 12 - Aesthetic Classification Gamma parameter* 
 
-#### Binary classification of interestingness
+### Binary classification of interestingness
 
 It is based on the Video Interestingness Database (VID), two benchmarks [datasets](http://www.yugangjiang.info/research/interestingness/index.html)  with ground-truth interestingness labels. The first one (V.I.D. dataset A) comprises 1200 videos collected from Flickr which have a rank based on interestingness. The second (V.I.D. dataset B) comprises 420 advertisement videos from YouTube. YouTube does not have an interestingness rank so to collect the interestingness scores, this dataset was subject to an experimental annotation procedure. It was extracted an extended set of features, including the before mentioned attention and aesthetics related features, from the (V.I.D. dataset A). These features together with the experimental binary values were used to train SVM classifiers for interestingness on video.
 
