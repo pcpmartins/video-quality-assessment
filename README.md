@@ -3,56 +3,6 @@ CBMI-2017 [ACM paper](https://dl.acm.org/citation.cfm?id=3095748) - [Semi-automa
 
 # Semi-automatic Video Assessment System
 
-
-- [Semi-automatic Video Assessment System](#)
-	- [Introduction](#)
-	- [Development setup](#)
-	- [Feature enginnering and extraction](#)
-		- [Aesthetic related features](#aesthetic-related-features)
-			- [Colour moments](#)
-			- [Colour ratio](#)
-			- [Luminance](#)
-			- [Edge orientation](#)
-			- [Edge strength](#)
-			- [Color diversity](#)
-			- [Colourfulness](#)
-			- [Rule of thirds](#)
-			- [Foreground area](#)
-			- [Shadow area](#)
-			- [Camera moves](#)
-			- [Entropy](#)
-			- [Binary classification for aesthetics](#)
-		- [Attention related features](#attention-related-features)
-			- [Focus](#)
-			- [Faces](#)
-			- [Face area](#)
-			- [Smiles](#)
-			- [static saliency](#)
-			- [Focus difference](#)
-			- [Motion magnitude](#)
-			- [Shakiness](#)
-			- [Objective index](#)
-			- [Binary classification for interestingness](#)
-	- [Algorithm categories](#)
-		- [Object detection](#)
-		- [Background Subtraction](#)
-		- [Optical flow](#)
-		- [Saliency](#)
-		- [Semantic analysis](#)
-	- [Machine learning classification](#)
-		- [SVM setup and parameters](#)
-		- [Feature scaling](#)
-		- [Statistical measures](#)
-		- [Feature selection](#)
-		- [Aesthetic classifier details](#)
-		- [Interestingness classifiers details](#)
-			- [Basketball classifier](#)
-			- [Parade classifier](#)
-			- [Music performance classifier](#)
-			- [Beach performance classifier](#)
-	- [References](#)
-
-
 ## Introduction
 
 The goal is the development of a system capable of semi-automatically assess video quality, to sort and filter a large stream of user generated content (UGC) in a timely manner and in a way, that it can be manageable by a human operator.
@@ -148,10 +98,6 @@ Percentage of frames where foreground area is bigger than 80% of total area avai
 
 Entropy is a quantity normally used to describe the volume of data that needs to be encoded by a compression algorithm. A completely flat image, without any prominent pixel have zero entropy and can be compressed to a very small size. On the other hand, an image with high entropy, full of details and pixel contrast will result in a very large encoded file size.
 
-#### Binary classification for aesthetics
-
-  We used the CERTH-ITI-VAQ700 dataset, a comprehensive [video dataset](http://mklab.iti.gr/project/certh-iti-vaq700-dataset) for the problem of aesthetic quality assessment with annotated scores for 700 (UGC)videos from YouTube, 350 videos are rated as being of high aesthetic quality and another 350 as being of low aesthetic quality. We extracted our set of features from the dataset and using the ground truth experimental results generated a classifier to predict aesthetic of any new sample.
-
 ### Attention related features
 
 Measures related to attention can be used to improve user QoE in many applications. In the remainder of this section are enumerated visual features in some way related to attention, and for each one explained its relevancy, from our point of view. It was used a top-down approach for feature extraction. It is possible to see an overview in [figure 3]( /images/feature_groups.png), resulting in a small, off the shelf, set of visual features able to capture, at some extent, important aspects of the interestingness, attention and visual aesthetic concepts. Interestingness is an important visual property, as the human vision system (HVS) searches actively for regions of interest to improve the efficiency of subsequent object detection and recognition tasks and is also a precursor to attention. Interestingness literally means something that arouses curiosity.
@@ -194,11 +140,6 @@ It is based on the comparison of the angle between two subsequent motion vectors
 #### Objective index
 
 The frame rate and resolution of video were used to compute a simple objective quality measure.
-
-#### Binary classification for interestingness
-
-It is based on the Video Interestingness Database (VID), two benchmarks [datasets](http://www.yugangjiang.info/research/interestingness/index.html)  with ground-truth interestingness labels. The first one (V.I.D. dataset A) comprises 1200 videos collected from Flickr which have a rank based on interestingness. The second (V.I.D. dataset B) comprises 420 advertisement videos from YouTube. YouTube does not have an interestingness rank so to collect the interestingness scores, this dataset was subject to an experimental annotation procedure. It was extracted an extended set of features, including the before mentioned related to attention and others related to aesthetics, from the (V.I.D. dataset A). These features together with the experimental binary values were used to train SVM classifiers for interestingness on video.
-
 
 ## Algorithm categories
 
@@ -285,7 +226,9 @@ The central premise when using a feature selection technique is that the data co
 
 For this we use the feature selection algorithm [minimum-Redundancy-Maximum-Relevance (mRMR)](http://home.penglab.com/proj/mRMR/), to reorganize our variables taking into account not only the dependency and redundancy between variables but also their relevancy. More details in [11](home.penglab.com/papersall/docpdf/2004_JBCB_feasel-04-06-15.pdf).
 
-### Aesthetic classifier details
+### Binary classification of aesthetics
+
+  We used the CERTH-ITI-VAQ700 dataset, a comprehensive [video dataset](http://mklab.iti.gr/project/certh-iti-vaq700-dataset) for the problem of aesthetic quality assessment with annotated scores for 700 (UGC)videos from YouTube, 350 videos are rated as being of high aesthetic quality and another 350 as being of low aesthetic quality. We extracted our set of features from the dataset and using the ground truth experimental results generated a classifier to predict aesthetic of any new sample.
 
 * At start a rough pre-selection was made according to the concept to be classified, discarding redundant or not applicable groups of features. The overall extracted features were reduced by this process from the initial 98 columns to 48 as shown in [figure 8](/images/a_48_features.png).
 
@@ -312,7 +255,9 @@ For this we use the feature selection algorithm [minimum-Redundancy-Maximum-Rele
 ![figure 12](/images/a_classification_G.png)
 *figure 12 - Aesthetic Classification Gamma parameter* 
 
-### Interestingness classifiers details
+#### Binary classification of interestingness
+
+It is based on the Video Interestingness Database (VID), two benchmarks [datasets](http://www.yugangjiang.info/research/interestingness/index.html)  with ground-truth interestingness labels. The first one (V.I.D. dataset A) comprises 1200 videos collected from Flickr which have a rank based on interestingness. The second (V.I.D. dataset B) comprises 420 advertisement videos from YouTube. YouTube does not have an interestingness rank so to collect the interestingness scores, this dataset was subject to an experimental annotation procedure. It was extracted an extended set of features, including the before mentioned attention and aesthetics related features, from the (V.I.D. dataset A). These features together with the experimental binary values were used to train SVM classifiers for interestingness on video.
 
 The interestingness classification focused on specific events. Each specific event dataset was gathered from the event categories of the beforementioned Flickr interestingness video dataset. We can see a breakdown and the event categories selected in [figure 13](/images/i_categories.png).
 Each event dataset comprises 40 positive and 40 negative samples, this samples were compiled from the top 10% (positives) and bottom 10% (negatives) from a total of 400 videos retrieved from Flickr keyword search for each event and sorted by interestingness. The methodology used was the same used for aesthetic classification explained in the [Aesthetic classifier details](#aesthetic-classifier-details) section .
