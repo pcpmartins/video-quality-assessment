@@ -5,51 +5,50 @@ CBMI-2017 [ACM paper](https://dl.acm.org/citation.cfm?id=3095748) - [Semi-automa
 
 **Table of Contents**
 
-- [Semi-automatic Video Assessment System](#semi-automatic-video-assessment-system)
-	- [Introduction](#Introduction)
-	- [Development setup](#development-setup)
-	- [Feature enginnering and extraction](#feature-enginnering-and-extraction)
-		- [Aesthetic related features](#aesthetic-related-features)
-			- [Colour moments](#colour-moments)
-			- [Colour ratio](#colour-ratio)
-			- [Luminance](#luminance)
-			- [Edge orientation](#edge-orientation)
-			- [Edge strength](#edge-strength)
-			- [Colour diversity](#colour-diversity)
-			- [Colourfulness](#colourfulness)
-			- [Rule of thirds](#rule-of-thirds)
-			- [Foreground area](#foreground-area)
-			- [Shadow area](#shadow-area)
-			- [Camera moves](#camera-moves)
-			- [Entropy](#entropy)
-		- [Attention related features](#attention-related-features)
-			- [Focus](#focus)
-			- [Faces](#faces)
-			- [Face area](#face-area)
-			- [Smiles](#smiles)
-			- [static saliency](#static-saliency)
-			- [Focus difference](#focus-difference)
-			- [Motion magnitude](#motion-magnitude)
-			- [Shakiness](#shakiness)
-			- [Objective index](#objective-index)
-	- [Algorithm categories](#algorithm-categories)
-		- [Object detection](#object-detection)
-		- [Background Subtraction](#background-subtraction)
-		- [Optical flow](#optical-flow)
-		- [Saliency](#saliency)
-		- [Semantic analysis](#semantic-analysis)
-	- [Machine learning classification](#machine-learning-classification)
-		- [SVM setup and parameters](#svm-setup-and-parameters)
-		- [Feature scaling](#feature-scaling)
-		- [Statistical measures](#statistical-measures)
-		- [Feature selection](#feature-selection)
-		- [Binary classification of aesthetics](#binary-classification-of-aesthetics)
-		- [Binary classification of interestingness](#binary-classification-of-interestingness)
-			- [Basketball classifier](#basketball-classifier)
-			- [Parade classifier](#parade-classifier)
-			- [Music performance classifier](#music-performance-classifier)
-			- [Beach performance classifier](#beach-performance-classifier)
-	- [References](#references)
+- [Introduction](#introduction)
+- [Development setup](#development-setup)
+- [Feature enginnering and extraction](#feature-enginnering-and-extraction)
+	- [Aesthetic related features](#aesthetic-related-features)
+		- [Colour moments](#colour-moments)
+		- [Colour ratio](#colour-ratio)
+		- [Luminance](#luminance)
+		- [Edge orientation and strength](#edge-orientation-and-strength)
+		- [Colour diversity](#colour-diversity)
+		- [Colourfulness](#colourfulness)
+		- [Dominat colours](#dominant-colours)
+		- [Rule of thirds](#rule-of-thirds)
+		- [Foreground area](#foreground-area)
+		- [Shadow area](#shadow-area)
+		- [Camera moves](#camera-moves)
+		- [Entropy](#entropy)
+	- [Attention related features](#attention-related-features)
+		- [Focus](#focus)
+		- [Faces](#faces)
+		- [Face area](#face-area)
+		- [Smiles](#smiles)
+		- [static saliency](#static-saliency)
+		- [Focus difference](#focus-difference)
+		- [Motion magnitude](#motion-magnitude)
+		- [Shakiness](#shakiness)
+		- [Objective index](#objective-index)
+- [Algorithm categories](#algorithm-categories)
+	- [Object detection](#object-detection)
+	- [Background Subtraction](#background-subtraction)
+	- [Optical flow](#optical-flow)
+	- [Saliency](#saliency)
+	- [Semantic analysis](#semantic-analysis)
+- [Machine learning classification](#machine-learning-classification)
+	- [SVM setup and parameters](#svm-setup-and-parameters)
+	- [Feature scaling](#feature-scaling)
+	- [Statistical measures](#statistical-measures)
+	- [Feature selection](#feature-selection)
+	- [Binary classification of aesthetics](#binary-classification-of-aesthetics)
+	- [Binary classification of interestingness](#binary-classification-of-interestingness)
+		- [Basketball classifier](#basketball-classifier)
+		- [Parade classifier](#parade-classifier)
+		- [Music performance classifier](#music-performance-classifier)
+		- [Beach classifier](#beach-classifier)
+- [References](#references)
 
 
 ## Introduction
@@ -105,26 +104,28 @@ Colour moments are great as a measure to judge similarity between images or vide
 
 Luminance is arguable the most important visual components, humans are so much more sensitive to light than colour information. We compute the first luminance moment. In terms of the human visual perception system the variance of luminance may even be more informative than the mean or median.
 
-#### Edge orientation
+#### Edge orientation and strength
 
 Edges may indicate the boundaries of objects in the scene. Detecting sharp changes in brightness between each pixel and its surroundings allow us to detect edges.
 
-It was implemented a simplified version of the method presented in ["Efficient Use of Local Edge Histogram Descriptor"](https://www.dcc.fc.up.pt/~mcoimbra/lectures/VC_1415/VC_1415_P8_LEH.pdf) where edge histograms MPEG-7 compliant features are extracted. We use a global and a local representation for edges, for the local one a support tool was used to split each frame by a 4x4 grid, resulting in 16 sub-images. Each one of this sub-image was convolved with 5 different oriented kernels (0-zero, 1-vertical, 2-horizontal, 3-45º, 4-135º, 5-non-directional) this process results in 16 local features representing the orientation of each sub-image. A global edge value is also computed.
+It was implemented a simplified version of the method presented in ["Efficient Use of Local Edge Histogram Descriptor"](https://www.dcc.fc.up.pt/~mcoimbra/lectures/VC_1415/VC_1415_P8_LEH.pdf) where edge histograms MPEG-7 compliant features are extracted. We use a global and a local representation for edges, for the local one a support tool was used to split each frame by a 4x4 grid, resulting in 16 sub-images. Each one of this sub-image was convolved with 5 different oriented kernels (0-zero, 1-vertical, 2-horizontal, 3-45º, 4-135º, 5-non-directional) this process results in 16 local features representing the orientation of each sub-image. A global edge value is also computed alongside with the detected edges strength.
 
-#### Edge strength
-
-The amount of edges detected.
 
 #### Colour diversity
 
 Colour diversity is a property related to visual aesthetics. We count different groups of hues. On the hue histogram (computed from the H channel of HSV) we count any variation of hue bigger than a certain threshold.
 
 #### Colourfulness
+
 From "Measuring colourfulness in natural images" - (Hasler and Susstrunk, 2003).
 Using a simple opponent colour space and computing the mean and standard deviation of the pixel cloud along each direction [figure 4](/images/formula_colourfullness.png).
 
 ![figure 4](/images/formula_colourfullness.png)
 *figure 4 – Colourfulness metric* 
+
+#### Dominant colours
+
+A straight forward method of computing dominant colors is to use kmean clustering. It is available on most machine learning packages. However the result may not be deterministic, a standard practice is to use known initializations(not guaranteed best colors) or to run kmeans several times (runtime increase). To overcome this, we use instead a precise and fast to compute color quantisation method based on Eigenvectors.[Dominant colors in an image](https://github.com/aishack/dominant-colors).
 
 
 #### Rule of thirds
@@ -222,11 +223,11 @@ Furthermore, this API for using pre-trained deep learning models is compatible w
     - Pass the video frame through the network and obtain the output classifications.
     - Compute pooled top 5 concepts for each video file.
 
-We use the popular GoogleLeNet network architecture (Inception), it was introduced by Szegedy et al. in their 2014 paper, [Going deeper with convolutions](https://arxiv.org/abs/1409.4842). Next we can see the caffe model and prototxt file together with the list of the 1000 predictable concepts.
+We use the popular GoogleLeNet network architecture (Inception), it was introduced by Szegedy et al. in their 2014 paper, [Going deeper with convolutions](https://arxiv.org/abs/1409.4842). Next we link the caffe model and prototxt file together with the list of the 1000 predictable concepts.
 
 - [caffemodel file](video-assessment/bin/data/dnn/bvlc_googlenet.caffemodel).
 - [prototxt file](video-assessment/bin/data/dnn/bvlc_googlenet.prototxt).
-- [words file](video-assessment/bin/data/dnn/synset_words.txt).
+- [concept list file](video-assessment/bin/data/dnn/synset_words.txt).
 
 
 ## Machine learning classification
@@ -273,7 +274,7 @@ In machine learning and statistics, feature selection, also known as variable se
 
 The central premise when using a feature selection technique is that the data contains many features that are either redundant or irrelevant, and can thus be removed without incurring much loss of information. Redundant or irrelevant features are two distinct notions, since one relevant feature may be redundant in the presence of another relevant feature with which it is strongly correlated.
 
-For this we use the feature selection algorithm [minimum-Redundancy-Maximum-Relevance (mRMR)](http://home.penglab.com/proj/mRMR/), to reorganize our variables taking into account not only the dependency and redundancy between variables but also their relevancy. More details in [11](home.penglab.com/papersall/docpdf/2004_JBCB_feasel-04-06-15.pdf).
+For this we use the feature selection algorithm [minimum-Redundancy-Maximum-Relevance (mRMR)](http://home.penglab.com/proj/mRMR/), to reorganize our variables taking into account not only the dependency and redundancy between variables but also their relevancy. More details in [[11]](http://home.penglab.com/papersall/docpdf/2004_JBCB_feasel-04-06-15.pdf).
 
 ### Binary classification of aesthetics
 
@@ -304,12 +305,12 @@ For this we use the feature selection algorithm [minimum-Redundancy-Maximum-Rele
 ![figure 12](/images/a_classification_G.png)
 *figure 12 - Aesthetic Classification Gamma parameter* 
 
-### Binary classification of interestingness
+### Binary classification of specific event interestingness
 
 It is based on the Video Interestingness Database (VID), two benchmarks [datasets](http://www.yugangjiang.info/research/interestingness/index.html)  with ground-truth interestingness labels. The first one (V.I.D. dataset A) comprises 1200 videos collected from Flickr which have a rank based on interestingness. The second (V.I.D. dataset B) comprises 420 advertisement videos from YouTube. YouTube does not have an interestingness rank so to collect the interestingness scores, this dataset was subject to an experimental annotation procedure. It was extracted an extended set of features, including the before mentioned attention and aesthetics related features, from the (V.I.D. dataset A). These features together with the experimental binary values were used to train SVM classifiers for interestingness on video.
 
 The interestingness classification focused on specific events. Each specific event dataset was gathered from the event categories of the beforementioned Flickr interestingness video dataset. We can see a breakdown and the event categories selected in [figure 13](/images/i_categories.png).
-Each event dataset comprises 40 positive and 40 negative samples, this samples were compiled from the top 10% (positives) and bottom 10% (negatives) from a total of 400 videos retrieved from Flickr keyword search for each event and sorted by interestingness. The methodology used was the same used for aesthetic classification explained in the [Aesthetic classifier details](#aesthetic-classifier-details) section .
+Each event dataset comprises 40 positive and 40 negative samples, this samples were compiled from the top 10% (positives) and bottom 10% (negatives) from a total of 400 videos retrieved from Flickr keyword search for each event and sorted by interestingness. The methodology used was the same used for aesthetic classification explained in the previous [Binary classification of aesthetics](#binary-classification-of-aesthetics) section.
 
 ![figure 13](/images/i_categories.png)
 *figure 13 - Interestingness event categories breakdown* 
@@ -317,34 +318,36 @@ Each event dataset comprises 40 positive and 40 negative samples, this samples w
 #### Basketball classifier
 
 ![figure 14](/images/basket_graph.png)
-*figure 14 - Basketball event interestingness classifier performance*
+*figure 14 - Interestingness: Basketball event classifier performance evaluation*
 
 In [figure 14](/images/basket_graph.png) it is possible to  see the performance comparison between classifiers trained to predict interestingness on basketball events with progressively higher number of features. The associated C and Gamma parameters evolution can also be seen at [figure 15](/images/basket_c.png) and [figure 16](/images/basket_g.png) respectively. The top 28 features were selected to train the final classifier. The accuracy registered was 88% and the F-score 0.8.
 
 ![figure 15](/images/basket_c.png)
-*figure 15 - Basketball event interestingness classifier C parameter*
+*figure 15 - Interestingness: Basketball event classifier C optimal parameter*
 
 ![figure 16](/images/basket_g.png)
-*figure 16 - Basketball event interestingness classifier Gamma parameter*
+*figure 16 - Interestingness: Basketball event classifier Gamma optimal parameter*
 
 #### Parade classifier
 
 In [figure 17](/images/parade_graph.png) it is possible to see the performance comparison between classifiers trained to predict interestingness of parade events with progressively higher number of features.
 
 ![figure 17](/images/parade_graph.png)
-*figure 17 - Parade event interestingness classifier performance*
+*figure 17 - Interestingness: Parade event classifier performance evaluation*
 
 #### Music performance classifier
 
 In [figure 18](/images/music_graph.png) it is possible to see the performance comparison between classifiers trained to predict interestingness of music events with progressively higher number of features. as the audio information is very relevant on this event, the overall performance of the classification was worst comparing with the other events.
 
 ![figure 18](/images/music_graph.png)
-*figure 18 - Music event interestingness classifier performance*
+*figure 18 - Interestingness: Music performance event classifier performance evaluation*
 
-#### Beach performance classifier
+#### Beach classifier
 
-![figure 19](/images/music_graph.png)
-*figure 19 - Beach interestingness classifier performance*
+In [figure 19](/images/beach_graph.png) it is possible to see the performance comparison between classifiers trained to predict interestingness from beach videos with progressively higher number of features.
+
+![figure 19](/images/beach_graph.png)
+*figure 19 - Interestingness: Beach classifier performance evaluation*
 
 ## References
 
