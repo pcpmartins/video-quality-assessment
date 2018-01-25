@@ -961,7 +961,7 @@ vector<string> Gallery::getIndividualSample(string name) {
 
 std::vector<String> Gallery::readClassNames()
 {
-	const char *filename = "../bin/data/dnn/synset_words.txt";
+	const char *filename = "data/dnn/synset_words.txt";
 	std::vector<String> cNames;
 	std::ifstream fp(filename);
 	if (!fp.is_open())

@@ -318,7 +318,7 @@ Each event dataset comprises 40 positive and 40 negative samples, this samples w
 #### Basketball classifier
 
 ![figure 14](/images/basket_graph.png)
-*figure 14 - Interestingness: Basketball event classifier performance evaluation*
+*figure 14 - Interestingness: Basketball event classifier evaluation*
 
 In [figure 14](/images/basket_graph.png) it is possible to  see the performance comparison between classifiers trained to predict interestingness on basketball events with progressively higher number of features. The associated C and Gamma parameters evolution can also be seen at [figure 15](/images/basket_c.png) and [figure 16](/images/basket_g.png) respectively. The top 28 features were selected to train the final classifier. The accuracy registered was 88% and the F-score 0.8.
 
@@ -333,21 +333,21 @@ In [figure 14](/images/basket_graph.png) it is possible to  see the performance 
 In [figure 17](/images/parade_graph.png) it is possible to see the performance comparison between classifiers trained to predict interestingness of parade events with progressively higher number of features.
 
 ![figure 17](/images/parade_graph.png)
-*figure 17 - Interestingness: Parade event classifier performance evaluation*
+*figure 17 - Interestingness: Parade event classifier evaluation*
 
 #### Music performance classifier
 
 In [figure 18](/images/music_graph.png) it is possible to see the performance comparison between classifiers trained to predict interestingness of music events with progressively higher number of features. as the audio information is very relevant on this event, the overall performance of the classification was worst comparing with the other events.
 
 ![figure 18](/images/music_graph.png)
-*figure 18 - Interestingness: Music performance event classifier performance evaluation*
+*figure 18 - Interestingness: Music performance event classifier evaluation*
 
 #### Beach classifier
 
 In [figure 19](/images/beach_graph.png) it is possible to see the performance comparison between classifiers trained to predict interestingness from beach videos with progressively higher number of features.
 
 ![figure 19](/images/beach_graph.png)
-*figure 19 - Interestingness: Beach classifier performance evaluation*
+*figure 19 - Interestingness: Beach classifier evaluation*
 
 ## References
 
