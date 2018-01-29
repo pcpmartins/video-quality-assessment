@@ -9,6 +9,12 @@ More details in [of install.md](of_INSTALL.md)
 * Go to [visual studio setup guide](http://openframeworks.cc/setup/vs/) and follow the instructions.
 This project uses two OF addons,ofxGUI and ofxmlSettings they come with the release in the addons folder and should be enabled.
 
+## Install FFmpeg
+
+FFmpeg is optional, its only used during the audio extraction process. 
+
+* Follow [Install-FFmpeg-on-Windows](https://www.wikihow.com/Install-FFmpeg-on-Windows)
+
 ## Install OpenCV 3.2 and contrib modules
 
 * Follow [this instructions](https://www.learnopencv.com/install-opencv3-on-windows/)
