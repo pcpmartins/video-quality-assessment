@@ -33,6 +33,9 @@ CBMI-2017 [ACM paper](https://dl.acm.org/citation.cfm?id=3095748) - [Semi-automa
 		- [Objective index](#objective-index)
 - [Semantic features extraction](#semantic-features-extraction)
 - [Audio features extraction](#audio-features-extraction)
+	- [Low level](#lowlevel)
+	- [Rythm](#rythm)
+	- [Tonal](#tonal)
 - [Algorithm categories](#algorithm-categories)
 	- [Object detection](#object-detection)
 	- [Background Subtraction](#background-subtraction)
@@ -205,37 +208,37 @@ We extracted several audio descriptors using the [Essentia](http://essentia.upf.
 
 ### LOWLEVEL
 
-	*Average_loudness -  Dynamic range descriptor. It rescales average loudness, computed on 2sec windows with 1 sec overlap, into the [0,1] interval. The value of 0 corresponds to signals with large dynamic range, 1 corresponds to signal with little dynamic range. This algorithm computes the loudness of an audio signal defined by Steven's power law. It computes loudness as the energy of the signal raised to the power of 0.67. Algorithms: [Loudness](http://essentia.upf.edu/documentation/reference/streaming_Loudness.html).
+* Average_loudness -  Dynamic range descriptor. It rescales average loudness, computed on 2sec windows with 1 sec overlap, into the [0,1] interval. The value of 0 corresponds to signals with large dynamic range, 1 corresponds to signal with little dynamic range. This algorithm computes the loudness of an audio signal defined by Steven's power law. It computes loudness as the energy of the signal raised to the power of 0.67. Algorithms: [Loudness](http://essentia.upf.edu/documentation/reference/streaming_Loudness.html).
 	
-	*Dynamic_complexity - Dynamic complexity computed on 2sec windows with 1sec overlap. This algorithm computes the dynamic complexity defined as the average absolute deviation from the global loudness level estimate on the dB scale. It is related to the dynamic range and to the amount of fluctuation in loudness present in a recording. Silence at the beginning and at the end of a track are ignored in the computation in order not to deteriorate the results. Algorithms: [DynamicComplexity](http://essentia.upf.edu/documentation/reference/streaming_DynamicComplexity.html)
+* Dynamic_complexity - Dynamic complexity computed on 2sec windows with 1sec overlap. This algorithm computes the dynamic complexity defined as the average absolute deviation from the global loudness level estimate on the dB scale. It is related to the dynamic range and to the amount of fluctuation in loudness present in a recording. Silence at the beginning and at the end of a track are ignored in the computation in order not to deteriorate the results. Algorithms: [DynamicComplexity](http://essentia.upf.edu/documentation/reference/streaming_DynamicComplexity.html)
 	
-	*MFCC - The first 13 melodic frequency cepstrum coefficients. As there is no standard implementation, the MFCC-FB40 is used by default. See algorithm: [MFCC](http://essentia.upf.edu/documentation/reference/streaming_MFCC.html)
+* MFCC - The first 13 melodic frequency cepstrum coefficients. As there is no standard implementation, the MFCC-FB40 is used by default. See algorithm: [MFCC](http://essentia.upf.edu/documentation/reference/streaming_MFCC.html)
 
 ### RHYTHM
 
-	*Beats_count - Number of detected beats
+* Beats_count - Number of detected beats
 
-	*Bpm - BPM value according to detected beats
+* Bpm - BPM value according to detected beats
 
-	*Danceability - The algorithm is derived from Detrended Fluctuation Analysis (DFA). The output is the danceability of the audio signal. These values usually range from 0 to 3 (higher values meaning more danceable).. Algorithms: [Danceability](http://essentia.upf.edu/documentation/reference/streaming_Danceability.html)
+* Danceability - The algorithm is derived from Detrended Fluctuation Analysis (DFA). The output is the danceability of the audio signal. These values usually range from 0 to 3 (higher values meaning more danceable).. Algorithms: [Danceability](http://essentia.upf.edu/documentation/reference/streaming_Danceability.html)
 
-	*Onset_rate - This algorithm computes the number of onsets per second and their position in time for an audio signal. Onset detection functions are computed using both high frequency content and complex-domain methods. Algorithms: [OnsetRate](http://essentia.upf.edu/documentation/reference/streaming_OnsetRate.html)
+* Onset_rate - This algorithm computes the number of onsets per second and their position in time for an audio signal. Onset detection functions are computed using both high frequency content and complex-domain methods. Algorithms: [OnsetRate](http://essentia.upf.edu/documentation/reference/streaming_OnsetRate.html)
 
 ### TONAL
 
-	 Algorithms: [ChordsDetection](http://essentia.upf.edu/documentation/reference/streaming_ChordsDetection.html), [ChordsDescriptors](http://essentia.upf.edu/documentation/reference/streaming_ChordsDescriptors.html).
+Algorithms: [ChordsDetection](http://essentia.upf.edu/documentation/reference/streaming_ChordsDetection.html), [ChordsDescriptors](http://essentia.upf.edu/documentation/reference/streaming_ChordsDescriptors.html).
 
-	*Chords_changes_rate - Chords change rate in the progression.
+* Chords_changes_rate - Chords change rate in the progression.
 
-	*Chords_number_rate -  Ratio of different chords from the total number of chords in the progression.
+* Chords_number_rate -  Ratio of different chords from the total number of chords in the progression.
 
-	*Key_strength -  key of the progression.
+* Key_strength -  key of the progression.
 
-	*Tuning_diatonic_strength key - Strength estimated from high-resolution HPCP (120 dimensions) using diatonic profile. Algorithms: [Key](http://essentia.upf.edu/documentation/reference/streaming_Key.html)
+* Tuning_diatonic_strength key - Strength estimated from high-resolution HPCP (120 dimensions) using diatonic profile. Algorithms: [Key](http://essentia.upf.edu/documentation/reference/streaming_Key.html)
 
-	*Tuning_equal_tempered_deviation -  Equal-temperament deviation estimated from high-resolution HPCP (120 dimensions). Algorithms: [HighResolutionFeatures](http://essentia.upf.edu/documentation/reference/streaming_HighResolutionFeatures.html)
+* Tuning_equal_tempered_deviation -  Equal-temperament deviation estimated from high-resolution HPCP (120 dimensions). Algorithms: [HighResolutionFeatures](http://essentia.upf.edu/documentation/reference/streaming_HighResolutionFeatures.html)
 	
-	*Tuning_nontempered_energy_ratio - Non-tempered energy ratio estimated from high-resolution HPCP (120 dimensions). Algorithms: [HighResolutionFeatures](http://essentia.upf.edu/documentation/reference/streaming_HighResolutionFeatures.html)
+* Tuning_nontempered_energy_ratio - Non-tempered energy ratio estimated from high-resolution HPCP (120 dimensions). Algorithms: [HighResolutionFeatures](http://essentia.upf.edu/documentation/reference/streaming_HighResolutionFeatures.html)
 
 
 ## Algorithm categories
@@ -278,13 +281,13 @@ We use the popular GoogleLeNet network architecture (Inception), it was introduc
 
 Further information:
 
-*[Brewing ImageNet](http://caffe.berkeleyvision.org/gathered/examples/imagenet.html)
-*[OpenCV sample: caffe_googlenet.cpp](https://github.com/opencv/opencv/blob/master/samples/dnn/caffe_googlenet.cpp)
-*[OpenCV dnn/googleNet tutorial](https://docs.opencv.org/3.4.0/d5/de7/tutorial_dnn_googlenet.html)
-*[Classification: Instant Recognition with Caffe](http://nbviewer.jupyter.org/github/BVLC/caffe/blob/master/examples/00-classification.ipynb)
-*[Model zoo](https://github.com/BVLC/caffe/wiki/Model-Zoo#berkeley-trained-models)
-*[ImageNet index](http://image-net.org/challenges/LSVRC/2012/index)
-*[ImageNet 1000 categories training images](http://image-net.org/challenges/LSVRC/2012/browse-synsets)
+* [Brewing ImageNet](http://caffe.berkeleyvision.org/gathered/examples/imagenet.html)
+* [OpenCV sample: caffe_googlenet.cpp](https://github.com/opencv/opencv/blob/master/samples/dnn/caffe_googlenet.cpp)
+* [OpenCV dnn/googleNet tutorial](https://docs.opencv.org/3.4.0/d5/de7/tutorial_dnn_googlenet.html)
+* [Classification: Instant Recognition with Caffe](http://nbviewer.jupyter.org/github/BVLC/caffe/blob/master/examples/00-classification.ipynb)
+* [Model zoo](https://github.com/BVLC/caffe/wiki/Model-Zoo#berkeley-trained-models)
+* [ImageNet index](http://image-net.org/challenges/LSVRC/2012/index)
+* [ImageNet 1000 categories](http://image-net.org/challenges/LSVRC/2012/browse-synsets)
 
 ### Audio analysis
 
