@@ -34,6 +34,10 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 	int eh1 = 0, eh2 = 0, eh3 = 0, eh4 = 0, eh5 = 0, eh6, eh7 = 0, eh8 = 0, eh9 = 0, eh10 = 0,
 		eh11 = 0, eh12 = 0, eh13 = 0, eh14 = 0, eh15 = 0, eh16 = 0, ehGlobal = 0;
 	double entropy, motion = 0.0;
+	float f1_average_loudness = 0.0, f2_dynamic_complexity = 0.0, f3_bpm = 0.0, f4_danceability = 0.0,
+		f5_onset_rate = 0.0, f6_chords_change_rate = 0.0, f7_chords_number_rate = 0.0, f8_key_strength = 0.0,
+		f9_tuning_diatonic_strength = 0.0, f10_tuning_equal_tempered_deviation = 0.0,
+		f11_tuning_nontempered_energy_ratio = 0.0;
 
 	if (lockSemanticInsert) {
 		userInsertKeywords = ofSystemTextBoxDialog("Insert Keywords:", userInsertKeywords);
@@ -45,7 +49,7 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 		cout << "Removed keywords: " << userRemoveKeywords << endl;
 	}
 
-	if (lockTargetVideo)     //if similarity button is clicked on similarity menu
+	if (lockTargetVideo)     //if similarity button is clicked on modify menu
 	{
 
 		if (choosenFileIndex < 0) { cout << "no current selection!" << endl; }
@@ -80,19 +84,16 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 				eh15 = files[choosenFileIndex].eh15;
 				eh16 = files[choosenFileIndex].eh16;
 				ehGlobal = files[choosenFileIndex].ehGlobal;
-
 			}
 			if (entropySimilarityON)
 			{
 				nsim++;
 				entropy = files[choosenFileIndex].entropy;
-
 			}
 			if (motionSimilarityON)
 			{
 				nsim++;
 				motion = files[choosenFileIndex].motion;
-
 			}
 
 			for (int i = 0; i < length; ++i) {
@@ -160,8 +161,7 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 
 	}
 
-
-	if (normalBP_ON || moreBP_ON)
+	if (f_ON || fadv_ON)
 	{
 
 		for (int i = 0; i < length; ++i) {				//For each file take values 
@@ -194,30 +194,41 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 			double focus_dif = files[i].focus_dif;
 			double shake = files[i].shake;
 
-
-			if ((redRatio >= normalBP_redRatioP) &&		          //Red colour parameter
-				(greenRatio >= normalBP_greenRatioP) &&	          //Green colour parameter
-				(blueRatio >= normalBP_blueRatioP) &&	          //Blue colour parameter
-				(rate >= normalBP_rateP) &&	                      //Blue colour parameter
-				(entropy >= normalBP_entropy) &&			          //Simplicity parameter
-				(luminance >= normalBP_luminaceP) &&               //Luminance parameter	
-				(sharpness >= normalBP_sharpness) &&               //sharpness	
-				(abruptness < normalBP_abruptness) &&	          //abruptness
-				(motion >= normalBP_motion) &&	                  //motion
-				(luminance_std >= normalBP_luminance_std) &&      //luma std
-				(dif_hues >= normalBP_dif_hues) &&	              //hues
-				(static_saliency >= normalBP_static_saliency) &&  //static saliency
-				(ranksum >= normalBP_ranksum) &&	              //ranksum
-				(shadow >= normalBP_shadow) &&	                  //shadow area
-				(avgFaces >= normalBP_avgFaces) &&	              //ranksum
-				(faceArea >= normalBP_faceArea) &&	              //area of faces
-				(smiles >= normalBP_smiles) &&	                  //smiles in proper place of faces
-				(fgArea >= normalBP_fgArea) &&	                  //foreground area
-				(focus_dif >= normalBP_focus_dif) &&              //foreground area
-				(shake < normalBP_shake) &&                       //foreground area
-				(rule3 >= normalBP_rule3))                        //shakiness
+			double average_loudness = files[i].a1_average_loudness;
+			double dynamic_complexity = files[i].a2_dynamic_complexity;
+			double bpm = files[i].a3_bpm;
+			double danceability = files[i].a4_danceability;
+			double onset_rate = files[i].a5_onset_rate;
+			double chords_change_rate = files[i].a6_chords_change_rate;
 
 
+			if ((redRatio >= f_redRatioP) &&		          //Red colour parameter
+				(greenRatio >= f_greenRatioP) &&	          //Green colour parameter
+				(blueRatio >= f_blueRatioP) &&	          //Blue colour parameter
+				(rate >= f_rateP) &&	                      //Blue colour parameter
+				(entropy >= f_entropy) &&			          //Simplicity parameter
+				(luminance >= f_luminaceP) &&               //Luminance parameter	
+				(sharpness >= f_sharpness) &&               //sharpness	
+				(abruptness < f_abruptness) &&	          //abruptness
+				(motion >= f_motion) &&	                  //motion
+				(luminance_std >= f_luminance_std) &&      //luma std
+				(dif_hues >= f_dif_hues) &&	              //hues
+				(static_saliency >= f_static_saliency) &&  //static saliency
+				(ranksum >= f_ranksum) &&	              //ranksum
+				(shadow >= f_shadow) &&	                  //shadow area
+				(avgFaces >= f_avgFaces) &&	              //ranksum
+				(faceArea >= f_faceArea) &&	              //area of faces
+				(smiles >= f_smiles) &&	                  //smiles in proper place of faces
+				(fgArea >= f_fgArea) &&	                  //foreground area
+				(focus_dif >= f_focus_dif) &&              
+				(shake < f_shake) &&                       
+				(rule3 >= f_rule3)  &&  
+				(average_loudness >= fa1_average_loudness) &&
+				(dynamic_complexity >= fa2_dynamic_complexity) &&
+				(bpm >= fa3_bpm) &&
+				(danceability >= fa4_danceability) &&
+				(onset_rate >= fa5_onset_rate) &&
+				(chords_change_rate >= fa6_chords_change_rate))
 
 			{
 				files[i].setVisible(true);
@@ -229,21 +240,21 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 			}
 
 			//////Human face filtering////////
-			if (normalBP_humanFace)								//If human face filtering is set
+			if (f_humanFace)								//If human face filtering is set
 			{
 				if (files[i].getVisible()) {						//And file was visible
 					files[i].setVisible(files[i].humanFace);			//Set visible if there is human face
 				}
 			}
 			//////Aesthetic filtering////////
-			if (normalBP_predict)
+			if (f_predict)
 			{
 				if (files[i].getVisible()) {
 					files[i].setVisible(files[i].predict);
 				}
 			}
 			//////Interestingness filtering////////
-			if (normalBP_interest_1)								//If max interest filtering is set
+			if (f_interest)								//If max interest filtering is set
 			{
 				if (files[i].getVisible()) {						//And file was visible
 					files[i].setVisible(files[i].interest_1);			//Set visible if there is max interest
@@ -251,11 +262,30 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 			}
 
 			//////Keyword filtering////////
-			if (normalBP_semantic)
+			if (f_semantic)
 			{
 				if (files[i].getVisible()) {
 
 					files[i].setVisible(haveKey(files[i], userInsertKeywords, unionIntersect) && haveNotKey(files[i], userRemoveKeywords));
+				}
+			}
+
+			if (moreBP_g1)
+			{
+				if (files[i].getVisible()) {
+					files[i].setVisible(files[i].rate == 1);
+				}
+			}
+			else if (moreBP_g2)
+			{
+				if (files[i].getVisible()) {					
+					files[i].setVisible(files[i].rate == 2);				
+				}
+			}
+			else if (moreBP_g3)
+			{
+				if (files[i].getVisible()) {
+					files[i].setVisible(files[i].rate == 3);
 				}
 			}
 
@@ -288,7 +318,7 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 
 			}
 
-			if (sortBP_ON && files[i].getVisible())			//Add all visible files to ranking
+			if (s_ON && files[i].getVisible())			//Add all visible files to ranking
 			{
 				sortVector.push_back(files[i]);
 				numberOfSortedFiles = sortVector.size() < NUMBER_OF_RANKED_FILES ? sortVector.size() : NUMBER_OF_RANKED_FILES;
@@ -304,7 +334,7 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 
 	//Rank files
 
-	if (sortBP_ON) {
+	if (s_ON) {
 		ranking(sortVector);
 		hideUnrankedFiles(sortVector, files, length);
 	}
@@ -312,34 +342,42 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 
 	if (resetFilterValues) {
 
-		normalBP_redRatioP = 0;
-		normalBP_greenRatioP = 0;
-		normalBP_blueRatioP = 0;
-		normalBP_entropy = 0;
-		normalBP_luminaceP = 0;
-		normalBP_sharpness = 0;
-		normalBP_rateP = 0;
-		normalBP_abruptness = 1;
-		normalBP_motion = 0;
-		normalBP_shake = 1;
-		normalBP_humanFace = false;
-		normalBP_rule3 = 0;
-		normalBP_avgFaces = 0;
-		normalBP_faceArea = 0;
-		normalBP_smiles = 0;
-		normalBP_fgArea = 0;
-		normalBP_focus_dif = 0;
-		normalBP_luminance_std = 0;
-		normalBP_dif_hues = 0;
-		normalBP_static_saliency = 0;
-		normalBP_ranksum = 0;
-		normalBP_shadow = 0;
-		normalBP_predict = false;
-		normalBP_interest_1 = false;
-		normalBP_semantic = false;
+		f_redRatioP = 0;
+		f_greenRatioP = 0;
+		f_blueRatioP = 0;
+		f_entropy = 0;
+		f_luminaceP = 0;
+		f_sharpness = 0;
+		f_rateP = 0;
+		f_abruptness = 1;
+		f_motion = 0;
+		f_shake = 1;
+		f_humanFace = false;
+		f_rule3 = 0;
+		f_avgFaces = 0;
+		f_faceArea = 0;
+		f_smiles = 0;
+		f_fgArea = 0;
+		f_focus_dif = 0;
+		f_luminance_std = 0;
+		f_dif_hues = 0;
+		f_static_saliency = 0;
+		f_ranksum = 0;
+		f_shadow = 0;
+		f_predict = false;
+		f_interest = false;
+		f_semantic = false;
+		f_audio = false;
 		cout << "Values reseted!" << endl;
 		resetFilterValues = false;
-		sortBP_ON = false;
+		s_ON = false;
+
+		fa1_average_loudness = 0;
+		fa2_dynamic_complexity = 0,
+		fa3_bpm = 0,
+		fa4_danceability = 0,
+		fa5_onset_rate = 0,
+		fa6_chords_change_rate = 0;
 
 		moreBP_v = false;
 		moreBP_h = false;
@@ -366,32 +404,33 @@ void filtersPanel::ranking(vector<VideoFile> &files)
 void filtersPanel::setup()
 {
 
-	normalBP_redRatioP = 0;
-	normalBP_greenRatioP = 0;
-	normalBP_blueRatioP = 0;
-	normalBP_entropy = 0;
-	normalBP_luminaceP = 0;
-	normalBP_sharpness = 0;
-	normalBP_rateP = 0;
-	normalBP_abruptness = 1;
-	normalBP_motion = 0;
-	normalBP_shake = 1;
+	f_redRatioP = 0;
+	f_greenRatioP = 0;
+	f_blueRatioP = 0;
+	f_entropy = 0;
+	f_luminaceP = 0;
+	f_sharpness = 0;
+	f_rateP = 0;
+	f_abruptness = 1;
+	f_motion = 0;
+	f_shake = 1;
 
-	normalBP_rule3 = 0;
-	normalBP_avgFaces = 0;
-	normalBP_faceArea = 0;
-	normalBP_smiles = 0;
-	normalBP_fgArea = 0;
-	normalBP_focus_dif = 0;
-	normalBP_luminance_std = 0;
-	normalBP_dif_hues = 0;
-	normalBP_static_saliency = 0;
-	normalBP_ranksum = 0;
-	normalBP_shadow = 0;
-	normalBP_humanFace = false;
-	normalBP_predict = false;
-	normalBP_interest_1 = false;
-	normalBP_semantic = false;
+	f_rule3 = 0;
+	f_avgFaces = 0;
+	f_faceArea = 0;
+	f_smiles = 0;
+	f_fgArea = 0;
+	f_focus_dif = 0;
+	f_luminance_std = 0;
+	f_dif_hues = 0;
+	f_static_saliency = 0;
+	f_ranksum = 0;
+	f_shadow = 0;
+	f_humanFace = false;
+	f_predict = false;
+	f_interest = false;
+	f_semantic = false;
+	f_audio = false;
 
 	moreBP_v = false;
 	moreBP_h = false;
@@ -399,7 +438,7 @@ void filtersPanel::setup()
 	moreBP_135 = false;
 
 	resetFilterValues = false;
-	sortBP_ON = false;
+	s_ON = false;
 
 	lockTargetVideo = false;
 	colorSimilarityON = false;
@@ -413,11 +452,18 @@ void filtersPanel::setup()
 	lockSemanticRemove = false;
 	unionIntersect = false;
 
-	normalBP_abruptness = 1;
-	normalBP_shake = 0.5;
+	f_abruptness = 1;
+	f_shake = 0.5;
 
-	normalBP_ON = true;
-	moreBP_ON = true;
+	fa1_average_loudness = 0;
+	fa2_dynamic_complexity = 0,
+	fa3_bpm = 0,
+	fa4_danceability = 0,
+	fa5_onset_rate = 0,
+	fa6_chords_change_rate = 0;
+
+	f_ON = true;
+	fadv_ON = true;
 
 	ofSetVerticalSync(true);
 
@@ -425,85 +471,101 @@ void filtersPanel::setup()
 
 	//File groups
 	groupBP = buttons.addButtonPanel("FILE GROUPS");
-	groupBP->addSelectionItem("      0             ", ugcRateBP_choosenRate, RATE_0);
-	groupBP->addSelectionItem("      1             ", ugcRateBP_choosenRate, RATE_1);
-	groupBP->addSelectionItem("      2             ", ugcRateBP_choosenRate, RATE_2);
-	groupBP->addSelectionItem("      3             ", ugcRateBP_choosenRate, RATE_3);
-	groupBP->addSelectionItem("      4             ", ugcRateBP_choosenRate, RATE_4);
-	groupBP->addSelectionItem("      5             ", ugcRateBP_choosenRate, RATE_5);
+	groupBP->addSelectionItem("  0         ", file_group, GROUP_0);
+	groupBP->addSelectionItem("  1         ", file_group, GROUP_1);
+	groupBP->addSelectionItem("  2         ", file_group, GROUP_2);
+	groupBP->addSelectionItem("  3         ", file_group, GROUP_3);
 	//ugcRateBP->addToggleItem("testing", moreBP_v);
 
 	//Normal filters Panel
 	simpleFilterBP = buttons.addButtonPanel("SIMPLE FILTERS");
 	simpleFilterBP->addFlashItem("Clear values", resetFilterValues);
-	simpleFilterBP->addSliderItem("Group           ", 0, 5, normalBP_rateP);
-	simpleFilterBP->addSliderItem("Obj. index      ", 0, 0.5, normalBP_ranksum);
+	simpleFilterBP->addListItem("Orientation:");
+	simpleFilterBP->addToggleItem("Group 1", moreBP_g1);
+	simpleFilterBP->addToggleItem("Group_2", moreBP_g2);
+	simpleFilterBP->addToggleItem("Group 3", moreBP_g3);
+	//simpleFilterBP->addSliderItem("Group           ", 0, 5, f_rateP);
+	simpleFilterBP->addSliderItem("Obj. index ", 0, 0.5, f_ranksum);
 	simpleFilterBP->addListItem("Color:");
-	simpleFilterBP->addSliderItem("Red             ", 0, 1, normalBP_redRatioP);
-	simpleFilterBP->addSliderItem("Green           ", 0, 1, normalBP_greenRatioP);
-	simpleFilterBP->addSliderItem("Blue            ", 0, 1, normalBP_blueRatioP);
+	simpleFilterBP->addSliderItem("Red        ", 0, 1, f_redRatioP);
+	simpleFilterBP->addSliderItem("Green      ", 0, 1, f_greenRatioP);
+	simpleFilterBP->addSliderItem("Blue       ", 0, 1, f_blueRatioP);
 	simpleFilterBP->addListItem("Orientation:");
 	simpleFilterBP->addToggleItem("Vertical", moreBP_v);
 	simpleFilterBP->addToggleItem("Horizontal", moreBP_h);
 	simpleFilterBP->addToggleItem("45 degrees", moreBP_45);
 	simpleFilterBP->addToggleItem("135 degrees", moreBP_135);
-	simpleFilterBP->addSliderItem("Entropy         ", 0, 1, normalBP_entropy);
-	simpleFilterBP->addSliderItem("Luminance       ", 0, 1, normalBP_luminaceP);
-	simpleFilterBP->addSliderItem("Sharpness       ", 0, 1, normalBP_sharpness);
-	simpleFilterBP->addSliderItem("Hue count       ", 0, 1, normalBP_dif_hues);
-	simpleFilterBP->addSliderItem("Saliency        ", 0, 0.3, normalBP_static_saliency);
-	simpleFilterBP->addToggleItem("Human face", normalBP_humanFace);
-	simpleFilterBP->addSliderItem("Avg faces       ", 0, 1, normalBP_avgFaces);
-	simpleFilterBP->addSliderItem("Faces area      ", 0, 0.4, normalBP_faceArea);
-	simpleFilterBP->addSliderItem("Rule of thirds  ", 0, 0.3, normalBP_rule3);
-	simpleFilterBP->addSliderItem("Smiles          ", 0, 0.5, normalBP_smiles);
+	simpleFilterBP->addSliderItem("Entropy    ", 0, 1, f_entropy);
+	simpleFilterBP->addSliderItem("Luminance  ", 0, 1, f_luminaceP);
+	simpleFilterBP->addSliderItem("Sharpness  ", 0, 1, f_sharpness);
+	simpleFilterBP->addSliderItem("Hue count  ", 0, 1, f_dif_hues);
+	simpleFilterBP->addSliderItem("Saliency   ", 0, 0.3, f_static_saliency);
+	simpleFilterBP->addToggleItem("Human face", f_humanFace);
+	simpleFilterBP->addSliderItem("Avg faces  ", 0, 1, f_avgFaces);
+	simpleFilterBP->addSliderItem("Faces area ", 0, 0.4, f_faceArea);
+	simpleFilterBP->addSliderItem("R. of thirds", 0, 0.3, f_rule3);
+	simpleFilterBP->addSliderItem("Smiles     ", 0, 0.5, f_smiles);
 
 
 	//filter more
 	advanceFilterBP = buttons.addButtonPanel("ADVANCED FILTERS");
 	advanceFilterBP->addFlashItem("Clear values", resetFilterValues);
-	advanceFilterBP->addSliderItem("Lum. std        ", 0, 0.5, normalBP_luminance_std);
-	advanceFilterBP->addSliderItem("Foreg. area     ", 0, 0.2, normalBP_fgArea);
-	advanceFilterBP->addSliderItem("Shadow          ", 0, 0.3, normalBP_shadow);
-	advanceFilterBP->addSliderItem("Focus diff.     ", 0, 1, normalBP_focus_dif);
-	advanceFilterBP->addSliderItem("Motion          ", 0, 0.5, normalBP_motion);
-	advanceFilterBP->addSliderItem("Abruptness      ", 0, 1, normalBP_abruptness);
-	advanceFilterBP->addSliderItem("Shakiness       ", 0, 0.5, normalBP_shake);
-	advanceFilterBP->addListItem("Classification:");
-	advanceFilterBP->addToggleItem("Aesthetics", normalBP_predict);
-	advanceFilterBP->addToggleItem("Interest", normalBP_interest_1);
-	advanceFilterBP->addListItem("Semantic analysis:");
-	advanceFilterBP->addToggleItem("Keyword filter", normalBP_semantic);
-	advanceFilterBP->addToggleItem("Union-Intersect", unionIntersect);
-
+	advanceFilterBP->addSliderItem("Lum. std        ", 0, 0.5, f_luminance_std);
+	advanceFilterBP->addSliderItem("Foreg. area     ", 0, 0.2, f_fgArea);
+	advanceFilterBP->addSliderItem("Shadow          ", 0, 0.3, f_shadow);
+	advanceFilterBP->addSliderItem("Focus diff.     ", 0, 1, f_focus_dif);
+	advanceFilterBP->addSliderItem("Motion          ", 0, 0.5, f_motion);
+	advanceFilterBP->addSliderItem("Abruptness      ", 0, 1, f_abruptness);
+	advanceFilterBP->addSliderItem("Shakiness       ", 0, 0.5, f_shake);
+	advanceFilterBP->addListItem("SVM concept:");
+	advanceFilterBP->addToggleItem("Aesthetics", f_predict);
+	advanceFilterBP->addToggleItem("Interest", f_interest);
+	advanceFilterBP->addListItem("Semantic filter:");
+	advanceFilterBP->addToggleItem("Keyword filter", f_semantic);
+	advanceFilterBP->addToggleItem("Intersect", unionIntersect);
+	advanceFilterBP->addListItem("Audio filter:");
+	advanceFilterBP->addSliderItem("Loudness      ", 0, 1, fa1_average_loudness);
+	advanceFilterBP->addSliderItem("Complexity    ", 0, 1, fa2_dynamic_complexity);
+	advanceFilterBP->addSliderItem("BPM           ", 0, 1, fa3_bpm);
+	advanceFilterBP->addSliderItem("Danceability  ", 0, 1, fa4_danceability);
+	advanceFilterBP->addSliderItem("Onset         ", 0, 1, fa5_onset_rate);
+	advanceFilterBP->addSliderItem("Chords change ", 0, 1, fa6_chords_change_rate);
 
 	//Sortpanel
 	sortBP = buttons.addButtonPanel("FILE SORT");
-	sortBP->addSelectionItem("Group", sortBP_sortType, SORT_0);
-	sortBP->addSelectionItem("Obj. index", sortBP_sortType, SORT_1);
-	sortBP->addSelectionItem("Red", sortBP_sortType, SORT_2);
-	sortBP->addSelectionItem("Green", sortBP_sortType, SORT_3);
-	sortBP->addSelectionItem("Blue", sortBP_sortType, SORT_4);
-	sortBP->addSelectionItem("Entropy", sortBP_sortType, SORT_5);
-	sortBP->addSelectionItem("Luminance", sortBP_sortType, SORT_6);
-	sortBP->addSelectionItem("Luminance std", sortBP_sortType, SORT_7);
-	sortBP->addSelectionItem("Sharpness", sortBP_sortType, SORT_8);
-	sortBP->addSelectionItem("Hue count", sortBP_sortType, SORT_9);
-	sortBP->addSelectionItem("Saliency", sortBP_sortType, SORT_10);
-	sortBP->addSelectionItem("Avg faces", sortBP_sortType, SORT_11);
-	sortBP->addSelectionItem("Faces area", sortBP_sortType, SORT_12);
-	sortBP->addSelectionItem("Rule of Thirds      ", sortBP_sortType, SORT_13);
-	sortBP->addSelectionItem("Smiles", sortBP_sortType, SORT_14);
-	sortBP->addSelectionItem("Foreg. area", sortBP_sortType, SORT_15);
-	sortBP->addSelectionItem("Shadow", sortBP_sortType, SORT_16);
-	sortBP->addSelectionItem("Focus diff.", sortBP_sortType, SORT_17);
-	sortBP->addSelectionItem("Motion", sortBP_sortType, SORT_18);
-	sortBP->addSelectionItem("Abruptness", sortBP_sortType, SORT_19);
-	sortBP->addSelectionItem("Shakiness", sortBP_sortType, SORT_20);
-	sortBP->addSelectionItem("Similarity", sortBP_sortType, SORT_21);
+	sortBP->addSelectionItem("Group", sortType, SORT_0);
+	sortBP->addSelectionItem("Obj. index", sortType, SORT_1);
+	sortBP->addSelectionItem("Red", sortType, SORT_2);
+	sortBP->addSelectionItem("Green", sortType, SORT_3);
+	sortBP->addSelectionItem("Blue", sortType, SORT_4);
+	sortBP->addSelectionItem("Entropy", sortType, SORT_5);
+	sortBP->addSelectionItem("Luminance", sortType, SORT_6);
+	sortBP->addSelectionItem("Luminance std", sortType, SORT_7);
+	sortBP->addSelectionItem("Sharpness", sortType, SORT_8);
+	sortBP->addSelectionItem("Hue count", sortType, SORT_9);
+	sortBP->addSelectionItem("Saliency", sortType, SORT_10);
+	sortBP->addSelectionItem("Avg faces", sortType, SORT_11);
+	sortBP->addSelectionItem("Faces area", sortType, SORT_12);
+	sortBP->addSelectionItem("Rule of Thirds      ", sortType, SORT_13);
+	sortBP->addSelectionItem("Smiles", sortType, SORT_14);
+	sortBP->addSelectionItem("Foreg. area", sortType, SORT_15);
+	sortBP->addSelectionItem("Shadow", sortType, SORT_16);
+	sortBP->addSelectionItem("Focus diff.", sortType, SORT_17);
+	sortBP->addSelectionItem("Motion", sortType, SORT_18);
+	sortBP->addSelectionItem("Abruptness", sortType, SORT_19);
+	sortBP->addSelectionItem("Shakiness", sortType, SORT_20);
+
+	sortBP->addSelectionItem("Loudness", sortType, SORT_22);
+	sortBP->addSelectionItem("Complexity", sortType, SORT_23);
+	sortBP->addSelectionItem("BPM", sortType, SORT_24);
+	sortBP->addSelectionItem("Danceability", sortType, SORT_25);
+	sortBP->addSelectionItem("Onset", sortType, SORT_26);
+	sortBP->addSelectionItem("Chords change", sortType, SORT_27);
+
+	sortBP->addSelectionItem("Similarity", sortType, SORT_21);
 	sortBP->addListItem(" ");
-	sortBP->addFlashItem("APPLY SORT", sortBP_ON);
-	sortBP_sortType = 0;
+	sortBP->addFlashItem("APPLY SORT", s_ON);
+	sortType = 0;
 
 
 	//indexing panel
@@ -521,7 +583,7 @@ void filtersPanel::setup()
 
 
 }
-bool filtersPanel::isOtherClicked(int x, int y)
+bool filtersPanel::isModifyClicked(int x, int y)
 {
 	if (otherBP->checkTitleClick(x, y) || otherBP->checkClick(x, y))		//If value or title clicked
 	{
@@ -584,7 +646,7 @@ bool filtersPanel::isGroupClicked(int x, int y)
 	}
 }
 
-bool filtersPanel::isRateValueClicked(int x, int y)
+bool filtersPanel::isGroupValueClicked(int x, int y)
 {
 	return groupBP->checkClick(x, y);
 }
@@ -596,23 +658,23 @@ bool filtersPanel::isToolbarClicked(int x, int y)
 	return r.inside(mousePoint);
 }
 
-int filtersPanel::getRate()
+int filtersPanel::getGroup()
 {
-	return ugcRateBP_choosenRate;
+	return file_group;
 }
 
 bool filtersPanel::ifFiltersON()
 {
-	return normalBP_ON;
+	return f_ON;
 }
-bool filtersPanel::ifFiltersMoreON()
+bool filtersPanel::ifFiltersAdvON()
 {
-	return moreBP_ON;
+	return fadv_ON;
 }
 
-bool filtersPanel::isRankingON()
+bool filtersPanel::isGroupON()
 {
-	return sortBP_ON;
+	return s_ON;
 }
 
 void filtersPanel::sortFiles(vector<VideoFile> &files, size_t length)
@@ -628,7 +690,7 @@ void filtersPanel::sortFiles(vector<VideoFile> &files, size_t length)
 			do {
 				i--;
 
-				switch (sortBP_sortType)
+				switch (sortType)
 				{
 				case 0:
 					test = files[i].rate < files[i + 1].rate;
@@ -695,6 +757,24 @@ void filtersPanel::sortFiles(vector<VideoFile> &files, size_t length)
 					break;
 				case 21:
 					test = files[i].similarityIndex < files[i + 1].similarityIndex;
+					break;
+				case 22:
+					test = files[i].a1_average_loudness < files[i + 1].a1_average_loudness;
+					break;
+				case 23:
+					test = files[i].a2_dynamic_complexity < files[i + 1].a2_dynamic_complexity;
+					break;
+				case 24:
+					test = files[i].a3_bpm < files[i + 1].a3_bpm;
+					break;
+				case 25:
+					test = files[i].a4_danceability< files[i + 1].a4_danceability;
+					break;
+				case 26:
+					test = files[i].a5_onset_rate< files[i + 1].a5_onset_rate;
+					break;
+				case 27:
+					test = files[i].a6_chords_change_rate < files[i + 1].a6_chords_change_rate;
 					break;
 
 				};

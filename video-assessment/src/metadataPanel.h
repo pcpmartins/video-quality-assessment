@@ -29,8 +29,8 @@ private:
 	ofRectangle middleRight;	//Frame
 	ofRectangle advanced;	//Frame
 	string toString(double x);	//Return string with 2 digits precision
-	ofColor getColor1(const File *f);
-	ofColor getColor2(const File *f);
+	ofColor getColor1(const VideoFile *f);
+	ofColor getColor2(const VideoFile *f);
 
 	/////////////////////////////////////Objects/////////////////////////////////////////
 

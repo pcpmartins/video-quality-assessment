@@ -37,6 +37,7 @@ public:
 	void processColors(Mat colorMat);
 
 	vector <pair<double, int > > getSemanticMap();
+	vector <double > getAudioMap();
 
 	void extractFromVideo(string filePath, int nv);
 
@@ -96,8 +97,9 @@ public:
 
 private:
 	void getConfigParams();
+	//void extract(int frameCount);
 	
 
 };
 
-void extract(int frameCount);
+

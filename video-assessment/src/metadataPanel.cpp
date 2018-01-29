@@ -10,19 +10,31 @@ metadataPanel::~metadataPanel()
 
 void metadataPanel::getData(const VideoFile * vid)
 {
-	metadataString = "\n   File name: " + vid->name + vid->extension + "\n";	
-	metadataString += "   Resolution: " + std::to_string(vid->resX) + " x " + std::to_string(vid->resY) + "\n";
-	metadataString += "   Objective index: " + toString(vid->ranksum) +"                         Group: " + std::to_string(vid->rate) +"\n\n";
-	metadataString += "       Edge strenght: " + std::to_string(vid->edgeStrenght).substr(0,4) + "                      Color Ratio " + "\n";
-	metadataString += "       Edge orientation: " + std::to_string(vid->ehGlobal) + "                          R: " + toString(vid->redRatio) + "\n";
-	metadataString += "             " + std::to_string(vid->eh1) + "   " + std::to_string(vid->eh2) + "   " + std::to_string(vid->eh3) + "   " +
-		std::to_string(vid->eh4) + "                                 G: " + toString(vid->greenRatio) + "\n";
-	metadataString += "             " + std::to_string(vid->eh5) + "   " + std::to_string(vid->eh6) + "   " + std::to_string(vid->eh7) + "   " +
-		std::to_string(vid->eh8) + "                                 B: " + toString(vid->blueRatio) + "\n";
-	metadataString += "             " + std::to_string(vid->eh9) + "   " + std::to_string(vid->eh10) + "   " + std::to_string(vid->eh11) + "   " +
-		std::to_string(vid->eh12)  + "\n";
-	metadataString += "             " + std::to_string(vid->eh13) + "   " + std::to_string(vid->eh14) + "   " + std::to_string(vid->eh15) + "   " +
-		std::to_string(vid->eh16) +"\n";
+	metadataString = "\n   R: " + toString(vid->redRatio) + "   File name: "
+		+ vid->name + vid->extension + "\n";
+	metadataString += "   G: " + toString(vid->greenRatio) + "   Resolution: "
+		+ std::to_string(vid->resX) + " x " + std::to_string(vid->resY) +"\n";
+	metadataString += "   B: " + toString(vid->blueRatio) + "   Objective index: "
+		+ toString(vid->ranksum) +"         Group: " + std::to_string(vid->rate) +"\n\n";
+	metadataString += "   Strenght: " + std::to_string(vid->edgeStrenght).substr(0,4) +
+		"                         Loudness: " + std::to_string(vid->a1_average_loudness) + "\n";
+	metadataString += "   Orientation: " + std::to_string(vid->ehGlobal) +
+		"                          Complexity: " + std::to_string(vid->a2_dynamic_complexity)+ "\n";
+	metadataString += "      " + std::to_string(vid->eh1) + "   " + std::to_string(vid->eh2) + 
+		"   " + std::to_string(vid->eh3) + "   " +
+		std::to_string(vid->eh4) + "                            BPM: " + std::to_string(vid->a3_bpm*200) + "\n";
+	metadataString += "      " + std::to_string(vid->eh5) + "   " + std::to_string(vid->eh6) +
+		"   " + std::to_string(vid->eh7) + "   " +
+		std::to_string(vid->eh8) + "                            Danceability: " + 
+		std::to_string(vid->a4_danceability) + "\n";
+	metadataString += "      " + std::to_string(vid->eh9) + "   " + std::to_string(vid->eh10) +
+		"   " + std::to_string(vid->eh11) + "   " +
+		std::to_string(vid->eh12)  + "                            Onset: " + 
+		std::to_string(vid->a5_onset_rate) + "\n";
+	metadataString += "      " + std::to_string(vid->eh13) + "   " + std::to_string(vid->eh14) + 
+		"   " + std::to_string(vid->eh15) + "   " +
+		std::to_string(vid->eh16) + "                            CCR: " + 
+		std::to_string(vid->a6_chords_change_rate) + "\n";
 	metadataString += +"\n";
 	
 	metadataString += "    Luminance: " + toString(vid->luminance) +
@@ -150,16 +162,16 @@ string metadataPanel::toString(double x)
 	return s;
 }
 
-ofColor metadataPanel::getColor1(const File * f)
+ofColor metadataPanel::getColor1(const VideoFile * f)
 {
-	int red = f->redMoments.first;
-	int green = f->greenMoments.first;
-	int blue = f->blueMoments.first;
-	ofColor c(red, green, blue, 100);
+	int red = f->redRatio*255;
+	int green = f->greenRatio*255;
+	int blue = f->blueRatio*255;
+	ofColor c(red, green, blue, 150);
 	return c;
 }
 
-ofColor metadataPanel::getColor2(const File * f)
+ofColor metadataPanel::getColor2(const VideoFile * f)
 {
 
 	int red = 0;

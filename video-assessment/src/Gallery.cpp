@@ -46,6 +46,7 @@ void Gallery::setup()
 
 		parseCsvFeatureVector();
 		parseSemanticVector();
+		parseAudioVector();
 		lock();
 	}
 
@@ -381,10 +382,10 @@ void Gallery::mousePressed(int x, int y, int button) {
 		cout << "Rate clicked. Index: " << choosenFileIndex << endl;
 		if (thumbnailClicked)										//If some file was choosen earlier
 		{
-			if (filtersPanel.isRateValueClicked(x, y))				//And we want to update rate
+			if (filtersPanel.isGroupValueClicked(x, y))				//And we want to update rate
 			{
-				cout << "Index: " << choosenFileIndex << " Rate: " << filtersPanel.getRate() << endl;
-				allFiles[choosenFileIndex].rateUpdate(filtersPanel.getRate());	//Update its rate
+				cout << "Index: " << choosenFileIndex << " Rate: " << filtersPanel.getGroup() << endl;
+				allFiles[choosenFileIndex].rateUpdate(filtersPanel.getGroup());	//Update its rate
 
 			}
 
@@ -403,7 +404,7 @@ void Gallery::mousePressed(int x, int y, int button) {
 
 		cout << "Sort clicked. Index: " << choosenFileIndex << endl;
 	}
-	else  if (filtersPanel.isOtherClicked(x, y))					//Filter choosen. Don't change choosenFileIndex or thumbnailClicked flag now
+	else  if (filtersPanel.isModifyClicked(x, y))					//Filter choosen. Don't change choosenFileIndex or thumbnailClicked flag now
 	{
 		cout << "Similarity clicked. Index: " << choosenFileIndex << endl;
 	}
@@ -459,7 +460,7 @@ void Gallery::mouseReleased(int x, int y, int button) {
 	isDraggingGrip = false;
 
 	if (filtersPanel.isSimpleFiltersClicked(x, y) || filtersPanel.isAdvancedFiltersClicked(x, y) || filtersPanel.isSortClicked(x, y)
-		|| filtersPanel.isOtherClicked(x, y))
+		|| filtersPanel.isModifyClicked(x, y))
 	{
 		high_resolution_clock::time_point t1 = high_resolution_clock::now(); // note time before execution
 		filtersPanel.filter(&allFiles[0], allFiles.size(), choosenFileIndex);
@@ -523,20 +524,15 @@ bool Gallery::extractVideoThumbnails() {
 			cap.open(filePath.c_str());
 
 			cap >> frame;
-			double tempHeigth;
-			if (frame.rows > frame.cols) {
-				tempHeigth = (thumbnailWidth / frame.rows*frame.cols);
-			}
-			else { tempHeigth = thumbnailHeight; }
-
 			Mat thumbnailImage;
-			resize(frame, thumbnailImage, Size(thumbnailWidth, tempHeigth), 0, 0, INTER_NEAREST);
+			resize(frame, thumbnailImage, Size(thumbnailWidth, thumbnailHeight), 0, 0, INTER_NEAREST);
 			size_t lastindex1 = filePath.find_last_of("\\");
 			string name = filePath.substr(lastindex1);
 			size_t lastindex2 = name.find_last_of(".");
 			name = name.substr(0, lastindex2);
 			string path = thumbnailFolderPath + name + ".jpg";
 			imwrite(path, thumbnailImage);
+
 		}
 		catch (Exception &e) {
 			const char *err_msg = e.what();
@@ -567,6 +563,8 @@ bool Gallery::extractVideoData() {
 	ofstream myfile(dataOutputPath.c_str());
 	//and semantic data too
 	ofstream mysemanticfile(semanticDataOutputPath.c_str());
+	//for audio
+	ofstream myaudiofile(audioDataOutputPath.c_str());
 
 	///main loop
 	int nv = 0;
@@ -591,33 +589,45 @@ bool Gallery::extractVideoData() {
 
 					mysemanticfile << semanticTemp.at(x).second << ","
 						<< semanticTemp.at(x).first << ",";
-
 				}
 				else {
 					mysemanticfile << semanticTemp.at(x).second << ","
 						<< semanticTemp.at(x).first;
 				}
 				x++;
-
 			}
-
 			mysemanticfile << "\n";
 			mysemanticfile.flush();
+		}
 
+		vector  <double > audioTemp;
+
+		audioTemp = ex.getAudioMap();
+
+		if (myaudiofile.is_open()) {
+
+			int xi = 0;
+
+			while (xi < audioTemp.size()) {
+
+				if (xi != audioTemp.size() - 1) {
+					myaudiofile << audioTemp.at(xi) << ",";
+				}
+				else {
+					myaudiofile << audioTemp.at(xi) << "\n";
+				}
+				xi++;
+			}
+			//myaudiofile << "\n";
+			myaudiofile.flush();
 		}
 		json jsonA = ex.getJsonA();
 
 		json jsonI = ex.getJsonI();
 
-		//cout <<jsonA<<endl;
-
-		//cout << jsonI << endl;
-
 		aesthetic = mlc.predictSample(jsonA, 0);
 
 		interest = mlc.predictSample(jsonI, 1);
-		//interest = 3;
-		
 
 		json jsonSample = ex.getJsonAll();
 
@@ -764,13 +774,12 @@ bool Gallery::loadFiles()
 
 	if (vectorSize > 0)									//If there are some files
 	{
-		allFiles.assign(vectorSize, VideoFile());			//Create vector of size equal to number of images and videos
-		clNames.assign(1000, "");
+		allFiles.assign(vectorSize, VideoFile());	    //Create vector of size equal to number of images and videos
+		clNames.assign(1000, "");                       //1000 semantic concepts
 		clNames = readClassNames();
 
 		for (int k = 0; k < vectorSize; ++k)
 		{
-
 			VideoFile tmpVideo = VideoFile(vidDir.getName(k), vidDir.getPath(k));
 
 			if (ofFile::doesFileExist(tmpVideo.xmlPath)) {			//If doesn't xmlDataExists
@@ -780,9 +789,14 @@ bool Gallery::loadFiles()
 			else {
 
 				vector<string> test = getIndividualSample(to_string(k + 1));
-				vector<pair<double, int> > semanticSample = semanticData[k];
 				tmpVideo.getMetadataFromCsv(test);
+
+				vector<pair<double, int> > semanticSample = semanticData[k];
 				tmpVideo.getMetadataFromSemanticSample(semanticSample);
+
+				vector <double > audioSample = audioData[k];
+				tmpVideo.getMetadataFromAudioSample(audioSample);
+
 				tmpVideo.generateXmlFile();
 				tmpVideo.getMetadataFromXml();
 			}
@@ -891,6 +905,46 @@ bool Gallery::parseSemanticVector() {
 	return true;
 }
 
+bool Gallery::parseAudioVector() {
+
+	audioData.assign(totalFiles, vector<double>(25));
+	ifstream myReadFile;
+	myReadFile.open(audioDataOutputPath.c_str());
+
+	string line;
+	if (myReadFile.fail())
+	{
+		cout << "fail loading audio vector!" << endl;
+		myReadFile.close();
+		return false;
+	}
+	else {
+
+		vector<double> tempVector;
+		tempVector.assign(25, 0.0);
+		int l = 0;
+		while (getline(myReadFile, line)) {
+
+			stringstream temp(line);
+			string word;
+			int w = 0;
+
+			while (getline(temp, word, ',')) {
+
+				tempVector.at(w) = std::stod(word);
+
+				w++;
+			}
+
+			audioData.at(l) = tempVector;
+			l++;
+		}
+
+	}
+	myReadFile.close();
+	return true;
+}
+
 
 bool Gallery::parseCsvFeatureVector() {
 
@@ -953,7 +1007,7 @@ vector<string> Gallery::getIndividualSample(string name) {
 		}
 	}
 	else {
-		vecStr.assign(1, "");	
+		vecStr.assign(1, "");
 	}
 
 	return vecStr;

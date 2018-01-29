@@ -1,1 +1,1 @@
-average_loudness, dynamic_complexity, bpm, danceability, onset_rate, chords_changes_rate, chords_number_rate, key_strength,tuning_diatonic_strength, tuning_equal_tempered_deviation, tuning_nontempered_energy_ratio
+average_loudness, dynamic_complexity, beats_count, bpm, danceability, onset_rate, chords_changes_rate, chords_number_rate, key_strength,tuning_diatonic_strength, tuning_equal_tempered_deviation, tuning_nontempered_energy_ratio, mfcc_01, mfcc_02, mfcc_03, mfcc_04, mfcc_05, mfcc_06, mfcc_07, mfcc_08, mfcc_09, mfcc_10, mfcc_11, mfcc_12, mfcc_13

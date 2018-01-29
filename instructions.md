@@ -14,11 +14,11 @@ The several tool menus are visible in  figure 2.  The rating menu (1) helps the 
 
 There are 4 available menu tabs:
 
-* RATING - With this tab the user can assign a rating from 0 to 5 to some videos and afterwards filter or sort by this rating.
-* FILTER 1 - In the filter tab 1 the user can filter using the basic features.
-* FILTER 2 - In the filter tab 2 are grouped more advanced features.
+* FILE GROUPS - With this tab the user can assign files to groups.
+* SIMPLE FILTER - The user can filter using the basic features. Dedicated mainly to visual features, includes file group filter and face/smile filter.
+* ADVANCED FILTER - Motion, semantic, audio and SVM filters.
 * SORT - In this tab we can sort the videos by more then 20 different features.
-* SIMILARITY - Using the similarity menu the user can generate a similarity index based on color, edge orientation, entropy or motion. This feature uses the current selected video as reference for the indexing operation. After generation of the index the user can sort by similarity using the sort tab.
+* MODIFY - Using the similarity menu the user can generate a similarity index based on color, edge orientation, entropy or motion. This feature uses the current selected video as reference for the indexing operation. After generation of the index the user can sort by similarity using the sort tab. Semantic concepts can be added or removed from a semantic filter, this filter can afterwards be selected on the advanced filter menu.
 
 ## Adding a new video repository
 
@@ -71,6 +71,7 @@ the content of this file where we can see the default values:
 	<FLOW>1</FLOW>
 	<SEMANTIC>1</SEMANTIC>
 	<COLORFULLNESS>1</COLORFULLNESS>
+	<AUDIO>1</AUDIO>
 	<PARSE_ONLY>0</PARSE_ONLY>
 	<INPUT_FOLDER>data/files</INPUT_FOLDER>
 	<TOTAL_FILES>1000</TOTAL_FILES>
@@ -125,6 +126,9 @@ Turning off semantic concepts extraction will decrease greatly the overall compu
 - COLORFULLNESS = [0, 1] 
 Turning off colorfullness computation will decrease moderately the overall computation time.
 
+- AUDIO = [0, 1] 
+Turning off audio extraction will decrease greatly the overall computation time.
+
 - PARSE_ONLY = [0, 1] 
 Allows to bypass extraction process and start from feature vector parse phase.
 
@@ -136,7 +140,7 @@ The total capacity.
 
 ## Error handling
 
-The error handling and exception mechanism is not enough implemented, if the application hangs at the extraction phase, theres a great probability of existance of corrupted video files, you can inspect the output/output.csv file to try to understand wich is the damaged file and delete/recode it. When errors occur during very long extraction operations it is possible to reuse the already extracted data.
+The error handling and exception mechanism is not enough implemented, if the application hangs at the extraction phase, theres a great probability of existance of corrupted video files, you can inspect the output/output.csv file to try to understand wich is the damaged file and delete/recode it. When errors occur during very long extraction operations it is possible to reuse the already extracted data. This process can also be used to do incremental extraction, allowing for example to extract new features individually and concatenate with previously extracted features.
 
 * backup the output.csv file
 * delete/move the already computed videos

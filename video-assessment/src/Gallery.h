@@ -54,6 +54,7 @@ public:
 
 private:
 	/////////////////////////////////Methods////////////////////////////////
+	string audioDataOutputPath = "data/audio/audio_result.csv";
 	string semanticDataOutputPath = "data/output/semantic_data.csv"; //output from extraction process
 	string dataOutputPath = "data/output/output.csv"; //output from extraction process
 	string inputFolder = "data/files/";               //video input files
@@ -66,6 +67,8 @@ private:
 	ofRectangle spaceForFileDisplay();
 
 	bool parseSemanticVector();
+
+	bool parseAudioVector();
 
 	bool parseCsvFeatureVector();					//Load data to allFiles vector 
 	vector<string> getIndividualSample(string name);
@@ -84,6 +87,7 @@ private:
 	vector <vector <string> >csvData;
 	int numberOfselectedFiles;
 	vector <vector< pair <double, int > > > semanticData;
+	vector <vector< double > > audioData;
 
 	/*Thumbnails parameteres*/
 	int thumbnailsWidth;

@@ -7,7 +7,7 @@ CBMI-2017 [ACM paper](https://dl.acm.org/citation.cfm?id=3095748) - [Semi-automa
 
 - [Introduction](#introduction)
 - [Development setup](#development-setup)
-- [Feature enginnering and extraction](#feature-enginnering-and-extraction)
+- [Visual features extraction](#visual-features-extraction)
 	- [Aesthetic related features](#aesthetic-related-features)
 		- [Colour moments](#colour-moments)
 		- [Colour ratio](#colour-ratio)
@@ -31,12 +31,15 @@ CBMI-2017 [ACM paper](https://dl.acm.org/citation.cfm?id=3095748) - [Semi-automa
 		- [Motion magnitude](#motion-magnitude)
 		- [Shakiness](#shakiness)
 		- [Objective index](#objective-index)
+- [Semantic features extraction](#semantic-features-extraction)
+- [Audio features extraction](#audio-features-extraction)
 - [Algorithm categories](#algorithm-categories)
 	- [Object detection](#object-detection)
 	- [Background Subtraction](#background-subtraction)
 	- [Optical flow](#optical-flow)
 	- [Saliency](#saliency)
 	- [Semantic analysis](#semantic-analysis)
+	- [Audio analysis](#audio-analysis)
 - [Machine learning classification](#machine-learning-classification)
 	- [SVM setup and parameters](#svm-setup-and-parameters)
 	- [Feature scaling](#feature-scaling)
@@ -77,13 +80,14 @@ Detailed instructions on how to use the GUI and on how to load a new video repos
 * Visual Studio community edition 2015
 * openFrameworks 0.9.8
 * OpenCV 3.2.0 + contrib modules
+* ffmpeg
 
 In this project github repository there is a Visual Studio 2015 Project. One can either compile it from source (make sure to read [this](install_requirements.md) before) or just copy and paste the binaries folder. The available binaries should run on any Windows 8-10. x64 machine.
 
 
-## Feature enginnering and extraction
+## Visual features extraction
 
-We start from an initial basic set of basic measurements, from video data (metadata, raw 3 channel frame pixel values and their change along time), and some derived values. In this section we enumerate the main features, for each one we explain its relevancy, from our point of view. We can see in [figure 3](/images/feature_groups.png) a snapshot of the current feature taxonomy. The features can be computed by groups. For each one it is possible to compute several statistical measures: mean, variance, standard deviation, skewness and kurtosis.
+We start from an initial basic set of basic measurements, from video data (metadata, raw 3 channel frame pixel values and their change along time), and some derived values. In this section we enumerate the main features, for each one we explain its relevancy, from our point of view. We can see in [figure 3](/images/feature_groups.png) a snapshot of the current visual features taxonomy. The features can be computed by groups. For each one it is possible to compute several statistical measures including the mean, variance, standard deviation, skewness and kurtosis.
 
 ![figure 3](/images/feature_groups.png)
 *figure 3 - Feature extraction groups*
@@ -191,6 +195,49 @@ It is based on the comparison of the angle between two subsequent motion vectors
 
 The frame rate and resolution of video were used to compute a simple objective quality measure.
 
+## Semantic features extraction
+
+We extract the top-5 semantic concepts present on each video. Further details in the [Semantic analysis section](#semantic-analysis)
+
+## Audio features extraction
+
+We extracted several audio descriptors using the [Essentia](http://essentia.upf.edu/documentation/) open-source C++ library for audio description and music analysis. More details are available in the [Audio analysis section](#audio-analysis).
+
+### LOWLEVEL
+
+	*Average_loudness -  Dynamic range descriptor. It rescales average loudness, computed on 2sec windows with 1 sec overlap, into the [0,1] interval. The value of 0 corresponds to signals with large dynamic range, 1 corresponds to signal with little dynamic range. This algorithm computes the loudness of an audio signal defined by Steven's power law. It computes loudness as the energy of the signal raised to the power of 0.67. Algorithms: [Loudness](http://essentia.upf.edu/documentation/reference/streaming_Loudness.html).
+	
+	*Dynamic_complexity - Dynamic complexity computed on 2sec windows with 1sec overlap. This algorithm computes the dynamic complexity defined as the average absolute deviation from the global loudness level estimate on the dB scale. It is related to the dynamic range and to the amount of fluctuation in loudness present in a recording. Silence at the beginning and at the end of a track are ignored in the computation in order not to deteriorate the results. Algorithms: [DynamicComplexity](http://essentia.upf.edu/documentation/reference/streaming_DynamicComplexity.html)
+	
+	*MFCC - The first 13 melodic frequency cepstrum coefficients. As there is no standard implementation, the MFCC-FB40 is used by default. See algorithm: [MFCC](http://essentia.upf.edu/documentation/reference/streaming_MFCC.html)
+
+### RHYTHM
+
+	*Beats_count - Number of detected beats
+
+	*Bpm - BPM value according to detected beats
+
+	*Danceability - The algorithm is derived from Detrended Fluctuation Analysis (DFA). The output is the danceability of the audio signal. These values usually range from 0 to 3 (higher values meaning more danceable).. Algorithms: [Danceability](http://essentia.upf.edu/documentation/reference/streaming_Danceability.html)
+
+	*Onset_rate - This algorithm computes the number of onsets per second and their position in time for an audio signal. Onset detection functions are computed using both high frequency content and complex-domain methods. Algorithms: [OnsetRate](http://essentia.upf.edu/documentation/reference/streaming_OnsetRate.html)
+
+### TONAL
+
+	 Algorithms: [ChordsDetection](http://essentia.upf.edu/documentation/reference/streaming_ChordsDetection.html), [ChordsDescriptors](http://essentia.upf.edu/documentation/reference/streaming_ChordsDescriptors.html).
+
+	*Chords_changes_rate - Chords change rate in the progression.
+
+	*Chords_number_rate -  Ratio of different chords from the total number of chords in the progression.
+
+	*Key_strength -  key of the progression.
+
+	*Tuning_diatonic_strength key - Strength estimated from high-resolution HPCP (120 dimensions) using diatonic profile. Algorithms: [Key](http://essentia.upf.edu/documentation/reference/streaming_Key.html)
+
+	*Tuning_equal_tempered_deviation -  Equal-temperament deviation estimated from high-resolution HPCP (120 dimensions). Algorithms: [HighResolutionFeatures](http://essentia.upf.edu/documentation/reference/streaming_HighResolutionFeatures.html)
+	
+	*Tuning_nontempered_energy_ratio - Non-tempered energy ratio estimated from high-resolution HPCP (120 dimensions). Algorithms: [HighResolutionFeatures](http://essentia.upf.edu/documentation/reference/streaming_HighResolutionFeatures.html)
+
+
 ## Algorithm categories
 
 ### Object detection
@@ -223,17 +270,33 @@ Furthermore, this API for using pre-trained deep learning models is compatible w
     - Pass the video frame through the network and obtain the output classifications.
     - Compute pooled top 5 concepts for each video file.
 
-We use the popular GoogleLeNet network architecture (Inception), it was introduced by Szegedy et al. in their 2014 paper, [Going deeper with convolutions](https://arxiv.org/abs/1409.4842). Next we link the caffe model and prototxt file together with the list of the 1000 predictable concepts.
+We use the popular GoogleLeNet network architecture (Inception), it was introduced by Szegedy et al. in their 2014 paper, [Going deeper with convolutions](https://arxiv.org/abs/1409.4842). Caffe is a deep learning framework made with expression, speed, and modularity in mind. It was developed by Berkeley AI Research (BAIR)/The Berkeley Vision and Learning Center (BVLC) and community contributors. Next we link the caffe BVLC model and the prototxt file together with the list of the 1000  concepts.
 
 - [caffemodel file](video-assessment/bin/data/dnn/bvlc_googlenet.caffemodel).
 - [prototxt file](video-assessment/bin/data/dnn/bvlc_googlenet.prototxt).
 - [concept list file](video-assessment/bin/data/dnn/synset_words.txt).
 
+Further information:
+
+*[Brewing ImageNet](http://caffe.berkeleyvision.org/gathered/examples/imagenet.html)
+*[OpenCV sample: caffe_googlenet.cpp](https://github.com/opencv/opencv/blob/master/samples/dnn/caffe_googlenet.cpp)
+*[OpenCV dnn/googleNet tutorial](https://docs.opencv.org/3.4.0/d5/de7/tutorial_dnn_googlenet.html)
+*[Classification: Instant Recognition with Caffe](http://nbviewer.jupyter.org/github/BVLC/caffe/blob/master/examples/00-classification.ipynb)
+*[Model zoo](https://github.com/BVLC/caffe/wiki/Model-Zoo#berkeley-trained-models)
+*[ImageNet index](http://image-net.org/challenges/LSVRC/2012/index)
+*[ImageNet 1000 categories training images](http://image-net.org/challenges/LSVRC/2012/browse-synsets)
+
+### Audio analysis
+
+[Essentia](http://essentia.upf.edu/documentation/) is an open-source C++ library with Python bindings for audio analysis and audio-based music information retrieval. The library contains an extensive collection of reusable algorithms which implement audio input/output functionality, standard digital signal processing blocks, statistical characterization of data, and a large set of spectral, temporal, tonal and high-level music descriptors. In addition, Essentia can be complemented with [Gaia](https://github.com/MTG/gaia), a C++ library with python bindings which implement similarity measures and classification on the results of audio analysis, and generate classification models that Essentia can use to compute high-level description of music.
+
+ We used the Static binaries for an extractor specifically designed for the [AcousticBrainz project](http://acousticbrainz.org/). It is a configurable command-line feature extractor that computes a large set of spectral, time-domain, rhythm, tonal and high-level descriptors suited for batch computations on large music collections.
+
+All descriptors are analyzed on a signal resampled to 44kHz sample rate, summed to mono and normalized using replay gain value. The frame-wise descriptors are summarized by their statistical distribution. We only selected 13 features from the [large list](http://essentia.upf.edu/documentation/streaming_extractor_music.html#music-descriptors) of available features.
 
 ## Machine learning classification
 
  SVM binary classifiers were trained, using our extracted features, to predict aesthetic and interestingness from video. The classifiers are based on two publicly available video datasets with ground truth data. One for aesthetic  concepts where the dataset was used with a scheme that exploits visual properties and movement to assess the aesthetic quality of video. Other for interestingness , used in the development of a computational system to compare the interestingness levels of videos. For more details please refer to the corresponding papers [[9]](https://www.researchgate.net/profile/Christos_Tzelepis/publication/307516039_Video_aesthetic_quality_assessment_using_kernel_Support_Vector_Machine_with_isotropic_Gaussian_sample_uncertainty_KSVM-IGSU/links/57d9074a08ae601b39b04749/Video-aesthetic-quality-assessment-using-kernel-Support-Vector-Machine-with-isotropic-Gaussian-sample-uncertainty-KSVM-IGSU.pdf) and [[10]](http://www.yugangjiang.info/publication/aaai13-interestingness.pdf).
-
 
 ### SVM setup and parameters
 

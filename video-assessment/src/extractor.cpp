@@ -18,12 +18,13 @@ using namespace cv::dnn;
 
 //feature extraction configuration parsed from extractor_config.xml
 
-int samplingFactor = 1;                     
-bool edgeHist = true;              
-int resizeMode = 1;               
-bool entro = true;              
-bool opticalFlow = true;          
-bool semanticAnalysis = true;     
+int samplingFactor = 1;
+bool edgeHist = true;
+int resizeMode = 1;
+bool entro = true;
+bool opticalFlow = true;
+bool semanticAnalysis = true;
+bool audioAnalysis = true;
 bool dominantColors = false;
 int numberOfDominantColors = 5;
 bool saveDominantPallete = false;
@@ -41,13 +42,13 @@ bool update_bg_model = true;
 int method = 1;
 
 //dominant colors, frame number
-std::vector< std::pair<std::vector<cv::Vec3b>, int> > dominantDataVector; 
+std::vector< std::pair<std::vector<cv::Vec3b>, int> > dominantDataVector;
 
 // running statistics class is used to compute statistics in one pass trough the data
 RunningStats runstatRed, runstatGreen, runstatBlue, runstatLuminance,
 runstatEntropy, runstatHues, runstatFocus, runstatUflowx, runstatUflowy,
 runstatSflowx, runstatSflowy, runstatMag, runstatMeanColorfullness,
-runstatStdColorfullness,runstatColofull, runstatSaturation, runstatBrightness;
+runstatStdColorfullness, runstatColofull, runstatSaturation, runstatBrightness;
 
 //variables to save Mean, Std. deviation, Skewness and Kurtosis of distributions
 double R1, R2, R3, R4, G1, G2, G3, G4, B1, B2, B3, B4, LU1, LU2, LU3, LU4,
@@ -65,6 +66,8 @@ int numberOfMatches = 5; // find top 5 best matches
 // build a map of {probability, classId} in decreasing order, highest probability first
 vector< pair<double, int> >  semanticMap;
 
+vector<double> audioMap;
+
 String modelTxt = "../bin/data/dnn/bvlc_googlenet.prototxt";
 String modelBin = "../bin/data/dnn/bvlc_googlenet.caffemodel";
 Net net;
@@ -72,9 +75,9 @@ Net net;
 processing pp;                   //processing class object
 utility uu;                      //utility class object
 
-json jAestheticSample = {};         
+json jAestheticSample = {};
 json jInterestSample = {};
-json jsonAll = {};            
+json jsonAll = {};
 
 //color ratios
 double redRatio, greenRatio, blueRatio;
@@ -141,8 +144,8 @@ void extractor::initVectors(unsigned long numFiles) {
 
 	//var initialization
 
-	facesVec = facesAreaVec = facesRof3Vec = eyesVec = redRatio = greenRatio = 
-    blueRatio = fpsVec = widthVec = heightVec = staticSaliencyVec = shackiness = 0.0;
+	facesVec = facesAreaVec = facesRof3Vec = eyesVec = redRatio = greenRatio =
+		blueRatio = fpsVec = widthVec = heightVec = staticSaliencyVec = shackiness = 0.0;
 	edgeHistogramVec.assign(numFiles, vector<int>(17, 0));
 	edgeDistributionVec.assign(17, vector<int>(5, 0));
 	probabilities.assign(1000, 0);
@@ -166,11 +169,11 @@ void extractor::initVectors(unsigned long numFiles) {
 	runstatBrightness.Clear();
 	runstatColofull.Clear();
 	R1 = R2 = R3 = R4 = G1 = G2 = G3 = G4 = B1 = B2 = B3 = B4 = LU1 = LU2 =
-	LU3 = LU4 = E1 = E2 = E3 = E4 = H1 = H2 = H3 = H4 = F1 = F2 = F3 = F4 = 
-	UFLOWX1 = UFLOWX2 = MAG1 = MAG2 = MAG3 = MAG4 = UFLOWX3 = UFLOWX4 = UFLOWY1 =
-	UFLOWY2 = UFLOWY3 = UFLOWY4 = SFLOWX1 = SFLOWX2 = SFLOWX3 = SFLOWX4 =
-	SFLOWY1 = SFLOWY2 = SFLOWY3 = SFLOWY4 = RG1 = RG2 = YB1 = YB2 = SAT1 = SAT2 =
-	BRI1 = BRI2 = CF1 = CF2 = 0.0;
+		LU3 = LU4 = E1 = E2 = E3 = E4 = H1 = H2 = H3 = H4 = F1 = F2 = F3 = F4 =
+		UFLOWX1 = UFLOWX2 = MAG1 = MAG2 = MAG3 = MAG4 = UFLOWX3 = UFLOWX4 = UFLOWY1 =
+		UFLOWY2 = UFLOWY3 = UFLOWY4 = SFLOWX1 = SFLOWX2 = SFLOWX3 = SFLOWX4 =
+		SFLOWY1 = SFLOWY2 = SFLOWY3 = SFLOWY4 = RG1 = RG2 = YB1 = YB2 = SAT1 = SAT2 =
+		BRI1 = BRI2 = CF1 = CF2 = 0.0;
 	EH_edges_distribution.clear();
 }
 
@@ -199,7 +202,7 @@ void extractor::processColors(Mat colorMat) {
 	if (colorfullness)
 	{
 		// C++ algorithm implementation of the
-	    // "Measuring colourfulness in natural images"
+		// "Measuring colourfulness in natural images"
 		// (Hasler and Susstrunk, 2003)
 
 		double RGmean = colAvg[2] - colAvg[1];
@@ -221,58 +224,58 @@ void extractor::extract(int frameCount) {
 
 	R1 = runstatRed.Mean() / 255;
 	R2 = runstatRed.StandardDeviation() / 255;
-	R3 = ensureFormat( runstatRed.Skewness() / 255 );
-	R4 = ensureFormat( runstatRed.Kurtosis() / 255 );
+	R3 = ensureFormat(runstatRed.Skewness() / 255);
+	R4 = ensureFormat(runstatRed.Kurtosis() / 255);
 	G1 = runstatGreen.Mean() / 255;
 	G2 = runstatGreen.StandardDeviation() / 255;
-	G3 = ensureFormat( runstatGreen.Skewness() / 255 );
-	G4 = ensureFormat( runstatGreen.Kurtosis() / 255 );
+	G3 = ensureFormat(runstatGreen.Skewness() / 255);
+	G4 = ensureFormat(runstatGreen.Kurtosis() / 255);
 	B1 = runstatBlue.Mean() / 255;
 	B2 = runstatBlue.StandardDeviation() / 255;
-	B3 = ensureFormat( runstatBlue.Skewness() / 255 );
-	B4 = ensureFormat( runstatBlue.Kurtosis() / 255 );
+	B3 = ensureFormat(runstatBlue.Skewness() / 255);
+	B4 = ensureFormat(runstatBlue.Kurtosis() / 255);
 	LU1 = runstatLuminance.Mean() / 255;
 	LU2 = runstatLuminance.StandardDeviation() / 255;
-	LU3 = ensureFormat( runstatLuminance.Skewness() / 255 );
-	LU4 = ensureFormat( runstatLuminance.Kurtosis() / 255 );
-	E1 = runstatEntropy.Mean() /12 ;
-	E2 = ensureFormat( runstatEntropy.StandardDeviation() / 5 ); //adhoc norm [0,1]
-	E3 = ensureFormat( runstatEntropy.Skewness() / 20 ); //adhoc norm [0,1] 
-	E4 = ensureFormat( runstatEntropy.Kurtosis() / 1000 ); //adhoc norm [0,1]
-	H1 = ensureFormat( runstatHues.Mean() / 50 );
-	H2 = ensureFormat( runstatHues.StandardDeviation() /50);
-	H3 = ensureFormat( runstatHues.Skewness() / 50);
-	H4 = ensureFormat( runstatHues.Kurtosis() /50);
-	F1 = ensureFormat( runstatFocus.Mean() / 4000 );
-	F2 = ensureFormat( runstatFocus.StandardDeviation() /10000 ); //adhoc norm [0,1]
-	F3 = ensureFormat( runstatFocus.Skewness() / 50 );
-	F4 = ensureFormat( runstatFocus.Kurtosis() /300 ); //adhoc norm [0,1]
+	LU3 = ensureFormat(runstatLuminance.Skewness() / 255);
+	LU4 = ensureFormat(runstatLuminance.Kurtosis() / 255);
+	E1 = runstatEntropy.Mean() / 12;
+	E2 = ensureFormat(runstatEntropy.StandardDeviation() / 5); //adhoc norm [0,1]
+	E3 = ensureFormat(runstatEntropy.Skewness() / 20); //adhoc norm [0,1] 
+	E4 = ensureFormat(runstatEntropy.Kurtosis() / 1000); //adhoc norm [0,1]
+	H1 = ensureFormat(runstatHues.Mean() / 50);
+	H2 = ensureFormat(runstatHues.StandardDeviation() / 50);
+	H3 = ensureFormat(runstatHues.Skewness() / 50);
+	H4 = ensureFormat(runstatHues.Kurtosis() / 50);
+	F1 = ensureFormat(runstatFocus.Mean() / 4000);
+	F2 = ensureFormat(runstatFocus.StandardDeviation() / 10000); //adhoc norm [0,1]
+	F3 = ensureFormat(runstatFocus.Skewness() / 50);
+	F4 = ensureFormat(runstatFocus.Kurtosis() / 300); //adhoc norm [0,1]
 
 	double total = R1 + G1 + B1;
 	redRatio = R1 / total;
 	greenRatio = G1 / total;
 	blueRatio = B1 / total;
 
-	MAG1 = ensureFormat( runstatMag.Mean() / 20000 );
-	MAG2 = ensureFormat( runstatMag.StandardDeviation()/20000 );
-	MAG3 = ensureFormat( runstatMag.Skewness() / 100 );
-	MAG4 = ensureFormat( runstatMag.Kurtosis() / 3500 );
-	UFLOWX1 = ensureFormat( runstatUflowx.Mean()/20000 );
-	UFLOWX2 = ensureFormat( runstatUflowx.StandardDeviation()/20000 );
-	UFLOWX3 = ensureFormat(runstatUflowx.Skewness() / 100 );
-	UFLOWX4 = ensureFormat( runstatUflowx.Kurtosis() / 3500 );
-	UFLOWY1 = ensureFormat( runstatUflowy.Mean() / 20000 );
-	UFLOWY2 = ensureFormat( runstatUflowy.StandardDeviation() / 20000 );
-	UFLOWY3 = ensureFormat( runstatUflowy.Skewness() / 100 );
-	UFLOWY4 = ensureFormat( runstatUflowy.Kurtosis() / 2000 ); //adhoc norm [0,1]
-	SFLOWX1 = ensureFormat( runstatSflowx.Mean() / 20000 );
-	SFLOWX2 = ensureFormat( runstatSflowx.StandardDeviation() / 20000 );
-	SFLOWX3 = ensureFormat( runstatSflowx.Skewness() / 100 );
-	SFLOWX4 = ensureFormat( runstatSflowx.Kurtosis() / 3500 ); //adhoc norm [0,1]
-	SFLOWY1 = ensureFormat( runstatSflowy.Mean() / 20000 );
-	SFLOWY2 = ensureFormat( runstatSflowy.StandardDeviation() / 20000 );
-	SFLOWY3 = ensureFormat( runstatSflowx.Skewness() / 100 );
-	SFLOWY4 = ensureFormat( runstatSflowx.Kurtosis() / 3500 ); //adhoc norm [0,1]
+	MAG1 = ensureFormat(runstatMag.Mean() / 20000);
+	MAG2 = ensureFormat(runstatMag.StandardDeviation() / 20000);
+	MAG3 = ensureFormat(runstatMag.Skewness() / 100);
+	MAG4 = ensureFormat(runstatMag.Kurtosis() / 3500);
+	UFLOWX1 = ensureFormat(runstatUflowx.Mean() / 20000);
+	UFLOWX2 = ensureFormat(runstatUflowx.StandardDeviation() / 20000);
+	UFLOWX3 = ensureFormat(runstatUflowx.Skewness() / 100);
+	UFLOWX4 = ensureFormat(runstatUflowx.Kurtosis() / 3500);
+	UFLOWY1 = ensureFormat(runstatUflowy.Mean() / 20000);
+	UFLOWY2 = ensureFormat(runstatUflowy.StandardDeviation() / 20000);
+	UFLOWY3 = ensureFormat(runstatUflowy.Skewness() / 100);
+	UFLOWY4 = ensureFormat(runstatUflowy.Kurtosis() / 2000); //adhoc norm [0,1]
+	SFLOWX1 = ensureFormat(runstatSflowx.Mean() / 20000);
+	SFLOWX2 = ensureFormat(runstatSflowx.StandardDeviation() / 20000);
+	SFLOWX3 = ensureFormat(runstatSflowx.Skewness() / 100);
+	SFLOWX4 = ensureFormat(runstatSflowx.Kurtosis() / 3500); //adhoc norm [0,1]
+	SFLOWY1 = ensureFormat(runstatSflowy.Mean() / 20000);
+	SFLOWY2 = ensureFormat(runstatSflowy.StandardDeviation() / 20000);
+	SFLOWY3 = ensureFormat(runstatSflowx.Skewness() / 100);
+	SFLOWY4 = ensureFormat(runstatSflowx.Kurtosis() / 3500); //adhoc norm [0,1]
 
 	RG1 = runstatMeanColorfullness.Mean() / 255;
 	RG2 = runstatMeanColorfullness.StandardDeviation() / 255;
@@ -301,6 +304,11 @@ void extractor::extract(int frameCount) {
 vector <pair <double, int > > extractor::getSemanticMap() {
 
 	return semanticMap;
+}
+
+vector <double > extractor::getAudioMap() {
+
+	return audioMap;
 }
 
 void extractor::extractFromVideo(string filePath, int nv) {
@@ -366,8 +374,9 @@ void extractor::extractFromVideo(string filePath, int nv) {
 		cout << " [*] Save pallete:" << saveDominantPallete << endl;
 		cout << " [*] Static saliency:" << sSaliency << endl;
 		cout << " [*] Optical flow:" << opticalFlow << endl;
-		cout << " [*] Semantic analysis:" << semanticAnalysis << endl;
 		cout << " [*] Colorfullness:" << colorfullness << endl;
+		cout << " [*] Semantic analysis:" << semanticAnalysis << endl;
+		cout << " [*] Audio analysis:" << audioAnalysis << endl;
 		cout << endl;
 	}
 
@@ -433,13 +442,8 @@ void extractor::extractFromVideo(string filePath, int nv) {
 
 			if (!onceTwice && frameCount >= length / 5) { //creating thumbnails at 1/5th of video duration
 
-				double tempHeigth;
-				if (frame.rows > frame.cols)
-					tempHeigth = (thumbnailWidth / frame.rows*frame.cols);			
-				else tempHeigth = thumbnailHeight; 
-
 				Mat thumbnailImage;
-				resize(frame, thumbnailImage, Size(thumbnailWidth, tempHeigth), 0, 0, INTER_NEAREST);
+				resize(frame, thumbnailImage, Size(thumbnailWidth, thumbnailHeight), 0, 0, INTER_NEAREST);
 				size_t lastindex1 = filePath.find_last_of("\\");
 				name = filePath.substr(lastindex1);
 				size_t lastindex2 = name.find_last_of(".");
@@ -591,7 +595,7 @@ void extractor::extractFromVideo(string filePath, int nv) {
 				v2.y = (int)unsignedFrameFlow.y;
 
 				float angle = uu.innerAngle(v1.x, v1.y, v2.x, v2.y, w / 2, h / 2); //compute angle between two vectors		
-				if (angle >= 70.0 ) //check shake based on vectors angle with threshold of 10
+				if (angle >= 70.0) //check shake based on vectors angle with threshold of 10
 				{
 					shakes++;
 					//cout << "angle: " << angle << endl;
@@ -621,7 +625,7 @@ void extractor::extractFromVideo(string filePath, int nv) {
 				runstatBrightness.Push(scalartemp[2]);
 				//cout << " "<<scalartemp[0] << " " << scalartemp[1] << " " << scalartemp[2] << endl;
 				//cout << " "<< scalartemp[1] << endl;
-			}			
+			}
 
 			processColors(frame);
 
@@ -705,24 +709,19 @@ void extractor::extractFromVideo(string filePath, int nv) {
 		if (sSaliency) {
 			staticSaliencyVec = (double)accumStaticSaliency / divider;
 		}
-	
+
 		if (opticalFlow) {
 			shackiness = (double)shakes / frameCount;
 		}
-	/*	else {
-			UFLOWX1 = UFLOWX2 = MAG1 = MAG2 = MAG3 = MAG4 = UFLOWX3 = UFLOWX4 = UFLOWY1 =
-			UFLOWY2 = UFLOWY3 = UFLOWY4 = SFLOWX1 = SFLOWX2 = SFLOWX3 = SFLOWX4 =
-			SFLOWY1 = SFLOWY2 = SFLOWY3 = SFLOWY4 = 0.0;
-		}*/
-		
-	    vector<double> frameBgData = vector<double>(5, 0);
+
+		vector<double> frameBgData = vector<double>(5, 0);
 		if (bgSub) {
 
 			frameBgData.at(0) = percentForegorund / divider;
 			frameBgData.at(1) = percentShadow / divider;
 			frameBgData.at(2) = percentBg / divider;
 			frameBgData.at(3) = percentCameraMove / divider;
-			frameBgData.at(4) = percentFocus / (divider) / 24;		
+			frameBgData.at(4) = percentFocus / (divider) / 24;
 		}
 		bgSubVec = frameBgData;
 
@@ -747,7 +746,7 @@ void extractor::extractFromVideo(string filePath, int nv) {
 
 			// select the best matches, which are in the first positions in the sorted map
 			int index = 0;
-			cout<<"\n";
+			cout << "\n";
 			for (mapIt = semanticTempMap.begin(); mapIt != semanticTempMap.end(); mapIt++)
 			{
 				pair<double, int> x = *mapIt;
@@ -762,6 +761,66 @@ void extractor::extractFromVideo(string filePath, int nv) {
 		}
 		extract(frameCount);
 		cap.release();
+
+		if (audioAnalysis) {
+
+			//shady system calls to strip video and keep audio with ffmpeg
+			//afterwards we extract a audio feature vector with streaming_extractor_music.exe
+			//and then we select only part of the extracted features
+
+			vector <double> audioTemp;
+			audioTemp.assign(25, 0.0);
+			string report = "";
+			const char *result = "";
+			const char *inputFile = filePath.c_str();
+			std::string str;
+			str = "ffmpeg.exe -y -nostats -loglevel 0 -i ";
+			str += inputFile;
+			str += " -vn -acodec copy data\\audio\\outputFile.mp4";
+			result = str.c_str();
+
+			int status = system(result);
+
+			if (status == 0) { //0 operation was sucessfull
+
+				system("streaming_extractor_music.exe data\\audio\\outputFile.mp4 data\\audio\\extractor_music_output.json > nul:");
+
+				// read a JSON file with audio features
+				std::ifstream i("data\\audio\\extractor_music_output.json");
+				json j;
+				i >> j;
+				audioTemp[0] = (double)j["lowlevel"]["average_loudness"];
+				audioTemp[1] = (double)j["lowlevel"]["dynamic_complexity"];
+				audioTemp[2] = (double)j["rhythm"]["beats_count"];
+				audioTemp[3] = (double)j["rhythm"]["bpm"];
+				audioTemp[4] = (double)j["rhythm"]["danceability"];
+				audioTemp[5] = (double)j["rhythm"]["onset_rate"];
+				audioTemp[6] = (double)j["tonal"]["chords_changes_rate"];
+				audioTemp[7] = (double)j["tonal"]["chords_number_rate"];
+				audioTemp[8] = (double)j["tonal"]["key_strength"];
+				audioTemp[9] = (double)j["tonal"]["tuning_diatonic_strength"];
+				audioTemp[10] = (double)j["tonal"]["tuning_equal_tempered_deviation"];
+				audioTemp[11] = (double)j["tonal"]["tuning_nontempered_energy_ratio"];
+				audioTemp[12] = (double)j["lowlevel"]["mfcc"]["mean"].at(0);
+				audioTemp[13] = (double)j["lowlevel"]["mfcc"]["mean"].at(1);
+				audioTemp[14] = (double)j["lowlevel"]["mfcc"]["mean"].at(2);
+				audioTemp[15] = (double)j["lowlevel"]["mfcc"]["mean"].at(3);
+				audioTemp[16] = (double)j["lowlevel"]["mfcc"]["mean"].at(4);
+				audioTemp[17] = (double)j["lowlevel"]["mfcc"]["mean"].at(5);
+				audioTemp[18] = (double)j["lowlevel"]["mfcc"]["mean"].at(6);
+				audioTemp[19] = (double)j["lowlevel"]["mfcc"]["mean"].at(7);
+				audioTemp[20] = (double)j["lowlevel"]["mfcc"]["mean"].at(8);
+				audioTemp[21] = (double)j["lowlevel"]["mfcc"]["mean"].at(9);
+				audioTemp[22] = (double)j["lowlevel"]["mfcc"]["mean"].at(10);
+				audioTemp[23] = (double)j["lowlevel"]["mfcc"]["mean"].at(11);
+				audioTemp[24] = (double)j["lowlevel"]["mfcc"]["mean"].at(12);
+
+				i.close();
+				report = " audio extracted!";
+			}
+			audioMap = audioTemp;
+			cout << " [A] Audio status: " << status << report << endl;
+		}
 
 		/* samples for SVM classification*/
 		jInterestSample = {
@@ -827,7 +886,7 @@ void extractor::extractFromVideo(string filePath, int nv) {
 
 		};
 
-		
+
 
 		jsonAll = {
 
@@ -866,9 +925,9 @@ void extractor::extractFromVideo(string filePath, int nv) {
 			{ "bg_area",         bgSubVec.at(2) },
 			{ "camera_move",     bgSubVec.at(3) },
 			{ "focus_diff",      bgSubVec.at(4) },
-		    { "hues_std",   H2 },
-		    { "hues_skewness",   H3 },
-		    { "hues_kurtosis",   H4 },
+			{ "hues_std",   H2 },
+			{ "hues_skewness",   H3 },
+			{ "hues_kurtosis",   H4 },
 			{ "eh_0",           (double)(edgeHistogramVec[0][0]) },
 			{ "eh_1",           (double)(edgeHistogramVec[0][1]) },
 			{ "eh_2",           (double)(edgeHistogramVec[0][2]) },
@@ -890,7 +949,7 @@ void extractor::extractFromVideo(string filePath, int nv) {
 			{ "edge_strenght",   edgeStrenght },
 			{ "luminance_skewness",   LU3 },
 			{ "luminance_kurtosis",   LU4 },
-		    { "entropy_std",   E2 },
+			{ "entropy_std",   E2 },
 			{ "entropy_skewness",   E3 },
 			{ "entropy_kurtosis",   E4 },
 			{ "focus_std",   F2 },
@@ -920,13 +979,13 @@ void extractor::extractFromVideo(string filePath, int nv) {
 			{ "colorfullness_yb1",   YB1 },
 			{ "colorfullness_yb2",   YB2 },
 			{ "duration",   length / fpsVec },
-	    	{ "saturation_1",   SAT1},
-	    	{ "saturation_2",   SAT2 },
-	    	{ "brightness_1",   BRI1 },
-	    	{ "brightness_2",   BRI2 },
-	    	{ "colorfull_1",   CF1 },
-		    { "colorfull_2",   CF2 }
-			
+			{ "saturation_1",   SAT1},
+			{ "saturation_2",   SAT2 },
+			{ "brightness_1",   BRI1 },
+			{ "brightness_2",   BRI2 },
+			{ "colorfull_1",   CF1 },
+			{ "colorfull_2",   CF2 }
+
 		};
 
 	}
@@ -972,12 +1031,13 @@ void extractor::getConfigParams() {
 		sSaliency = xml->getValue<bool>("//SSALIENCY");
 		saveDominantPallete = xml->getValue<bool>("//SAVEPALLETE");
 		colorfullness = xml->getValue<bool>("//COLORFULLNESS");
+		audioAnalysis = xml->getValue<bool>("//AUDIO");
 	}
 
 }
 
 double extractor::ensureFormat(double input) {
-	
+
 	double output = input;
 	if (isnan(input)) output = 0.0;
 	if (output > 1) output = 1;
