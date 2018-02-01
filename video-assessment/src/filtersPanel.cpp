@@ -1,4 +1,5 @@
 #include "filtersPanel.h"
+#include "ofxDatGui.h"
 
 
 using namespace std;
@@ -220,9 +221,9 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 				(faceArea >= f_faceArea) &&	              //area of faces
 				(smiles >= f_smiles) &&	                  //smiles in proper place of faces
 				(fgArea >= f_fgArea) &&	                  //foreground area
-				(focus_dif >= f_focus_dif) &&              
-				(shake < f_shake) &&                       
-				(rule3 >= f_rule3)  &&  
+				(focus_dif >= f_focus_dif) &&
+				(shake < f_shake) &&
+				(rule3 >= f_rule3) &&
 				(average_loudness >= fa1_average_loudness) &&
 				(dynamic_complexity >= fa2_dynamic_complexity) &&
 				(bpm >= fa3_bpm) &&
@@ -278,8 +279,8 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 			}
 			else if (moreBP_g2)
 			{
-				if (files[i].getVisible()) {					
-					files[i].setVisible(files[i].rate == 2);				
+				if (files[i].getVisible()) {
+					files[i].setVisible(files[i].rate == 2);
 				}
 			}
 			else if (moreBP_g3)
@@ -384,6 +385,10 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 		moreBP_45 = false;
 		moreBP_135 = false;
 
+		moreBP_g1 = false;
+		moreBP_g2 = false;
+		moreBP_g3 = false;
+
 		for (int i = 0; i < length; ++i) { 				//All files visible
 			files[i].setVisible(true);
 		}
@@ -437,6 +442,10 @@ void filtersPanel::setup()
 	moreBP_45 = false;
 	moreBP_135 = false;
 
+	moreBP_g1 = false;
+	moreBP_g2 = false;
+	moreBP_g3 = false;
+
 	resetFilterValues = false;
 	s_ON = false;
 
@@ -469,12 +478,21 @@ void filtersPanel::setup()
 
 	buttons.setup(); // this sets up the events etc..
 
+	/* testing new menus
+	gui = new ofxDatGui(ofxDatGuiAnchor::TOP_RIGHT);
+	gui->addHeader(":: Drag Me To Reposition ::");
+	gui->addButton("Click!");
+	gui->addToggle("Click!", false);
+	gui->addSlider("Click!", 0, 100);
+	vector<string> options = {"ONE", "TWO", "THREE", "FOUR"};
+	gui->addDropdown( "ONE", options);
+	*/
 	//File groups
 	groupBP = buttons.addButtonPanel("FILE GROUPS");
-	groupBP->addSelectionItem("  0         ", file_group, GROUP_0);
-	groupBP->addSelectionItem("  1         ", file_group, GROUP_1);
-	groupBP->addSelectionItem("  2         ", file_group, GROUP_2);
-	groupBP->addSelectionItem("  3         ", file_group, GROUP_3);
+	groupBP->addSelectionItem("  0       ", file_group, GROUP_0);
+	groupBP->addSelectionItem("  1       ", file_group, GROUP_1);
+	groupBP->addSelectionItem("  2       ", file_group, GROUP_2);
+	groupBP->addSelectionItem("  3       ", file_group, GROUP_3);
 	//ugcRateBP->addToggleItem("testing", moreBP_v);
 
 	//Normal filters Panel
@@ -485,26 +503,26 @@ void filtersPanel::setup()
 	simpleFilterBP->addToggleItem("Group_2", moreBP_g2);
 	simpleFilterBP->addToggleItem("Group 3", moreBP_g3);
 	//simpleFilterBP->addSliderItem("Group           ", 0, 5, f_rateP);
-	simpleFilterBP->addSliderItem("Obj. index ", 0, 0.5, f_ranksum);
+	simpleFilterBP->addSliderItem("Obj. index      ", 0, 0.5, f_ranksum);
 	simpleFilterBP->addListItem("Color:");
-	simpleFilterBP->addSliderItem("Red        ", 0, 1, f_redRatioP);
-	simpleFilterBP->addSliderItem("Green      ", 0, 1, f_greenRatioP);
-	simpleFilterBP->addSliderItem("Blue       ", 0, 1, f_blueRatioP);
+	simpleFilterBP->addSliderItem("Red             ", 0, 1, f_redRatioP);
+	simpleFilterBP->addSliderItem("Green           ", 0, 1, f_greenRatioP);
+	simpleFilterBP->addSliderItem("Blue            ", 0, 1, f_blueRatioP);
 	simpleFilterBP->addListItem("Orientation:");
 	simpleFilterBP->addToggleItem("Vertical", moreBP_v);
 	simpleFilterBP->addToggleItem("Horizontal", moreBP_h);
 	simpleFilterBP->addToggleItem("45 degrees", moreBP_45);
 	simpleFilterBP->addToggleItem("135 degrees", moreBP_135);
-	simpleFilterBP->addSliderItem("Entropy    ", 0, 1, f_entropy);
-	simpleFilterBP->addSliderItem("Luminance  ", 0, 1, f_luminaceP);
-	simpleFilterBP->addSliderItem("Sharpness  ", 0, 1, f_sharpness);
-	simpleFilterBP->addSliderItem("Hue count  ", 0, 1, f_dif_hues);
-	simpleFilterBP->addSliderItem("Saliency   ", 0, 0.3, f_static_saliency);
+	simpleFilterBP->addSliderItem("Entropy         ", 0, 1, f_entropy);
+	simpleFilterBP->addSliderItem("Luminance       ", 0, 1, f_luminaceP);
+	simpleFilterBP->addSliderItem("Sharpness       ", 0, 1, f_sharpness);
+	simpleFilterBP->addSliderItem("Hue count       ", 0, 1, f_dif_hues);
+	simpleFilterBP->addSliderItem("Saliency        ", 0, 0.3, f_static_saliency);
 	simpleFilterBP->addToggleItem("Human face", f_humanFace);
-	simpleFilterBP->addSliderItem("Avg faces  ", 0, 1, f_avgFaces);
-	simpleFilterBP->addSliderItem("Faces area ", 0, 0.4, f_faceArea);
-	simpleFilterBP->addSliderItem("R. of thirds", 0, 0.3, f_rule3);
-	simpleFilterBP->addSliderItem("Smiles     ", 0, 0.5, f_smiles);
+	simpleFilterBP->addSliderItem("Avg faces       ", 0, 1, f_avgFaces);
+	simpleFilterBP->addSliderItem("Faces area      ", 0, 0.4, f_faceArea);
+	simpleFilterBP->addSliderItem("Rule of thirds  ", 0, 0.3, f_rule3);
+	simpleFilterBP->addSliderItem("Smiles          ", 0, 0.5, f_smiles);
 
 
 	//filter more
@@ -524,12 +542,12 @@ void filtersPanel::setup()
 	advanceFilterBP->addToggleItem("Keyword filter", f_semantic);
 	advanceFilterBP->addToggleItem("Intersect", unionIntersect);
 	advanceFilterBP->addListItem("Audio filter:");
-	advanceFilterBP->addSliderItem("Loudness      ", 0, 1, fa1_average_loudness);
-	advanceFilterBP->addSliderItem("Complexity    ", 0, 1, fa2_dynamic_complexity);
-	advanceFilterBP->addSliderItem("BPM           ", 0, 1, fa3_bpm);
-	advanceFilterBP->addSliderItem("Danceability  ", 0, 1, fa4_danceability);
-	advanceFilterBP->addSliderItem("Onset         ", 0, 1, fa5_onset_rate);
-	advanceFilterBP->addSliderItem("Chords change ", 0, 1, fa6_chords_change_rate);
+	advanceFilterBP->addSliderItem("Loudness        ", 0, 1, fa1_average_loudness);
+	advanceFilterBP->addSliderItem("Complexity      ", 0, 1, fa2_dynamic_complexity);
+	advanceFilterBP->addSliderItem("Bpm             ", 0, 1, fa3_bpm);
+	advanceFilterBP->addSliderItem("Danceability    ", 0, 1, fa4_danceability);
+	advanceFilterBP->addSliderItem("Onset           ", 0, 1, fa5_onset_rate);
+	advanceFilterBP->addSliderItem("Chords change   ", 0, 1, fa6_chords_change_rate);
 
 	//Sortpanel
 	sortBP = buttons.addButtonPanel("FILE SORT");
@@ -557,7 +575,7 @@ void filtersPanel::setup()
 
 	sortBP->addSelectionItem("Loudness", sortType, SORT_22);
 	sortBP->addSelectionItem("Complexity", sortType, SORT_23);
-	sortBP->addSelectionItem("BPM", sortType, SORT_24);
+	sortBP->addSelectionItem("Bpm", sortType, SORT_24);
 	sortBP->addSelectionItem("Danceability", sortType, SORT_25);
 	sortBP->addSelectionItem("Onset", sortType, SORT_26);
 	sortBP->addSelectionItem("Chords change", sortType, SORT_27);
@@ -566,7 +584,6 @@ void filtersPanel::setup()
 	sortBP->addListItem(" ");
 	sortBP->addFlashItem("APPLY SORT", s_ON);
 	sortType = 0;
-
 
 	//indexing panel
 	otherBP = buttons.addButtonPanel("MODIFY");
@@ -579,8 +596,6 @@ void filtersPanel::setup()
 	otherBP->addListItem("Semantic analysis:");
 	otherBP->addFlashItem("Add keywords", lockSemanticInsert);
 	otherBP->addFlashItem("Remove keywords", lockSemanticRemove);
-
-
 
 }
 bool filtersPanel::isModifyClicked(int x, int y)
@@ -768,10 +783,10 @@ void filtersPanel::sortFiles(vector<VideoFile> &files, size_t length)
 					test = files[i].a3_bpm < files[i + 1].a3_bpm;
 					break;
 				case 25:
-					test = files[i].a4_danceability< files[i + 1].a4_danceability;
+					test = files[i].a4_danceability < files[i + 1].a4_danceability;
 					break;
 				case 26:
-					test = files[i].a5_onset_rate< files[i + 1].a5_onset_rate;
+					test = files[i].a5_onset_rate < files[i + 1].a5_onset_rate;
 					break;
 				case 27:
 					test = files[i].a6_chords_change_rate < files[i + 1].a6_chords_change_rate;

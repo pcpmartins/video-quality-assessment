@@ -2,6 +2,7 @@
 #include "File.h"
 #include "VideoFile.h"
 #include "ofxButtons.h"
+#include "ofxDatGui.h"
 
 #define NUMBER_OF_RANKED_FILES 1000
 
@@ -25,13 +26,15 @@ public:
 	bool isGroupClicked(int x, int y);	    	//Check if rate title or value clicked
 	bool isGroupValueClicked(int x, int y);   	//Check if rate clicked
 	bool isToolbarClicked(int x, int y);	    //Check if toolbar clicked
-
 	int getGroup();
 	bool ifFiltersON();						    //Getter of filtersFlag
 	bool ifFiltersAdvON();						//Getter of filtersFlag
 	bool isGroupON();						    //Getter of rankingsFlag
 
 private:
+
+	ofxDatGui* gui;
+
 	ButtonManager buttons;		        //Toolbar
 
 	ButtonPanel * groupBP;		    
