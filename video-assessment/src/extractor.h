@@ -62,8 +62,8 @@ public:
 
 	//our face classifier is not invariant to rotation
 	//using smile detection as additional cascade classifier
-	String face_cascade_name = "../bin/data/haar/haarcascade_frontalface_alt.xml";
-	String aditional_cascade_name = "../bin/data/haar/smiled_05.xml";
+	String face_cascade_name = "data/haar/haarcascade_frontalface_alt.xml";
+	String aditional_cascade_name = "data/haar/smiled_05.xml";
 	CascadeClassifier face_cascade;
 	CascadeClassifier aditional_cascade;
 	bool insideFace = true;

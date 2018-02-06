@@ -68,8 +68,8 @@ vector< pair<double, int> >  semanticMap;
 
 vector<double> audioMap;
 
-String modelTxt = "../bin/data/dnn/bvlc_googlenet.prototxt";
-String modelBin = "../bin/data/dnn/bvlc_googlenet.caffemodel";
+String modelTxt = "data/dnn/bvlc_googlenet.prototxt";
+String modelBin = "data/dnn/bvlc_googlenet.caffemodel";
 Net net;
 
 processing pp;                   //processing class object
@@ -100,7 +100,7 @@ void getMaxClass(dnn::Blob &probBlob, int *classId, double *classProb)
 	minMaxLoc(probMat, NULL, classProb, NULL, &classNumber);
 	*classId = classNumber.x;
 }
-std::vector<String> readClassNames(const char *filename = "../bin/data/dnn/synset_words.txt")
+std::vector<String> readClassNames(const char *filename = "data/dnn/synset_words.txt")
 {
 	std::ifstream fp(filename);
 	if (!fp.is_open())
@@ -320,7 +320,7 @@ void extractor::extractFromVideo(string filePath, int nv) {
 	Ptr<Saliency> staticSaliencyAlgorithm = Saliency::create(static_saliency_algorithm);
 
 	//load rule of thirds template
-	ruleImage = imread("../bin/data/templates/rule.jpg", CV_LOAD_IMAGE_GRAYSCALE);   // Read the iamge from file
+	ruleImage = imread("data/templates/rule.jpg", CV_LOAD_IMAGE_GRAYSCALE);   // Read the iamge from file
 
 	if (ruleImage.data == nullptr)                              // Check for invalid input
 	{
@@ -442,13 +442,29 @@ void extractor::extractFromVideo(string filePath, int nv) {
 
 			if (!onceTwice && frameCount >= length / 5) { //creating thumbnails at 1/5th of video duration
 
-				Mat thumbnailImage;
-				resize(frame, thumbnailImage, Size(thumbnailWidth, thumbnailHeight), 0, 0, INTER_NEAREST);
 				size_t lastindex1 = filePath.find_last_of("\\");
 				name = filePath.substr(lastindex1);
 				size_t lastindex2 = name.find_last_of(".");
 				name = name.substr(0, lastindex2);
 				string path = thumbnailFolderPath + name + ".jpg";
+
+				Mat thumbnailImage;
+				double tempHeigth = 0.0;
+				double tempWidth = 0.0;
+				
+
+				if (widthVec > heightVec) {
+					tempHeigth = (double)(thumbnailWidth / (double)widthVec )*heightVec;
+					tempWidth = thumbnailWidth;
+				}
+				else {
+					tempHeigth = thumbnailHeight;
+					tempWidth = (double)(thumbnailHeight / (double)heightVec)*widthVec;
+				}
+
+					cout <<" "<< widthVec << " " << heightVec << " " <<tempHeigth<<" "<< thumbnailWidth << endl;
+				resize(frame, thumbnailImage, Size(tempWidth, tempHeigth), 0, 0, INTER_NEAREST);
+				
 				imwrite(path, thumbnailImage);
 				onceTwice = true;
 			}
@@ -1045,4 +1061,4 @@ double extractor::ensureFormat(double input) {
 	return output;
 
 }
-string extractor::thumbnailFolderPath = "../bin/data/thumbnails/videos/";
+string extractor::thumbnailFolderPath = "data/thumbnails/videos/";

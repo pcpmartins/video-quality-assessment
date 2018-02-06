@@ -520,27 +520,55 @@ bool Gallery::extractVideoThumbnails() {
 		VideoCapture cap;
 
 		string filePath = fileNames.at(nv);
+		size_t lastindex1 = filePath.find_last_of("\\");
+		string name = filePath.substr(lastindex1);
+		size_t lastindex2 = name.find_last_of(".");
+		name = name.substr(0, lastindex2);
+		string path = thumbnailFolderPath + name + ".jpg";
+
+		ifstream file(path);
+
+		if (!file) {
+			
 		try {
 			cap.open(filePath.c_str());
+			int width = int(cap.get(CV_CAP_PROP_FRAME_WIDTH));
+			int height = int(cap.get(CV_CAP_PROP_FRAME_HEIGHT));
 
+			
 			cap >> frame;
 			Mat thumbnailImage;
-			resize(frame, thumbnailImage, Size(thumbnailWidth, thumbnailHeight), 0, 0, INTER_NEAREST);
-			size_t lastindex1 = filePath.find_last_of("\\");
-			string name = filePath.substr(lastindex1);
-			size_t lastindex2 = name.find_last_of(".");
-			name = name.substr(0, lastindex2);
-			string path = thumbnailFolderPath + name + ".jpg";
-			imwrite(path, thumbnailImage);
+			double tempHeigth = 0.0;
+			double tempWidth = 0.0;
+
+			if (width > height) {
+				tempHeigth = (double)(thumbnailWidth / (double)width)*height;
+				tempWidth = thumbnailWidth;
+			}
+			else {
+				tempHeigth = thumbnailHeight;
+				tempWidth = ((double)thumbnailHeight/(double)height)*width;
+			}
+		
+			cout << " " << tempWidth << " " << tempHeigth << " " << width << " " << height << endl;
+			resize(frame, thumbnailImage, Size(tempWidth, tempHeigth), 0, 0, INTER_NEAREST);
+
+				imwrite(path, thumbnailImage);
+				cout << " Thumb: " << path << " created!" << endl;
 
 		}
 		catch (Exception &e) {
 			const char *err_msg = e.what();
 			cout << "exception!: " << err_msg << std::endl;
 		}
+
+		
+	  }
 		cap.release();
 		nv++;
+		file.close();
 	}
+
 	return true;
 }
 bool Gallery::extractVideoData() {
@@ -846,7 +874,20 @@ ofRectangle Gallery::spaceForFileDisplay()
 {
 	int x = metadataPanel.getCordX();
 	int y = metadataPanel.getHeight() + 1.5 * margin;
-	ofRectangle space = ofRectangle(x, y, 320, 240);
+
+	double tempHeigth = 0.0;
+	double tempWidth = 0.0;
+
+	if (choosenVideo.resX >= choosenVideo.resY) {
+		tempHeigth = (((double)320/choosenVideo.resX)*choosenVideo.resY);
+		tempWidth = 320;
+	}
+	else {
+		tempHeigth = 240;
+		tempWidth = (((double)240/choosenVideo.resY )*choosenVideo.resX);
+	}
+
+	ofRectangle space = ofRectangle(x, y, tempWidth, tempHeigth);
 
 	return space;
 }
@@ -1044,4 +1085,4 @@ void Gallery::getConfigParams() {
 		totalFiles = xml->getValue<int>("//TOTAL_FILES");
 	}
 }
-string Gallery::thumbnailFolderPath = "../bin/data/thumbnails/videos/";
+string Gallery::thumbnailFolderPath = "data/thumbnails/videos/";

@@ -14,14 +14,14 @@ using namespace chrono;
 //string a_binary_scores = "../bin/data/SVM/A2018_21/A2018_binary21.csv";
 //string a_feature_vector = "../bin/data/SVM/A2018_21/A2018_train21_norm.csv";
 //string a_maxmin_path = "../bin/data/SVM/A2018_21/A2018_train21_maxmin.csv";
-string a_binary_scores = "../bin/data/SVM/A2018C22/A2018C_40__binary.csv";
-string a_feature_vector = "../bin/data/SVM/A2018C22/A2018C_40_reorg_norm.csv";
-string a_maxmin_path = "../bin/data/SVM/A2018C22/A2018C_40_reorg_maxmin.csv";
+string a_binary_scores = "data/SVM/A2018C22/A2018C_40__binary.csv";
+string a_feature_vector = "data/SVM/A2018C22/A2018C_40_reorg_norm.csv";
+string a_maxmin_path = "data/SVM/A2018C22/A2018C_40_reorg_maxmin.csv";
 
 //Interestingness classifier
-string i_binary_scores = "../bin/data/SVM/i_beach_gui/i_beach_bin_gui.csv";
-string i_feature_vector = "../bin/data/SVM/i_beach_gui/i_beach_train_gui_nonorm_norm.csv";
-string i_maxmin_path = "../bin/data/SVM/i_beach_gui/i_beach_train_gui_nonorm_maxmin.csv";
+string i_binary_scores = "data/SVM/i_beach_gui/i_beach_bin_gui.csv";
+string i_feature_vector = "data/SVM/i_beach_gui/i_beach_train_gui_nonorm_norm.csv";
+string i_maxmin_path = "data/SVM/i_beach_gui/i_beach_train_gui_nonorm_maxmin.csv";
 
 vector< vector<double> > trainingData, a_maxmin, i_maxmin;
 vector< int > trainingLabels;
