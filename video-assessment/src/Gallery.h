@@ -43,8 +43,8 @@ public:
 	bool parseOnly = false;
 
 	static string thumbnailFolderPath;				          //Path to thumbnails
-	int thumbnailHeight = 100;
-	int thumbnailWidth = 120;
+	int thumbnailHeight = 150;
+	int thumbnailWidth = 180;
 
 	extractor ex; //instantiate feature extractor class
 	mlclass mlc; //instantiate SVM classifier
@@ -78,7 +78,7 @@ private:
 	//////////////////////////////////Objects//////////////////////////////
 
 	vector <VideoFile>	allFiles;				//Vector of files loaded at the initialization
-	ImageFile choosenImage;					//Object of choosen image
+	//ImageFile choosenImage;					//Object of choosen image
 	VideoFile choosenVideo;					//Object of choosen video
 	metadataPanel metadataPanel;			//Object to display metadata
 	filtersPanel filtersPanel;				//Object to filter displayed data
@@ -100,6 +100,7 @@ private:
 	int margin;
 	int downMargin;
 	int scrollBarWidth;
+	int topMargin;
 
 	/*Buttons parameters*/
 	//int buttonMargin;
@@ -124,5 +125,4 @@ private:
 	bool isMouseOverGrip;
 	int mousePreviousY;
 	vector<ofRectangle> rectangles;
-
 };

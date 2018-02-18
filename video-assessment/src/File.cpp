@@ -316,5 +316,5 @@ void File::setIsCurrentFile(bool currentFile)
 }
 
 string File::xmlFolderPath = "/xml/";
-int File::thumbnailHeight = 100;
-int File::thumbnailWidth = 120;
+int File::thumbnailHeight = 150;
+int File::thumbnailWidth = 180;

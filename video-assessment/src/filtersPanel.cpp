@@ -271,7 +271,17 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 				}
 			}
 
-			if (moreBP_g1)
+			if (moreBP_gclear)
+			{
+				files[i].rate = 0.0;
+
+				//for (int i = 0; i <  length; i++) {	//For each file take values 
+				//files[i].rate = 0.0;
+				//}
+				
+			}
+
+			else if (moreBP_g1)
 			{
 				if (files[i].getVisible()) {
 					files[i].setVisible(files[i].rate == 1);
@@ -289,6 +299,7 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 					files[i].setVisible(files[i].rate == 3);
 				}
 			}
+			
 
 			if (moreBP_v)
 			{
@@ -388,6 +399,7 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 		moreBP_g1 = false;
 		moreBP_g2 = false;
 		moreBP_g3 = false;
+		moreBP_gclear = false;
 
 		for (int i = 0; i < length; ++i) { 				//All files visible
 			files[i].setVisible(true);
@@ -445,6 +457,7 @@ void filtersPanel::setup()
 	moreBP_g1 = false;
 	moreBP_g2 = false;
 	moreBP_g3 = false;
+	moreBP_gclear = false;
 
 	resetFilterValues = false;
 	s_ON = false;
@@ -493,6 +506,8 @@ void filtersPanel::setup()
 	groupBP->addSelectionItem("  1       ", file_group, GROUP_1);
 	groupBP->addSelectionItem("  2       ", file_group, GROUP_2);
 	groupBP->addSelectionItem("  3       ", file_group, GROUP_3);
+	groupBP->addFlashItem("Clear groups", moreBP_gclear);
+	//groupBP->addFlashItem("Clear groups", moreBP_gclear);
 	//ugcRateBP->addToggleItem("testing", moreBP_v);
 
 	//Normal filters Panel
@@ -586,7 +601,7 @@ void filtersPanel::setup()
 	sortType = 0;
 
 	//indexing panel
-	otherBP = buttons.addButtonPanel("MODIFY");
+	otherBP = buttons.addButtonPanel("EXTENDED");
 	otherBP->addListItem("Similarity:");
 	otherBP->addFlashItem("Generate index", lockTargetVideo);
 	otherBP->addToggleItem("COLOR", colorSimilarityON);
@@ -690,6 +705,11 @@ bool filtersPanel::ifFiltersAdvON()
 bool filtersPanel::isGroupON()
 {
 	return s_ON;
+}
+
+bool filtersPanel::ifClearGroupON()
+{
+	return moreBP_gclear;
 }
 
 void filtersPanel::sortFiles(vector<VideoFile> &files, size_t length)

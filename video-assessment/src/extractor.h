@@ -92,8 +92,10 @@ public:
 	double staticSaliencyVec;
 	string configPath = "extractor_config.xml";               //Path to configuration file
 	static string thumbnailFolderPath;				          //Path to thumbnails
-	int thumbnailHeight = 100;
-	int thumbnailWidth = 120;
+	int thumbnailHeight = 150;
+	int thumbnailWidth = 180;
+
+	bool extractor::exists_file(const std::string& name);
 
 private:
 	void getConfigParams();

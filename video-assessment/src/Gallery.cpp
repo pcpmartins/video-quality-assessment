@@ -11,7 +11,7 @@ using json = nlohmann::json;
 Gallery::Gallery() {
 	panelWidth = 1;
 	panelHeight = 1;
-	cout << "New Panel object" << endl;
+	cout << "Starting GUI" << endl;
 }
 
 Gallery::Gallery(double width, double height)
@@ -60,9 +60,10 @@ void Gallery::setup()
 	The scroll bar contains a "grip". The user can drag the grip with the mouse.
 	*/
 
-	gap = 15;               // Distance between rectangles, and between rectangles and scroll bar
-	margin = 50;            // Distance between the edge of the screen and the panel frame
-	downMargin = 15;			//Place for buttons
+	gap = 14;               // Distance between rectangles, and between rectangles and scroll bar
+	margin = 13;            // Distance between the edge of the screen and the panel frame
+	topMargin = 22;
+	downMargin = 3;			//Place for buttons
 	scrollBarWidth = 20;
 
 	// Now two rectangles, for the scroll bar and his grip placements
@@ -91,9 +92,9 @@ void Gallery::setup()
 	counter = new ofTrueTypeFont();
 	counter->load("arial.ttf", 14);
 	playerText = new ofTrueTypeFont();
-	playerText->load("arial.ttf", 10);
+	playerText->load("arial.ttf", 11);
 
-	ofBackground(127);
+	//ofBackground(127);
 	//Initialize filters
 	filtersPanel.setup();
 	fileSpace = spaceForFileDisplay();		//Calcute avaiable space for file to display
@@ -192,11 +193,11 @@ void Gallery::draw()
 
 	// Add a translation to bring the panel to the good position
 	ofPushMatrix();
-	ofTranslate(margin, margin, 0);
+	ofTranslate(margin, topMargin, 0);
 
 	ofRectangle r;
 	ofImage img;
-	ofSetColor(255);
+	//ofSetColor(0);
 	numberOfselectedFiles = 0;
 
 
@@ -211,7 +212,27 @@ void Gallery::draw()
 				if (r.getBottom() > 0) {
 					// Exception 1: If a rectangle is cut at the top of the panel
 
+					if (allFiles[i].rate == 1) {
 
+						ofSetColor(0, 255, 0);  // Set the drawing color to yellow							
+						ofDrawRectangle(r.x - 3, -3, thumbnailsWidth + 6, thumbnailsHeight + r.y + 16);
+						ofSetColor(255);
+
+					}
+					if (allFiles[i].rate == 2) {
+
+						ofSetColor(0, 0, 255);  // Set the drawing color to yellow							
+						ofDrawRectangle(r.x - 3, -3, thumbnailsWidth + 6, thumbnailsHeight + r.y + 16);
+						ofSetColor(255);
+
+					}
+					if (allFiles[i].rate == 3) {
+
+						ofSetColor(255, 0, 0);  // Set the drawing color to yellow							
+						ofDrawRectangle(r.x - 3, -3, thumbnailsWidth + 6, thumbnailsHeight + r.y + 16);
+						ofSetColor(255);
+
+					}
 					if (allFiles[i].getIsCurrentFile()) {
 
 						ofSetColor(255, 255, 0);  // Set the drawing color to yellow							
@@ -223,16 +244,37 @@ void Gallery::draw()
 					ofSetColor(0);
 					ofDrawRectangle(r.x, 0, thumbnailsWidth, thumbnailsHeight + r.y + 10); 	// Draw black rectangle
 					ofSetColor(255);
-					//img.resize(r.width, r.height-gap);
+					img.resize(r.width, r.height - 2 * gap);
 
-					img.getTextureReference().drawSubsection(r.x, 0, r.width, thumbnailsHeight + r.y - gap, 0, -r.y - gap, r.width, thumbnailsHeight + r.y - gap);
-					name->drawString(allFiles[i].name.substr(0, 16), r.x + 3, r.y - 10 + thumbnailsHeight + 0.5*gap);
+					img.getTextureReference().drawSubsection(r.x, 0, r.width, thumbnailsHeight + r.y - 2 * gap, 0, -r.y, r.width, thumbnailsHeight + r.y - 2 * gap);
+					name->drawString(allFiles[i].name.substr(0, 16), r.x + 3, r.y + thumbnailsHeight + 0.5*gap);
 
 				}
 			}
 			else if (r.getBottom() >= panelHeight) {
 				if (r.y <= panelHeight) {
 
+					if (allFiles[i].rate == 1) {
+
+						ofSetColor(0, 255, 0);  // Set the drawing color to yellow							
+						ofDrawRectangle(r.x - 3, r.y - 3, thumbnailsWidth + 6, panelHeight + 6 - r.y);
+						ofSetColor(255);
+
+					}
+					if (allFiles[i].rate == 2) {
+
+						ofSetColor(0, 0, 255);  // Set the drawing color to yellow							
+						ofDrawRectangle(r.x - 3, r.y - 3, thumbnailsWidth + 6, panelHeight + 6 - r.y);
+						ofSetColor(255);
+
+					}
+					if (allFiles[i].rate == 3) {
+
+						ofSetColor(255, 0, 0);  // Set the drawing color to yellow							
+						ofDrawRectangle(r.x - 3, r.y - 3, thumbnailsWidth + 6, panelHeight + 6 - r.y);
+						ofSetColor(255);
+
+					}
 					if (allFiles[i].getIsCurrentFile()) {
 
 						ofSetColor(255, 255, 0);  // Set the drawing color to yellow							
@@ -243,18 +285,40 @@ void Gallery::draw()
 					ofSetColor(0);
 					ofDrawRectangle(r.x, r.y, thumbnailsWidth, panelHeight - r.y);
 					ofSetColor(255);
+					img.resize(r.width, r.height - 2 * gap);
 					// Exception 2: If a rectangle is cut at the bottom of the panel.				
-					img.getTextureReference().drawSubsection(r.x, r.y, r.width, panelHeight - r.y - gap, 0, 0, r.width, panelHeight - r.y - gap);
-
+					img.getTextureReference().drawSubsection(r.x, r.y + gap, r.width, img.getHeight() - gap, 0, gap, r.width, img.getHeight() - gap);
+					name->drawString(allFiles[i].name.substr(0, 16), r.x + 3, r.y + thumbnailsHeight - 0.5*gap);
 
 				}
 			}
 			else {
 				// Draw a rectangle in the panel
 
+				if (allFiles[i].rate == 1) {
+
+					ofSetColor(0, 255, 0);  // Set the drawing color to yellow							
+					ofDrawRectangle(r.x - 3, r.y - 3, thumbnailsWidth + 6, thumbnailsHeight + 16); 	// Draw white rectangle
+					ofSetColor(0);
+
+				}
+				if (allFiles[i].rate == 2) {
+
+					ofSetColor(0, 0, 255);  // Set the drawing color to yellow							
+					ofDrawRectangle(r.x - 3, r.y - 3, thumbnailsWidth + 6, thumbnailsHeight + 16); 	// Draw white rectangle
+					ofSetColor(0);
+
+				}
+				if (allFiles[i].rate == 3) {
+
+					ofSetColor(255, 0, 0);  // Set the drawing color to yellow							
+					ofDrawRectangle(r.x - 3, r.y - 3, thumbnailsWidth + 6, thumbnailsHeight + 16); 	// Draw white rectangle
+					ofSetColor(0);
+
+				}
 				if (allFiles[i].getIsCurrentFile()) {
 
-					ofSetColor(255, 255, 0);  // Set the drawing color to yellow							
+					ofSetColor(255, 255, 255);  // Set the drawing color to white						
 					ofDrawRectangle(r.x - 3, r.y - 3, thumbnailsWidth + 6, thumbnailsHeight + 16); 	// Draw white rectangle
 					ofSetColor(0);
 
@@ -274,12 +338,12 @@ void Gallery::draw()
 			rectangles[i] = r;
 		}
 
-		if (i == allFiles.size() - 1)
-			counter->drawString(ofToString(numberOfselectedFiles) + " / " + ofToString(allFiles.size()), 2, -7);
+		//if (i == allFiles.size() - 1)
+			//counter->drawString(ofToString(numberOfselectedFiles) + " / " + ofToString(allFiles.size()), 2, 600);
 
 	}
 
-	/* Draw the scroll bar, is needed */
+	/* Draw the scroll bar, if needed */
 
 	if (isScrollBarVisible) {
 		ofSetColor(110);
@@ -298,11 +362,12 @@ void Gallery::draw()
 
 	//filtersPanel
 	filtersPanel.draw();
-
+	ofSetColor(255);
+	counter->drawString(ofToString(numberOfselectedFiles) + " / " + ofToString(allFiles.size()), metadataPanel.getCordX(), 40);
 	//Draw metadata on when clicked
 	if (thumbnailClicked) {
 		int metadataPanel_x = scrollBarRectangle.x + scrollBarWidth + 1.5*margin;		//x coordinate of metadata panel 
-		int metadataPanel_y = margin + 1;												//y coordinate of metadata panel 
+		int metadataPanel_y = topMargin + 30;												//y coordinate of metadata panel 
 		metadataPanel.draw(metadataPanel_x, metadataPanel_y);
 
 		if (allFiles[choosenFileIndex].getType() == File::fileType::VIDEO)	//Video file choosen
@@ -389,6 +454,12 @@ void Gallery::mousePressed(int x, int y, int button) {
 
 			}
 
+		}
+		if (filtersPanel.ifClearGroupON())
+		{
+			for (int i = 0; i < allFiles.size(); ++i) {	//For all  files
+				allFiles[i].rateUpdate(0);
+			}
 		}
 	}
 	else  if (filtersPanel.isSimpleFiltersClicked(x, y))					//Filter choosen. Don't change choosenFileIndex or thumbnailClicked flag now
@@ -529,41 +600,41 @@ bool Gallery::extractVideoThumbnails() {
 		ifstream file(path);
 
 		if (!file) {
-			
-		try {
-			cap.open(filePath.c_str());
-			int width = int(cap.get(CV_CAP_PROP_FRAME_WIDTH));
-			int height = int(cap.get(CV_CAP_PROP_FRAME_HEIGHT));
 
-			
-			cap >> frame;
-			Mat thumbnailImage;
-			double tempHeigth = 0.0;
-			double tempWidth = 0.0;
+			try {
+				cap.open(filePath.c_str());
+				int width = int(cap.get(CV_CAP_PROP_FRAME_WIDTH));
+				int height = int(cap.get(CV_CAP_PROP_FRAME_HEIGHT));
 
-			if (width > height) {
-				tempHeigth = (double)(thumbnailWidth / (double)width)*height;
-				tempWidth = thumbnailWidth;
-			}
-			else {
-				tempHeigth = thumbnailHeight;
-				tempWidth = ((double)thumbnailHeight/(double)height)*width;
-			}
-		
-			cout << " " << tempWidth << " " << tempHeigth << " " << width << " " << height << endl;
-			resize(frame, thumbnailImage, Size(tempWidth, tempHeigth), 0, 0, INTER_NEAREST);
+
+				cap >> frame;
+				Mat thumbnailImage;
+				double tempHeigth = 0.0;
+				double tempWidth = 0.0;
+
+				if (width > height) {
+					tempHeigth = (double)(thumbnailWidth / (double)width)*height;
+					tempWidth = thumbnailWidth;
+				}
+				else {
+					tempHeigth = thumbnailHeight;
+					tempWidth = ((double)thumbnailHeight / (double)height)*width;
+				}
+
+				cout << " " << tempWidth << " " << tempHeigth << " " << width << " " << height << endl;
+				resize(frame, thumbnailImage, Size(tempWidth, tempHeigth), 0, 0, INTER_NEAREST);
 
 				imwrite(path, thumbnailImage);
 				cout << " Thumb: " << path << " created!" << endl;
 
-		}
-		catch (Exception &e) {
-			const char *err_msg = e.what();
-			cout << "exception!: " << err_msg << std::endl;
-		}
+			}
+			catch (Exception &e) {
+				const char *err_msg = e.what();
+				cout << "exception!: " << err_msg << std::endl;
+			}
 
-		
-	  }
+
+		}
 		cap.release();
 		nv++;
 		file.close();
@@ -873,18 +944,18 @@ bool Gallery::toolBarClicked(int x, int y)
 ofRectangle Gallery::spaceForFileDisplay()
 {
 	int x = metadataPanel.getCordX();
-	int y = metadataPanel.getHeight() + 1.5 * margin;
+	int y = metadataPanel.getHeight() + 70;
 
 	double tempHeigth = 0.0;
 	double tempWidth = 0.0;
 
 	if (choosenVideo.resX >= choosenVideo.resY) {
-		tempHeigth = (((double)320/choosenVideo.resX)*choosenVideo.resY);
+		tempHeigth = (((double)320 / choosenVideo.resX)*choosenVideo.resY);
 		tempWidth = 320;
 	}
 	else {
 		tempHeigth = 240;
-		tempWidth = (((double)240/choosenVideo.resY )*choosenVideo.resX);
+		tempWidth = (((double)240 / choosenVideo.resY)*choosenVideo.resX);
 	}
 
 	ofRectangle space = ofRectangle(x, y, tempWidth, tempHeigth);

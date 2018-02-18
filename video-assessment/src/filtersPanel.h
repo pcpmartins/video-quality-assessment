@@ -30,6 +30,7 @@ public:
 	bool ifFiltersON();						    //Getter of filtersFlag
 	bool ifFiltersAdvON();						//Getter of filtersFlag
 	bool isGroupON();						    //Getter of rankingsFlag
+	bool ifClearGroupON();						    //Getter of filtersFlag
 
 private:
 
@@ -57,6 +58,7 @@ private:
 	bool moreBP_g1;
 	bool moreBP_g2;
 	bool moreBP_g3;
+	bool moreBP_gclear;
 
 	ButtonPanel * simpleFilterBP;		   //Normal panel	
 	bool f_ON;              //Flag if simple filters are ON
@@ -99,7 +101,7 @@ private:
 
 	bool s_ON;				//Flag if ranking on
 
-	int sortType;		//Choosen rate
+	int sortType;		//Sort type
 	enum {
 		SORT_0,
 		SORT_1,

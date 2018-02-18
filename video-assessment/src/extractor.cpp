@@ -797,7 +797,17 @@ void extractor::extractFromVideo(string filePath, int nv) {
 
 			int status = system(result);
 
-			if (status == 0) { //0 operation was sucessfull
+			int fileSize = 0.0;
+			streampos begin, end;
+			ifstream myfile("data\\audio\\outputFile.mp4", ios::binary);
+			begin = myfile.tellg();
+			myfile.seekg(0, ios::end);
+			end = myfile.tellg();
+			myfile.close();
+			cout << " [A] audio track size is: " << (end - begin) << " bytes.\n";
+			fileSize = (end - begin);
+
+			if (fileSize > 15000) {
 
 				system("streaming_extractor_music.exe data\\audio\\outputFile.mp4 data\\audio\\extractor_music_output.json > nul:");
 
@@ -833,7 +843,11 @@ void extractor::extractFromVideo(string filePath, int nv) {
 
 				i.close();
 				report = " audio extracted!";
+				remove("data\\audio\\outputFile.mp4");
+
 			}
+			else { report = " no audio!"; }
+			
 			audioMap = audioTemp;
 			cout << " [A] Audio status: " << status << report << endl;
 		}
@@ -1060,5 +1074,10 @@ double extractor::ensureFormat(double input) {
 
 	return output;
 
+}
+
+bool extractor::exists_file(const std::string& name) {
+	struct stat buffer;
+	return (stat(name.c_str(), &buffer) == 0);
 }
 string extractor::thumbnailFolderPath = "data/thumbnails/videos/";

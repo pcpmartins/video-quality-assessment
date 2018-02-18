@@ -5,8 +5,10 @@
 void ofApp::setup() {
 	
 	//Set the backgrounds color
-	colorOne = ofColor(ofColor::darkGray);
-	colorTwo = ofColor(ofColor::black);
+	//colorOne = ofColor(ofColor::darkGray);
+	//colorTwo = ofColor(ofColor::black);
+	colorOne = ofColor(0);
+	colorTwo = ofColor(40);
 	gallery = Gallery(0.8, 1);	//Gallery proportions Parameters
 
 	gallery.setup();
@@ -22,6 +24,8 @@ void ofApp::update(){
 void ofApp::draw(){
  
 	ofBackgroundGradient(colorOne, colorTwo, OF_GRADIENT_CIRCULAR);
+	//ofBackgroundGradient(colorOne, colorTwo, OF_GRADIENT_CIRCULAR);
+	//ofBackground(ofColor(ofColor::black));
 	gallery.draw();
 }
 
