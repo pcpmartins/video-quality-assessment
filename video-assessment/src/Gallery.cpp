@@ -11,7 +11,7 @@ using json = nlohmann::json;
 Gallery::Gallery() {
 	panelWidth = 1;
 	panelHeight = 1;
-	cout << "Starting GUI" << endl;
+	cout << "Starting... " << endl;
 }
 
 Gallery::Gallery(double width, double height)
@@ -77,6 +77,7 @@ void Gallery::setup()
 
 // Create images to display
 	thumbnailClicked = false;
+	videoPreviewClicked = false;
 	thumbnailsWidth = File::thumbnailWidth;
 	thumbnailsHeight = File::thumbnailHeight;
 	for (int i = 0; i < allFiles.size(); ++i) {
@@ -97,7 +98,7 @@ void Gallery::setup()
 	//ofBackground(127);
 	//Initialize filters
 	filtersPanel.setup();
-	fileSpace = spaceForFileDisplay();		//Calcute avaiable space for file to display
+	//fileSpace = spaceForFileDisplay();		//Calcute avaiable space for file to display
 	videoPlay = false;
 	cout << "------------------------------------------------------------------" << endl;
 }
@@ -523,7 +524,21 @@ void Gallery::mousePressed(int x, int y, int button) {
 				cout << "File not initialized" << endl;
 			}
 		}
-		//else {}
+		else if (checkIfVideoPreviewClicked(x,y)){
+
+			cout << "Previewing current video file with vlc\n";
+			string dData = "\data\\";
+			const char *result = dData.c_str();
+			const char *inputFile = choosenVideo.path.c_str();
+			std::string str;
+			str = "vlc ";
+			str += dData;
+			str += inputFile;
+			result = str.c_str();
+
+			int status = system(result);
+		
+		}
 	}
 }
 
@@ -645,7 +660,7 @@ bool Gallery::extractVideoThumbnails() {
 bool Gallery::extractVideoData() {
 
 
-	cout << " [*] Cognitus visual feature extraction module" << endl;
+	cout << " [*] COGNITUS visual feature extraction module" << endl;
 	cout << " [*] Video input folder: " << inputFolder << endl;
 
 	mlc.init(); //initialize machine learning module instance
@@ -902,6 +917,7 @@ bool Gallery::loadFiles()
 
 			allFiles[k] = tmpVideo;								//Create file with initialized data
 			allFiles[k].setType(File::fileType::VIDEO);
+			
 
 		}
 		//cout << "Feature vector loaded!" << endl;
@@ -936,6 +952,16 @@ bool Gallery::checkIfThumbnailClicked(int x, int y)
 	return thumbnailClicked;							//If thumbnail not clicked
 }
 
+bool Gallery::checkIfVideoPreviewClicked(int x, int y)
+{
+	ofPoint mousePoint;
+	mousePoint.set(x, y);		//Coordinates of mouse inside panel area
+	//cout << "xy " << x << " " << y << endl;
+	if (fileSpace.inside(mousePoint))
+	return true;
+	else return false;
+}
+
 bool Gallery::toolBarClicked(int x, int y)
 {
 	return filtersPanel.isToolbarClicked(x, y);
@@ -959,6 +985,8 @@ ofRectangle Gallery::spaceForFileDisplay()
 	}
 
 	ofRectangle space = ofRectangle(x, y, tempWidth, tempHeigth);
+
+	//cout << "w/h " << tempWidth << " " << tempHeigth << endl;
 
 	return space;
 }

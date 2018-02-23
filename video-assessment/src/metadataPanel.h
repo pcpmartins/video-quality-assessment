@@ -27,6 +27,9 @@ private:
 	ofRectangle title;	//Frame
 	ofRectangle middle;	//Frame
 	ofRectangle middleRight;	//Frame
+	ofRectangle middle2;	//Frame
+	ofRectangle middleRight2;	//Frame
+	ofRectangle middle3;	//Frame
 	ofRectangle advanced;	//Frame
 	string toString(double x);	//Return string with 2 digits precision
 	ofColor getColor1(const VideoFile *f);

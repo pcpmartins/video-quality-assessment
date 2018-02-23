@@ -286,8 +286,8 @@ void extractor::extract(int frameCount) {
 	SAT2 = runstatSaturation.StandardDeviation() / 255;
 	BRI1 = runstatBrightness.Mean() / 255;
 	BRI2 = runstatBrightness.StandardDeviation() / 255;
-	CF1 = runstatColofull.Mean();
-	CF2 = runstatColofull.StandardDeviation();
+	CF1 = (runstatColofull.Mean()-29)/(135); //x-min/max-min
+	CF2 = (runstatColofull.StandardDeviation()-0.1)/(35);
 
 
 	//cout << "\n [C] colorfullness: " << RG1 << " " << YB1 << " " << RG2 << " " << YB2 << " " << endl;

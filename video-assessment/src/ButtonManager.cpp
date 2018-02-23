@@ -51,9 +51,6 @@ void ButtonManager::printValues(){
 	
 }
 
-
-
-
 #pragma mark - DRAW
 
 //--------------------------------------------------------------
@@ -64,11 +61,11 @@ void ButtonManager::draw(){
 		ofDisableDepthTest();
         ofSetLineWidth(1);
 		drawToolBar();
-		ofEnableAlphaBlending();
+		//ofEnableAlphaBlending();
 		for(int i = 0; i <buttons.size(); i++){
 			buttons[i]-> draw();
 		}
-		ofDisableAlphaBlending();
+		//ofDisableAlphaBlending();
 		ofPopStyle();
 	}
 }
@@ -83,7 +80,7 @@ void ButtonManager::drawToolBar(){
 		int margin = 5;
 		int maxchars = (int)(toolbarw/ CHAR_W)-1;
 		ofFill();
-		ofSetColor(255, 255, 255, 240);
+		ofSetColor(255);
 		ofDrawRectangle(0, 0, ofGetWidth(), toolbarh); // bg
 		//
 		ofSetHexColor(0xcccccc);// bg border
@@ -100,9 +97,9 @@ void ButtonManager::drawToolBar(){
 			if (buttonorder[i]->visible) {
 				ofSetHexColor(BUTTONS_COLOR_HIGHLIGHT);
 				ofDrawRectangle(xpos+2, 2, toolbarw-4, 16 );
-				ofSetHexColor(0x666666);
+				ofSetHexColor(0x000000);
 			}else{
-				ofSetHexColor(0x999999);
+				ofSetHexColor(0x000000);
 			}
             
 				ofDrawBitmapString((string)(buttonorder[i]->title).substr(0,maxchars),  xpos+CHAR_W/2, 16);

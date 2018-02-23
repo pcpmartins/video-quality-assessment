@@ -46,17 +46,21 @@ void metadataPanel::getData(const VideoFile * vid)
 		"                    Focus diff: " + toString(vid->focus_dif) + "\n";
 	metadataString += "    Entropy: " + std::to_string(vid->entropy).substr(0, 4) +
 		"                         Shadows: " + toString(vid->shadow) + "\n";
-	metadataString += "                                                  Abruptness: " + toString(vid->abruptness) + "\n";
+	metadataString += "    Static saliency: " + toString(vid->static_saliency) +
+	    "               Abruptness: " + toString(vid->abruptness) + "\n";
+	metadataString += "    CFness mean: " + toString(vid->cf1) +"               Motion: " + toString(vid->motion)+"\n";
+	metadataString += "    CFness std: " + toString(vid->cf2)+ "                   Shakiness: " + toString(vid->shake) + "\n";
+	metadataString += +"\n";
+	metadataString += +"\n";
+	metadataString += "    Avg faces: " + toString(vid->avgFaces) +"\n";
 
-	metadataString += "    Avg faces: " + toString(vid->avgFaces) +
-		"                     Static saliency: " + toString(vid->static_saliency) + "\n";
-
-	metadataString += "    Faces area: " + toString(vid->faceArea) + "                   Motion: " + toString(vid->motion) + "\n" +
-		"    Rule of thirds: " + toString(vid->rule3) + "                Shakiness: " + toString(vid->shake) + "\n";
+	metadataString += "    Faces area: " + toString(vid->faceArea) +"\n";
+	metadataString += "    Rule of thirds: " + toString(vid->rule3) +"\n";
 
 
 	metadataString += "    Smiles: " + toString(vid->smiles) + "\n";
 	metadataString += +"\n";
+
 	metadataString += "   Aesthethic: " + toString(vid->predict).substr(0, 1) +
 		"                          Similarity: " + toString(vid->similarityIndex) + "\n";
 	metadataString += "   Interestingness: " + toString(vid->interest_1).substr(0, 1)
@@ -120,8 +124,24 @@ void metadataPanel::draw(int x, int y)
 	middleRight.set(p4, 154, 85);
 	ofRect(middleRight);
 
-	ofPoint p2(x + 4, y + 264);
-	advanced.set(p2, 310, 30);
+	//middle2
+	ofPoint p5(x + 4, y + 136);
+	middle2.set(p5, 152, 110);
+	ofRect(middle2);
+
+	//middle2 right
+	ofPoint p6(x + 4 + 152 + 4, y + 136);
+	middleRight2.set(p6, 154, 175);
+	ofRect(middleRight2);
+
+	//middle3
+	ofPoint p7(x + 4, y + 250);
+	middle3.set(p7, 152, 61);
+	ofRect(middle3);
+
+	//bottom
+	ofPoint p2(x + 4, y + 315);
+	advanced.set(p2, 310, 32);
 	ofRect(advanced);
 
 	//Fill

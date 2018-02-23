@@ -63,13 +63,12 @@ private:
 	void getConfigParams();
 	bool loadFiles();								//Load data to allFiles vector 	
 	bool checkIfThumbnailClicked(int x, int y);		//Saves index to choosenFileIndex. Sets thumbnailClicked flag
+	bool checkIfVideoPreviewClicked(int x, int y);	
 	bool toolBarClicked(int x, int y);				//Check if "click" was over toolbar
 	ofRectangle spaceForFileDisplay();
 
 	bool parseSemanticVector();
-
 	bool parseAudioVector();
-
 	bool parseCsvFeatureVector();					//Load data to allFiles vector 
 	vector<string> getIndividualSample(string name);
 
@@ -89,11 +88,14 @@ private:
 	vector <vector< pair <double, int > > > semanticData;
 	vector <vector< double > > audioData;
 
+	//cheater sort
+	vector <vector< int  > > cheaterSortData;
 	/*Thumbnails parameteres*/
 	int thumbnailsWidth;
 	int thumbnailsHeight;
 	int choosenFileIndex;					//Index of thumnbail pointed with mouse
 	bool thumbnailClicked;
+	bool videoPreviewClicked;
 
 	/* Parameters for the panel */
 	int gap;

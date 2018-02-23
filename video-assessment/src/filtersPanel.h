@@ -75,6 +75,9 @@ private:
 	float f_dif_hues;
 	float f_static_saliency;
 
+	float f_cf1;
+	float f_cf2;
+
 	bool f_humanFace;		//Flag if look for faces
 	float f_rule3;			//shake param
 	float f_avgFaces;		//Luminance param
@@ -130,7 +133,10 @@ private:
 		SORT_24,
 		SORT_25,
 		SORT_26,
-		SORT_27
+		SORT_27,
+		SORT_28,
+		SORT_29
+
 	};
 
 	bool resetFilterValues;			//reset values
@@ -147,11 +153,13 @@ private:
 	string userRemoveKeywords;
 	bool lockSemanticRemove;
 	bool unionIntersect;
+	bool saveXML, loadXML;
 
 
 	bool haveKey(VideoFile file, string keywords, bool ui);
 	bool haveNotKey(VideoFile file, string keywords);
 	vector<int> split(const string &s, char delim);
+	void saveToXML(string xmlfilePath);
 	vector<VideoFile> sortVector;		//Vector of ranked files
 	size_t numberOfSortedFiles;		//Number of ranked files
 

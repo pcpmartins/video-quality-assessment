@@ -109,6 +109,10 @@ bool VideoFile::generateXmlFile()
 		xml.addValue("MFCC11", mfcc11);
 		xml.addValue("MFCC12", mfcc12);
 		xml.addValue("MFCC13", mfcc13);
+		xml.setTo("//FILE");
+		xml.addValue("CF1", cf1);
+		xml.addValue("CF2", cf2);
+
 
 	}
 	else {
@@ -177,6 +181,8 @@ bool VideoFile::getMetadataFromXml()
 		mfcc11 = xml->getValue<double>("//MFCC11");
 		mfcc12 = xml->getValue<double>("//MFCC12");
 		mfcc13 = xml->getValue<double>("//MFCC13");
+		cf1 = xml->getValue<double>("//CF1");
+		cf2 = xml->getValue<double>("//CF2");
 
 	}
 	return false;
@@ -231,6 +237,8 @@ bool VideoFile::getMetadataFromCsv(vector <string> csvSingleData)
 	shadow = std::stod(csvSingleData[33]);
 	predict = std::stoi(csvSingleData[37]);
 	interest_1 = std::stoi(csvSingleData[38]);
+	cf1 = std::stod(csvSingleData[96]);
+	cf2 = std::stod(csvSingleData[97]);
 
 	return true;
 }
