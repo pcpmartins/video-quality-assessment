@@ -158,7 +158,7 @@ void ButtonPanel::draw(){
 		//ofSetHexColor(0xffffff);
 		ofSetColor(255, 255, 255, 220);
 		if(over){
-			ofSetColor(255, 255, 255, 250);
+			ofSetColor(255, 255, 255, 255);
 		}
 		ofDrawRectangle(0, 0, w, buttonheight);
         

@@ -30,10 +30,14 @@ private:
 	ofRectangle middle2;	//Frame
 	ofRectangle middleRight2;	//Frame
 	ofRectangle middle3;	//Frame
+	ofRectangle middle3Right;	//Frame
 	ofRectangle advanced;	//Frame
+	ofRectangle redRect, greenRect, blueRect;
 	string toString(double x);	//Return string with 2 digits precision
 	ofColor getColor1(const VideoFile *f);
 	ofColor getColor2(const VideoFile *f);
+
+	string edgeOrientIntToString(int orientation);
 
 	/////////////////////////////////////Objects/////////////////////////////////////////
 

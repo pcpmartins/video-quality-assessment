@@ -84,3 +84,9 @@ opencv_video320d.lib
 opencv_videoio320d.lib
 opencv_dnn320d.lib
 opencv_photo320d.lib
+
+##vlc for windows
+
+To be able to preview with an external aplication the currently selected video when cliking on the preview, both instaling vlc and setting the PATH environment variable to the location of vlc.exe(e.g:C:\Program Files (x86)\VideoLAN\VLC) are required.
+
+https://get.videolan.org/vlc/3.0.1/win32/vlc-3.0.1-win32.exe

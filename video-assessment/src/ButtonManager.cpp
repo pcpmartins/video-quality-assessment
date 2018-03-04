@@ -59,7 +59,7 @@ void ButtonManager::draw(){
 		ofPushStyle();
 		ofDisableSmoothing();
 		ofDisableDepthTest();
-        ofSetLineWidth(1);
+        ofSetLineWidth(0.1);
 		drawToolBar();
 		//ofEnableAlphaBlending();
 		for(int i = 0; i <buttons.size(); i++){

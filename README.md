@@ -70,7 +70,7 @@ The OpenCV library of algorithms was used to compute visual features focused mai
 
 In a nutshell, we perform an intuition based feature engineering process to select an initial feature extraction setup, relevant according to different concepts, followed by automatic supervisioned feature selection, where a optimal attribute set is selected for each concept classification. Together, the combined result of classification with feature tresholding over visual, semantic and audio data are used to create specific event models.
 
-We populated this release with the UGC videos from the [CERTH-ITI-VAQ700](http://mklab.iti.gr/project/certh-iti-vaq700-dataset), a dataset composed by 700 YouTube videos licensed under Creative Commons Attribution. The duration of each of these videos ranges from 1 to 6 minutes. Because of the large size of the dataset(25.3GB) we only used 1 second of each video. To have the full dataset available, one can download it from the dataset homepage to the bin/data/files folder.
+<!--We populated this release with the UGC videos from the [CERTH-ITI-VAQ700](http://mklab.iti.gr/project/certh-iti-vaq700-dataset), a dataset composed by 700 YouTube videos licensed under Creative Commons Attribution. The duration of each of these videos ranges from 1 to 6 minutes. Because of the large size of the dataset(25.3GB) we only used 1 second of each video. To have the full dataset available, one can download it from the dataset homepage to the bin/data/files folder.-->
 
 ![figure 2](/images/0.png)
 *figure 2 - Graphical interface* 

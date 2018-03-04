@@ -45,10 +45,14 @@ void Gallery::setup()
 		else extractVideoThumbnails();
 
 		parseCsvFeatureVector();
+		//savePreSortProcessing(parseCsvFeatureVector());
 		parseSemanticVector();
 		parseAudioVector();
 		lock();
 	}
+
+	//loadPreSort();
+	
 
 	if (!loadFiles())
 	{
@@ -527,7 +531,7 @@ void Gallery::mousePressed(int x, int y, int button) {
 		else if (checkIfVideoPreviewClicked(x,y)){
 
 			cout << "Previewing current video file with vlc\n";
-			string dData = "\data\\";
+			string dData = "data\\";
 			const char *result = dData.c_str();
 			const char *inputFile = choosenVideo.path.c_str();
 			std::string str;
@@ -549,7 +553,7 @@ void Gallery::mouseReleased(int x, int y, int button) {
 		|| filtersPanel.isModifyClicked(x, y))
 	{
 		high_resolution_clock::time_point t1 = high_resolution_clock::now(); // note time before execution
-		filtersPanel.filter(&allFiles[0], allFiles.size(), choosenFileIndex);
+		filtersPanel.filter(&allFiles[0], allFiles.size(), cheaterSortData, choosenFileIndex);
 		high_resolution_clock::time_point t2 = high_resolution_clock::now(); // note time after execution
 		std::cout << "operation duration: "
 			<< std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count()
@@ -1045,6 +1049,7 @@ bool Gallery::parseSemanticVector() {
 	return true;
 }
 
+
 bool Gallery::parseAudioVector() {
 
 	audioData.assign(totalFiles, vector<double>(25));
@@ -1084,26 +1089,134 @@ bool Gallery::parseAudioVector() {
 	myReadFile.close();
 	return true;
 }
+/*
+//actuality
+bool Gallery::savePreSortProcessing(int size) {
 
 
-bool Gallery::parseCsvFeatureVector() {
-
-	ifstream myReadFile;
-	myReadFile.open(dataOutputPath.c_str());
+	//cheaterSortData.assign(150, vector<int>(totalFiles));
+	ofstream myReadCheatFile;
+	myReadCheatFile.open(cheaterDataOutputPath.c_str());
+	
 
 	string line;
-
-	if (myReadFile.fail())
+	if (myReadCheatFile.fail())
 	{
-		cout << "fail loading csv feature vector!" << endl;
-		myReadFile.close();
+		cout << "wrong path to cheater sort file!" << endl;
+		myReadCheatFile.close();
+		return false;
+	}
+	else {
+
+		for (int x = 0; x < 98; x++) {
+		
+			vector<pair <int, double> > cheatSortSample;
+			//cheatSortSample.assign(150, pair <int,double>(0,0.0));
+
+			for (int y = 0; y < size; y++) {
+			
+				pair <int, double> tempPair;
+				tempPair = make_pair(y+1, std::stod(csvData.at(y).at(x)));
+				//cout << tempPair.first << " " << tempPair.second << endl;
+				cheatSortSample.push_back(tempPair);
+				//cout << cheatSortSample.size() <<" "<<""<< endl;
+			}
+			
+			std::sort(cheatSortSample.begin(), cheatSortSample.end(), sort_pred());		
+			
+			vector <int> sortedIDs;
+			//sortedIDs.assign(150,0);
+			
+			for (int z = 0; z < size; z++) {
+
+				sortedIDs.push_back (cheatSortSample.at(z).first);
+
+				if (z != size - 1) {
+
+					myReadCheatFile << (cheatSortSample.at(z).first) << ",";
+				}
+				else {
+					myReadCheatFile << (cheatSortSample.at(z).first) << "\n";
+				}
+
+				myReadCheatFile.flush();
+				
+				
+			}
+
+			//cout <<"cap "<< sortedIDs.size()<< endl;
+			cheaterSortData.push_back(sortedIDs);
+			
+		
+		}
+		//cout << cheaterSortData.size() <<" "<<""<< endl;
+		cout << "Sort pre-processed"<<endl ;
+		myReadCheatFile.close();
+		cout << "Saving cheat sort file " << endl;
+		
+		
+		//dominantDataVector.push_back(pairTemp);
+
+	}
+
+
+}
+
+bool Gallery::loadPreSort() {
+
+	ifstream myLoadCheatFile;
+	myLoadCheatFile.open(cheaterDataOutputPath.c_str());
+
+	string line;
+	if (myLoadCheatFile.fail())
+	{
+		cout << "fail loading sort vector!" << endl;
+		myLoadCheatFile.close();
 		return false;
 	}
 	else {
 
 		int l = 0;
-		int w = 0;
+		
+		while (getline(myLoadCheatFile, line)) {
 
+			stringstream temp(line);
+			string word;
+			int w = 0;
+			vector <int> sortedIDs;
+
+			while (getline(temp, word, ',')) {
+
+				sortedIDs.push_back( std::stoi(word));
+				w++;
+			}
+			cheaterSortData.push_back(sortedIDs);
+			l++;
+		}
+
+	}
+	myLoadCheatFile.close();
+	cout << "sort pre-processing loaded" << endl;
+	return true;
+}
+*/
+
+int Gallery::parseCsvFeatureVector() {
+
+	ifstream myReadFile;
+	myReadFile.open(dataOutputPath.c_str());
+
+	string line;
+	int l = 0;
+	int w = 0;
+
+	if (myReadFile.fail())
+	{
+		cout << "fail loading csv feature vector!" << endl;
+		myReadFile.close();
+		return 0;
+	}
+	else {
 		csvData.assign(totalFiles, vector<string>(150, ""));
 
 		while (getline(myReadFile, line)) {
@@ -1126,7 +1239,7 @@ bool Gallery::parseCsvFeatureVector() {
 
 	}
 	myReadFile.close();
-	return true;
+	return l;
 }
 
 vector<string> Gallery::getIndividualSample(string name) {

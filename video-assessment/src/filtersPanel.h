@@ -13,7 +13,7 @@ public:
 	~filtersPanel();
 
 	void draw();							                            //Draw gui window
-	void filter(VideoFile files[], int length, int choosenFileIndex);	//Filters array 
+	void filter(VideoFile files[], int length, vector <vector <int> > cheaterSortData, int choosenFileIndex);	//Filters array 
 	void setup();
 	//Check if similarity title or value was clicked
 	bool isModifyClicked(int x, int y);
@@ -135,10 +135,11 @@ private:
 		SORT_26,
 		SORT_27,
 		SORT_28,
-		SORT_29
+		SORT_29,
+		SORT_30
 
 	};
-
+	
 	bool resetFilterValues;			//reset values
 
 	ButtonPanel * otherBP;		//Similarity index panel
@@ -163,9 +164,15 @@ private:
 	vector<VideoFile> sortVector;		//Vector of ranked files
 	size_t numberOfSortedFiles;		//Number of ranked files
 
-	void ranking(vector<VideoFile> &files);		//Rank array (sort)
-	void sortFiles(vector<VideoFile> &files, size_t length);	//Sort 
+	void ranking(vector<VideoFile> &files, vector <vector <int> > &cheaterSortData);		//Rank array (sort)
+	void sortFiles(vector<VideoFile> &files);	//Sort 
 	//Show only n top ranked files
 	void hideUnrankedFiles(vector<VideoFile> rankedFiles, VideoFile allFiles[], int allLenght);
+
+	struct sort_by_attr {
+		bool operator()(const std::pair<int, double> &left, const std::pair<int, double> &right) {
+			return left.second < right.second;
+		}
+	};
 };
 

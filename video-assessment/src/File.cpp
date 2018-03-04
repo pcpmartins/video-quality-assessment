@@ -23,6 +23,7 @@ bool File::generateXmlFile()
 	xml.addChild("FILE");
 	xml.setTo("//FILE");
 
+	xml.addValue("ID", fileID);
 	xml.addValue("THUMBNAIL_PATH", thumbnailPath);		//Thumbnail path field
 	xml.addValue("FILE_PATH", path);					//File path field
 
@@ -80,7 +81,7 @@ bool File::generateXmlFile()
 	xml.addValue("EH16", eh16);
 	xml.addValue("EHGLOBAL", ehGlobal);
 	xml.setTo("//FILE");
-	
+
 
 	if (xml.save(xmlPath))
 	{
@@ -96,6 +97,7 @@ bool File::getMetadataFromXml()
 {
 	ofXml* xml = new ofXml(xmlPath);
 	if (xml->load(xmlPath)) {
+		fileID = xml->getValue<int>("//ID");
 		thumbnailPath = xml->getValue<string>("//THUMBNAIL_PATH");
 		path = xml->getValue<string>("//FILE_PATH");
 		rate = xml->getValue<int>("//RATE");
@@ -144,7 +146,7 @@ bool File::getMetadataFromXml()
 		eh15 = xml->getValue<int>("//EH15");
 		eh16 = xml->getValue<int>("//EH16");
 		ehGlobal = xml->getValue<int>("//EHGLOBAL");
-		
+
 
 		return true;
 	}
@@ -157,7 +159,8 @@ bool File::getMetadataFromXml()
 bool File::getMetadataFromCsv(vector <string> csvSingleData)
 {
 	if (std::stoi(csvSingleData[0]) != 0) {
-	
+
+		fileID = std::stoi(csvSingleData[0]);
 		resX = std::stoi(csvSingleData[1]);
 		resY = std::stoi(csvSingleData[2]);
 
@@ -206,7 +209,7 @@ bool File::getMetadataFromCsv(vector <string> csvSingleData)
 		eh14 = std::stoi(csvSingleData[54]);
 		eh15 = std::stoi(csvSingleData[55]);
 		eh16 = std::stoi(csvSingleData[56]);
-		ehGlobal = std::stoi(csvSingleData[57]);	
+		ehGlobal = std::stoi(csvSingleData[57]);
 
 		return true;
 	}
@@ -248,7 +251,6 @@ void File::rateUpdate(int newRate)
 	}
 	else {
 		rate = newRate;		//Rate update
-
 							//xmlFile update
 		ofXml* xml = new ofXml(xmlPath);
 		if (xml->load(xmlPath))
@@ -258,7 +260,7 @@ void File::rateUpdate(int newRate)
 
 		if (xml->save(xmlPath))
 		{
-			cout << name << " rate updated to: " << rate << endl;
+			cout << name << " File group updated to: " << rate << endl;
 		}
 	}
 }

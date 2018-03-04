@@ -42,6 +42,8 @@ public:
 	bool extractVideoData();
 	bool parseOnly = false;
 
+	//bool savePreSortProcessing(int size);
+
 	static string thumbnailFolderPath;				          //Path to thumbnails
 	int thumbnailHeight = 150;
 	int thumbnailWidth = 180;
@@ -52,11 +54,17 @@ public:
 	int totalFiles = 700;
 	vector<String> clNames;
 
+	//cheater sort
+	vector <vector< int  > > cheaterSortData;
+	//bool loadPreSort();
+
+
 private:
 	/////////////////////////////////Methods////////////////////////////////
 	string audioDataOutputPath = "data/audio/audio_result.csv";
 	string semanticDataOutputPath = "data/output/semantic_data.csv"; //output from extraction process
 	string dataOutputPath = "data/output/output.csv"; //output from extraction process
+	string cheaterDataOutputPath = "data/output/cheatersort.csv"; //pre processing sort
 	string inputFolder = "data/files/";               //video input files
 	string xmlFolderPath = "/xml/";                   //Path to folder with metadata
 
@@ -69,7 +77,7 @@ private:
 
 	bool parseSemanticVector();
 	bool parseAudioVector();
-	bool parseCsvFeatureVector();					//Load data to allFiles vector 
+	int parseCsvFeatureVector();					//Load data to allFiles vector 
 	vector<string> getIndividualSample(string name);
 
 	std::vector<String> readClassNames();
@@ -88,8 +96,6 @@ private:
 	vector <vector< pair <double, int > > > semanticData;
 	vector <vector< double > > audioData;
 
-	//cheater sort
-	vector <vector< int  > > cheaterSortData;
 	/*Thumbnails parameteres*/
 	int thumbnailsWidth;
 	int thumbnailsHeight;
@@ -127,4 +133,10 @@ private:
 	bool isMouseOverGrip;
 	int mousePreviousY;
 	vector<ofRectangle> rectangles;
+
+	struct sort_pred {
+		bool operator()(const std::pair<int, double> &left, const std::pair<int, double> &right) {
+			return left.second < right.second;
+		}
+	};
 };

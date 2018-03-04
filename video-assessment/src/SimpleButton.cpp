@@ -10,7 +10,7 @@ SimpleButton::SimpleButton(string name, int x, int y){
 	ypos = y;
 	w = 4+ title.length() *CHAR_W; //textw
 	w = (w<90) ? 90 : w;
-	h = 18;
+	h = 16;
 	buttonheight= 2*h;
 	relx = 0;
 	rely = 0;

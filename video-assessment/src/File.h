@@ -16,6 +16,7 @@ public:
 		VIDEO
 	};
 
+	int fileID;
 	static int thumbnailWidth;		//Width of the miniature 
 	static int thumbnailHeight;		//Height of the miniature 
 	int posX;						//Position of the middle size picture

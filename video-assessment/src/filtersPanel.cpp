@@ -27,7 +27,7 @@ void filtersPanel::draw()
 
 }
 
-void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
+void filtersPanel::filter(VideoFile files[], int length, vector <vector <int> > cheaterSortData, int choosenFileIndex)
 {
 	float colorSimilarity = 0.0, edgeSimilarity = 0.0, entropySimilarity = 0.0, motionSimilarity = 0.0;
 	int nsim = 0;
@@ -360,7 +360,7 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 	//Rank files
 
 	if (s_ON) {
-		ranking(sortVector);
+		ranking(sortVector, cheaterSortData);
 		hideUnrankedFiles(sortVector, files, length);
 	}
 
@@ -424,12 +424,12 @@ void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 	sortVector.clear();
 }
 
-void filtersPanel::ranking(vector<VideoFile> &files)
+void filtersPanel::ranking(vector<VideoFile> &files,vector <vector <int> > &cheaterSortData)
 {
 	size_t length = files.size();
 	if (length > 0) {
 
-		sortFiles(files, numberOfSortedFiles);
+		sortFiles(files);
 
 	}
 }
@@ -514,67 +514,58 @@ void filtersPanel::setup()
 
 	buttons.setup(); // this sets up the events etc..
 
-	/* testing new menus
-	gui = new ofxDatGui(ofxDatGuiAnchor::TOP_RIGHT);
-	gui->addHeader(":: Drag Me To Reposition ::");
-	gui->addButton("Click!");
-	gui->addToggle("Click!", false);
-	gui->addSlider("Click!", 0, 100);
-	vector<string> options = {"ONE", "TWO", "THREE", "FOUR"};
-	gui->addDropdown( "ONE", options);
-	*/
 	//File groups
 	groupBP = buttons.addButtonPanel("FILE GROUPS");
-	groupBP->addListItem("--- Add to group ---  ");
+	//groupBP->addListItem("--- Add to group ---  ");
 	groupBP->addSelectionItem("------ 0 -------", file_group, GROUP_0);
 	groupBP->addSelectionItem("------ 1 -------", file_group, GROUP_1);
 	groupBP->addSelectionItem("------ 2 -------", file_group, GROUP_2);
 	groupBP->addSelectionItem("------ 3 ------- ", file_group, GROUP_3);
 	groupBP->addListItem("--------------------");
-	groupBP->addFlashItem("Clear groups", moreBP_gclear);
+	groupBP->addFlashItem("Clear groups     ", moreBP_gclear);
 
-	//Normal filters Panel
+	//Simple filters Panel
 	simpleFilterBP = buttons.addButtonPanel("SIMPLE FILTERS");
 	simpleFilterBP->addFlashItem("Clear values", resetFilterValues);
-	simpleFilterBP->addSliderItem("Obj. index      ", 0, 0.5, f_ranksum);
+	simpleFilterBP->addSliderItem("Obj. index      ", 0, 0.75, f_ranksum);
 	simpleFilterBP->addListItem("------- Groups ------");
 	simpleFilterBP->addToggleItem("Group 1", moreBP_g1);
 	simpleFilterBP->addToggleItem("Group_2", moreBP_g2);
 	simpleFilterBP->addToggleItem("Group 3", moreBP_g3);
 	
 	simpleFilterBP->addListItem("------ Colour -------");
-	simpleFilterBP->addSliderItem("Red             ", 0, 1, f_redRatioP);
-	simpleFilterBP->addSliderItem("Green           ", 0, 1, f_greenRatioP);
-	simpleFilterBP->addSliderItem("Blue            ", 0, 1, f_blueRatioP);
+	simpleFilterBP->addSliderItem("Red             ", 0, 0.5, f_redRatioP);
+	simpleFilterBP->addSliderItem("Green           ", 0, 0.5, f_greenRatioP);
+	simpleFilterBP->addSliderItem("Blue            ", 0, 0.5, f_blueRatioP);
 	simpleFilterBP->addListItem("---- Orientation ----");
 	simpleFilterBP->addToggleItem("Vertical", moreBP_v);
 	simpleFilterBP->addToggleItem("Horizontal", moreBP_h);
 	simpleFilterBP->addToggleItem("45 degrees", moreBP_45);
 	simpleFilterBP->addToggleItem("135 degrees", moreBP_135);
-	simpleFilterBP->addSliderItem("Entropy         ", 0, 1, f_entropy);
-	simpleFilterBP->addSliderItem("Luminance       ", 0, 1, f_luminaceP);
+	simpleFilterBP->addSliderItem("Entropy         ", 0, 0.75, f_entropy);
+	simpleFilterBP->addSliderItem("Luminance       ", 0, 0.75, f_luminaceP);
 	simpleFilterBP->addSliderItem("Sharpness       ", 0, 1, f_sharpness);
-	simpleFilterBP->addSliderItem("Hue count       ", 0, 1, f_dif_hues);
-	simpleFilterBP->addSliderItem("Saliency        ", 0, 0.3, f_static_saliency);
+	simpleFilterBP->addSliderItem("Hue count       ", 0, 0.5, f_dif_hues);
+	simpleFilterBP->addSliderItem("Saliency        ", 0, 0.5, f_static_saliency);
 
 	simpleFilterBP->addSliderItem("CF mean         ", 0, 1, f_cf1);
 	simpleFilterBP->addSliderItem("CF std.         ", 0, 1, f_cf2);
 
 	simpleFilterBP->addToggleItem("Human face", f_humanFace);
 	simpleFilterBP->addSliderItem("Avg faces       ", 0, 1, f_avgFaces);
-	simpleFilterBP->addSliderItem("Faces area      ", 0, 0.4, f_faceArea);
-	simpleFilterBP->addSliderItem("Rule of thirds  ", 0, 0.3, f_rule3);
+	simpleFilterBP->addSliderItem("Faces area      ", 0, 0.5, f_faceArea);
+	simpleFilterBP->addSliderItem("Rule of thirds  ", 0, 0.5, f_rule3);
 	simpleFilterBP->addSliderItem("Smiles          ", 0, 0.5, f_smiles);
 
 
 	//filter more
 	advanceFilterBP = buttons.addButtonPanel("ADVANCED FILTERS");
 	advanceFilterBP->addFlashItem("Clear values", resetFilterValues);
-	advanceFilterBP->addSliderItem("Lum. std        ", 0, 0.5, f_luminance_std);
-	advanceFilterBP->addSliderItem("Foreg. area     ", 0, 0.2, f_fgArea);
-	advanceFilterBP->addSliderItem("Shadow          ", 0, 0.3, f_shadow);
-	advanceFilterBP->addSliderItem("Focus diff.     ", 0, 1, f_focus_dif);
-	advanceFilterBP->addSliderItem("Motion          ", 0, 0.5, f_motion);
+	advanceFilterBP->addSliderItem("Lum. std        ", 0, 0.3, f_luminance_std);
+	advanceFilterBP->addSliderItem("Foreg. area     ", 0, 0.3, f_fgArea);
+	advanceFilterBP->addSliderItem("Shadow          ", 0, 0.4, f_shadow);
+	advanceFilterBP->addSliderItem("Focus diff.     ", 0, 0.5, f_focus_dif);
+	advanceFilterBP->addSliderItem("Motion          ", 0, 0.75, f_motion);
 	advanceFilterBP->addSliderItem("Abruptness      ", 0, 1, f_abruptness);
 	advanceFilterBP->addSliderItem("Shakiness       ", 0, 0.5, f_shake);
 	advanceFilterBP->addListItem("-------- SVM --------");
@@ -593,7 +584,7 @@ void filtersPanel::setup()
 
 	//Sortpanel
 	sortBP = buttons.addButtonPanel("FILE SORT");
-
+	sortBP->addSelectionItem("File ID", sortType, SORT_30);
 	sortBP->addSelectionItem("Similarity", sortType, SORT_21);
 	sortBP->addSelectionItem("Group", sortType, SORT_0);
 	sortBP->addSelectionItem("Obj. index", sortType, SORT_1);
@@ -627,8 +618,9 @@ void filtersPanel::setup()
 	sortBP->addSelectionItem("Onset", sortType, SORT_26);
 	sortBP->addSelectionItem("Chords change", sortType, SORT_27);
 	sortBP->addListItem("---------------------");
+	
 	sortBP->addFlashItem("APPLY SORT", s_ON);
-	sortType = 0;
+	sortType = 30;
 
 	//indexing panel
 	otherBP = buttons.addButtonPanel("EXTENDED");
@@ -745,121 +737,137 @@ bool filtersPanel::ifClearGroupON()
 	return moreBP_gclear;
 }
 
-void filtersPanel::sortFiles(vector<VideoFile> &files, size_t length)
+void filtersPanel::sortFiles(vector<VideoFile> &files)
 {
+			switch (sortType)
+			{
+			case 0:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.rate > rhs.rate; });
+				break;
+			case 1:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.ranksum > rhs.ranksum; });
+				break;
+			case 2:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.redRatio > rhs.redRatio; });
+				break;
+			case 3:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.greenRatio > rhs.greenRatio; });
+				break;
+			case 4:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.blueRatio > rhs.blueRatio; });
+				break;
+			case 5:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.entropy > rhs.entropy; });
+				break;
+			case 6:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.luminance > rhs.luminance; });
+				break;
+			case 7:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.luminance_std > rhs.luminance_std; });
+				break;
+			case 8:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.sharpness > rhs.sharpness; });
+				break;
+			case 9:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.dif_hues > rhs.dif_hues; });
+				break;
+			case 10:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.static_saliency > rhs.static_saliency; });
+				break;
+			case 11:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.avgFaces > rhs.avgFaces; });
+				break;
+			case 12:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.faceArea > rhs.faceArea; });
+				break;
+			case 13:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.rule3 > rhs.rule3; });
+				break;
+			case 14:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.smiles > rhs.smiles; });
+				break;
+			case 15:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.fgArea > rhs.fgArea; });
+				break;
+			case 16:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.shadow > rhs.shadow; });
+				break;
+			case 17:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.focus_dif > rhs.focus_dif; });
+				break;
+			case 18:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.motion > rhs.motion; });
+				break;
+			case 19:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.abruptness > rhs.abruptness; });
+				break;
+			case 20:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.shake > rhs.shake; });
+				break;
+			case 21:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.similarityIndex > rhs.similarityIndex; });
+				break;
+			case 22:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.a1_average_loudness > rhs.a1_average_loudness; });
+				break;
+			case 23:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.a2_dynamic_complexity > rhs.a2_dynamic_complexity; });
+				break;
+			case 24:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.a3_bpm > rhs.a3_bpm; });
+				break;
+			case 25:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.a4_danceability > rhs.a4_danceability; });
+				break;
+			case 26:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.a5_onset_rate > rhs.a5_onset_rate; });
+				break;
+			case 27:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.a6_chords_change_rate > rhs.a6_chords_change_rate; });
+				break;
+			case 28:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.cf1 > rhs.cf1; });
+				break;
+			case 29:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.cf2 > rhs.cf2; });
+				break;
+			case 30:
+				sort(files.begin(), files.end(), [](const VideoFile& lhs, const VideoFile& rhs)
+				{ return lhs.fileID < rhs.fileID; });
+				break;
 
-	if (length > 1) {
+			};
 
-		size_t i, change;
-		bool test = false;
-		do {
-			change = 0;
-			i = length - 1;
-			do {
-				i--;
-
-				switch (sortType)
-				{
-				case 0:
-					test = files[i].rate < files[i + 1].rate;
-					break;
-				case 1:
-					test = files[i].ranksum < files[i + 1].ranksum;
-					break;
-				case 2:
-					test = files[i].redRatio < files[i + 1].redRatio;
-					break;
-				case 3:
-					test = files[i].greenRatio < files[i + 1].greenRatio;
-					break;
-				case 4:
-					test = files[i].blueRatio < files[i + 1].blueRatio;
-					break;
-				case 5:
-					test = files[i].entropy < files[i + 1].entropy;
-					break;
-				case 6:
-					test = files[i].luminance < files[i + 1].luminance;
-					break;
-				case 7:
-					test = files[i].luminance_std < files[i + 1].luminance_std;
-					break;
-				case 8:
-					test = files[i].sharpness < files[i + 1].sharpness;
-					break;
-				case 9:
-					test = files[i].dif_hues < files[i + 1].dif_hues;
-					break;
-				case 10:
-					test = files[i].static_saliency < files[i + 1].static_saliency;
-					break;
-				case 11:
-					test = files[i].avgFaces < files[i + 1].avgFaces;
-					break;
-				case 12:
-					test = files[i].faceArea < files[i + 1].faceArea;
-					break;
-				case 13:
-					test = files[i].rule3 < files[i + 1].rule3;
-					break;
-				case 14:
-					test = files[i].smiles < files[i + 1].smiles;
-					break;
-				case 15:
-					test = files[i].fgArea < files[i + 1].fgArea;
-					break;
-				case 16:
-					test = files[i].shadow < files[i + 1].shadow;
-					break;
-				case 17:
-					test = files[i].focus_dif < files[i + 1].focus_dif;
-					break;
-				case 18:
-					test = files[i].motion < files[i + 1].motion;
-					break;
-				case 19:
-					test = files[i].abruptness < files[i + 1].abruptness;
-					break;
-				case 20:
-					test = files[i].shake < files[i + 1].shake;
-					break;
-				case 21:
-					test = files[i].similarityIndex < files[i + 1].similarityIndex;
-					break;
-				case 22:
-					test = files[i].a1_average_loudness < files[i + 1].a1_average_loudness;
-					break;
-				case 23:
-					test = files[i].a2_dynamic_complexity < files[i + 1].a2_dynamic_complexity;
-					break;
-				case 24:
-					test = files[i].a3_bpm < files[i + 1].a3_bpm;
-					break;
-				case 25:
-					test = files[i].a4_danceability < files[i + 1].a4_danceability;
-					break;
-				case 26:
-					test = files[i].a5_onset_rate < files[i + 1].a5_onset_rate;
-					break;
-				case 27:
-					test = files[i].a6_chords_change_rate < files[i + 1].a6_chords_change_rate;
-					break;
-				case 28:
-					test = files[i].cf1 < files[i + 1].cf1;
-					break;
-				case 29:
-					test = files[i].cf2 < files[i + 1].cf2;
-					break;
-
-				};
-				if (test) {
-					std::swap(files[i], files[i + 1]);
-					change = 1;
-				}
-			} while (i != 0);
-
-		} while (change != 0);
-	}
 }
 
 void filtersPanel::hideUnrankedFiles(vector<VideoFile> rankedFiles, VideoFile allFiles[], int allLength)
