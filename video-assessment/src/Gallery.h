@@ -55,7 +55,7 @@ public:
 	vector<String> clNames;
 
 	//cheater sort
-	vector <vector< int  > > cheaterSortData;
+	//vector <vector< int  > > cheaterSortData;
 	//bool loadPreSort();
 
 

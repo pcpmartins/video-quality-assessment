@@ -17,25 +17,19 @@ void metadataPanel::getData(const VideoFile * vid)
 		+ "            File ID: " + std::to_string(vid->fileID) + "\n";
 	metadataString += "   B: " + toString(vid->blueRatio) + "       Objective index: "
 		+ toString(vid->ranksum) + "        Group: " + std::to_string(vid->rate) + "\n\n";
-	metadataString += "    Edge strenght: " + std::to_string(vid->edgeStrenght).substr(0, 5) +
-		"            Loudness:          " + std::to_string(vid->a1_average_loudness).substr(0, 6) + "\n";
-	metadataString += "     Global orientation: " + edgeOrientIntToString(vid->ehGlobal).substr(0, 6) +
-		"             Complexity:        " + std::to_string(vid->a2_dynamic_complexity).substr(0, 6) + "\n";
+	metadataString += "    Edge strenght: " + std::to_string(vid->edgeStrenght).substr(0, 5) + "\n";
+	metadataString += "     Global orientation: " + edgeOrientIntToString(vid->ehGlobal).substr(0, 6) + "\n";
 	metadataString += "               " + edgeOrientIntToString(vid->eh1) + "   " + edgeOrientIntToString(vid->eh2) +
-		"   " + edgeOrientIntToString(vid->eh3) + "   " + edgeOrientIntToString(vid->eh4) 
-		+ "                     Bpm:                  " + std::to_string(vid->a3_bpm * 200).substr(0, 6) + "\n";
+		"   " + edgeOrientIntToString(vid->eh3) + "   " + edgeOrientIntToString(vid->eh4) + "\n";
 	metadataString += "               " + edgeOrientIntToString(vid->eh5) + "   " + edgeOrientIntToString(vid->eh6) +
 		"   " + edgeOrientIntToString(vid->eh7) + "   " +
-		edgeOrientIntToString(vid->eh8) + "                     Danceability:      " +
-		std::to_string(vid->a4_danceability).substr(0, 6) + "\n";
+		edgeOrientIntToString(vid->eh8) + "\n";
 	metadataString += "               " + edgeOrientIntToString(vid->eh9) + "   " + edgeOrientIntToString(vid->eh10) +
 		"   " + edgeOrientIntToString(vid->eh11) + "   " +
-		edgeOrientIntToString(vid->eh12) + "                     Onset:                " +
-		std::to_string(vid->a5_onset_rate).substr(0, 6) + "\n";
+		edgeOrientIntToString(vid->eh12) + "\n";
 	metadataString += "               " + edgeOrientIntToString(vid->eh13) + "   " + edgeOrientIntToString(vid->eh14) +
 		"   " + edgeOrientIntToString(vid->eh15) + "   " +
-		edgeOrientIntToString(vid->eh16) + "                     CCR:                  " +
-		std::to_string(vid->a6_chords_change_rate).substr(0, 6) + "\n";
+		edgeOrientIntToString(vid->eh16) + "\n";
 	metadataString += +"\n";
 
 	metadataString += "    Luminance:        " + std::to_string(vid->luminance).substr(0, 6) +
@@ -66,9 +60,15 @@ void metadataPanel::getData(const VideoFile * vid)
 	metadataString += +"\n";
 
 	metadataString += "   Aesthethic:          " + std::to_string(vid->predict).substr(0, 1) +
-		"                    Similarity:        " + std::to_string(vid->similarityIndex).substr(0, 6) + "\n";
+		"               Similarity:             " + std::to_string(vid->similarityIndex).substr(0, 6) + "\n";
 	metadataString += "   Interestingness:  " + std::to_string(vid->interest_1).substr(0, 1)
-		+ " " + "    Ref: " + vid->referenceName.substr(0, 25) + "\n\n";
+		+ " " + "               Ref: " + vid->referenceName.substr(0, 25) + "\n\n";
+
+	audioMetadataString =  "Loudness:          " + std::to_string(vid->a1_average_loudness).substr(0, 6) + "\n";
+	audioMetadataString += "Complexity:        " + std::to_string(vid->a2_dynamic_complexity).substr(0, 6) + "\n";
+	audioMetadataString += "Bpm:                  " + std::to_string(vid->a3_bpm * 200).substr(0, 6) + "\n";
+	audioMetadataString += "Onset:                " + std::to_string(vid->a5_onset_rate).substr(0, 6) + "\n";
+	audioMetadataString += "CCR:                  " + std::to_string(vid->a6_chords_change_rate).substr(0, 6) + "\n";
 
 	color1 = getColor1(vid);
 	color2 = getColor2(vid);
@@ -101,8 +101,6 @@ void metadataPanel::draw(int x, int y)
 	this->x = x;
 	this->y = y;
 
-	//ofSetColor(ofColor(255, 255, 255));
-
 	// multiline bbox /////////////////////////////////////////////////////
 
 	//Border
@@ -115,30 +113,29 @@ void metadataPanel::draw(int x, int y)
 
 	//RGB squares
 	//ofRectangle redRect, greenRect, blueRect;	//Frame
-	ofPoint pr(x + 4, y);
+	ofPoint pr(x + 5, y + 1);
 	ofFill();
 	ofSetColor(255, 0, 0);
-	redRect.set(pr, 55, 15);
+	redRect.set(pr, 55, 14);
 	ofRect(redRect);
 	ofNoFill();
 	ofSetColor(255, 255, 255, 255);
 
-	ofPoint pg(x + 4, y + 15);
+	ofPoint pg(x + 5, y + 14);
 	ofFill();
 	ofSetColor(0, 255, 0);
-	redRect.set(pg, 55, 12);
-	ofRect(redRect);
+	greenRect.set(pg, 55, 14);
+	ofRect(greenRect);
 	ofNoFill();
 	ofSetColor(255, 255, 255, 255);
 
-	ofPoint pb(x + 4, y + 30);
+	ofPoint pb(x + 5, y + 27);
 	ofFill();
 	ofSetColor(0, 0, 255);
-	redRect.set(pb, 55, 16);
-	ofRect(redRect);
+	blueRect.set(pb, 55, 16);
+	ofRect(blueRect);
 	ofNoFill();
 	ofSetColor(255, 255, 255, 255);
-
 
 	//title
 	ofPoint p1(x + 4, y);
@@ -187,6 +184,8 @@ void metadataPanel::draw(int x, int y)
 	ofSetColor(255, 255, 255);
 
 	font.drawMultiLine(metadataString, fontSize, x, y);
+	font.drawMultiLine(audioMetadataString, fontSize, x+172, y+63);
+	
 }
 
 float metadataPanel::getWidth()

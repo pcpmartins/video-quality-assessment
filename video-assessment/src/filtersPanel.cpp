@@ -27,7 +27,7 @@ void filtersPanel::draw()
 
 }
 
-void filtersPanel::filter(VideoFile files[], int length, vector <vector <int> > cheaterSortData, int choosenFileIndex)
+void filtersPanel::filter(VideoFile files[], int length, int choosenFileIndex)
 {
 	float colorSimilarity = 0.0, edgeSimilarity = 0.0, entropySimilarity = 0.0, motionSimilarity = 0.0;
 	int nsim = 0;
@@ -43,10 +43,11 @@ void filtersPanel::filter(VideoFile files[], int length, vector <vector <int> > 
 	if (saveXML) {
 	
 		saveToXML("buttons.xml");
-		//buttons.saveToXML("buttons.xml");
+		cout << "Saved to XML" << endl;
 	}
 	if (loadXML) {
-		//buttons.loadXML("buttons.xml");
+		loadFromXML("buttons.xml");
+		cout << "Loaded from XML" << endl;
 	}
 
 	if (lockSemanticInsert) {
@@ -214,26 +215,26 @@ void filtersPanel::filter(VideoFile files[], int length, vector <vector <int> > 
 			double colourfulness_std = files[i].cf2;
 
 
-			if ((redRatio >= f_redRatioP) &&		          //Red colour parameter
-				(greenRatio >= f_greenRatioP) &&	          //Green colour parameter
-				(blueRatio >= f_blueRatioP) &&	          //Blue colour parameter
-				(rate >= f_rateP) &&	                      //Blue colour parameter
-				(entropy >= f_entropy) &&			          //Simplicity parameter
-				(luminance >= f_luminaceP) &&               //Luminance parameter	
-				(sharpness >= f_sharpness) &&               //sharpness	
-				(abruptness < f_abruptness) &&	          //abruptness
-				(motion >= f_motion) &&	                  //motion
-				(luminance_std >= f_luminance_std) &&      //luma std
-				(dif_hues >= f_dif_hues) &&	              //hues
-				(static_saliency >= f_static_saliency) &&  //static saliency
+			if ((redRatio >= f_redRatioP) &&		  
+				(greenRatio >= f_greenRatioP) &&	    
+				(blueRatio >= f_blueRatioP) &&	     
+				(rate >= f_rateP) &&	            
+				(entropy >= f_entropy) &&			    
+				(luminance >= f_luminaceP) &&      
+				(sharpness >= f_sharpness) &&           
+				(abruptness < f_abruptness) &&	       
+				(motion >= f_motion) &&	                
+				(luminance_std >= f_luminance_std) &&    
+				(dif_hues >= f_dif_hues) &&	           
+				(static_saliency >= f_static_saliency) && 
 				(colourfulness_mean >= f_cf1) &&
 				(colourfulness_std >= f_cf2) &&
-				(ranksum >= f_ranksum) &&	              //ranksum
-				(shadow >= f_shadow) &&	                  //shadow area
-				(avgFaces >= f_avgFaces) &&	              //ranksum
-				(faceArea >= f_faceArea) &&	              //area of faces
-				(smiles >= f_smiles) &&	                  //smiles in proper place of faces
-				(fgArea >= f_fgArea) &&	                  //foreground area
+				(ranksum >= f_ranksum) &&	           
+				(shadow >= f_shadow) &&	                
+				(avgFaces >= f_avgFaces) &&	             
+				(faceArea >= f_faceArea) &&	             
+				(smiles >= f_smiles) &&	                
+				(fgArea >= f_fgArea) &&	                
 				(focus_dif >= f_focus_dif) &&
 				(shake < f_shake) &&
 				(rule3 >= f_rule3) &&
@@ -254,10 +255,10 @@ void filtersPanel::filter(VideoFile files[], int length, vector <vector <int> > 
 			}
 
 			//////Human face filtering////////
-			if (f_humanFace)								//If human face filtering is set
+			if (f_humanFace)								   //If human face filtering is set
 			{
-				if (files[i].getVisible()) {						//And file was visible
-					files[i].setVisible(files[i].humanFace);			//Set visible if there is human face
+				if (files[i].getVisible()) {				   //And file was visible
+					files[i].setVisible(files[i].humanFace);   //Set visible if there is human face
 				}
 			}
 			//////Aesthetic filtering////////
@@ -268,10 +269,10 @@ void filtersPanel::filter(VideoFile files[], int length, vector <vector <int> > 
 				}
 			}
 			//////Interestingness filtering////////
-			if (f_interest)								//If max interest filtering is set
+			if (f_interest)								      //If max interest filtering is set
 			{
-				if (files[i].getVisible()) {						//And file was visible
-					files[i].setVisible(files[i].interest_1);			//Set visible if there is max interest
+				if (files[i].getVisible()) {				  //And file was visible
+					files[i].setVisible(files[i].interest_1); //Set visible if there is interest
 				}
 			}
 
@@ -286,33 +287,30 @@ void filtersPanel::filter(VideoFile files[], int length, vector <vector <int> > 
 
 			if (moreBP_gclear)
 			{
-				files[i].rate = 0.0;
-
-				//for (int i = 0; i <  length; i++) {	//For each file take values 
-				//files[i].rate = 0.0;
-				//}
-				
+				files[i].rate = 0.0;				
 			}
 
-			else if (moreBP_g1)
+		    if (moreBP_g1)
 			{
+
 				if (files[i].getVisible()) {
 					files[i].setVisible(files[i].rate == 1);
 				}
 			}
-			else if (moreBP_g2)
+			if (moreBP_g2)
 			{
+
 				if (files[i].getVisible()) {
 					files[i].setVisible(files[i].rate == 2);
 				}
 			}
-			else if (moreBP_g3)
+			 if (moreBP_g3)
 			{
+
 				if (files[i].getVisible()) {
 					files[i].setVisible(files[i].rate == 3);
 				}
-			}
-			
+			}				
 
 			if (moreBP_v)
 			{
@@ -360,7 +358,7 @@ void filtersPanel::filter(VideoFile files[], int length, vector <vector <int> > 
 	//Rank files
 
 	if (s_ON) {
-		ranking(sortVector, cheaterSortData);
+		ranking(sortVector);
 		hideUnrankedFiles(sortVector, files, length);
 	}
 
@@ -424,7 +422,7 @@ void filtersPanel::filter(VideoFile files[], int length, vector <vector <int> > 
 	sortVector.clear();
 }
 
-void filtersPanel::ranking(vector<VideoFile> &files,vector <vector <int> > &cheaterSortData)
+void filtersPanel::ranking(vector<VideoFile> &files)
 {
 	size_t length = files.size();
 	if (length > 0) {
@@ -558,7 +556,7 @@ void filtersPanel::setup()
 	simpleFilterBP->addSliderItem("Smiles          ", 0, 0.5, f_smiles);
 
 
-	//filter more
+	//advanced filter
 	advanceFilterBP = buttons.addButtonPanel("ADVANCED FILTERS");
 	advanceFilterBP->addFlashItem("Clear values", resetFilterValues);
 	advanceFilterBP->addSliderItem("Lum. std        ", 0, 0.3, f_luminance_std);
@@ -622,14 +620,14 @@ void filtersPanel::setup()
 	sortBP->addFlashItem("APPLY SORT", s_ON);
 	sortType = 30;
 
-	//indexing panel
+	//extended panel
 	otherBP = buttons.addButtonPanel("EXTENDED");
 	otherBP->addListItem("---- Similarity -----");
 	otherBP->addFlashItem("Generate index", lockTargetVideo);
-	otherBP->addToggleItem("COLOR", colorSimilarityON);
-	otherBP->addToggleItem("ORIENTATION", edgeSimilarityON);
-	otherBP->addToggleItem("ENTROPY", entropySimilarityON);
-	otherBP->addToggleItem("MOTION", motionSimilarityON);
+	otherBP->addToggleItem("Colour", colorSimilarityON);
+	otherBP->addToggleItem("Orientation", edgeSimilarityON);
+	otherBP->addToggleItem("Entropy", entropySimilarityON);
+	otherBP->addToggleItem("Motion", motionSimilarityON);
 	otherBP->addListItem("----- Semantics -----");
 	otherBP->addFlashItem("Add keywords", lockSemanticInsert);
 	otherBP->addFlashItem("Remove keywords", lockSemanticRemove);
@@ -987,61 +985,90 @@ void filtersPanel::saveToXML(string xmlfilePath)
 	xml.addValue("ABRUPTNESS", f_abruptness);
 	xml.addValue("MOTION", f_motion);
 
+	xml.addValue("SHAKE", f_shake);
+	xml.addValue("FACES", f_humanFace);
+	xml.addValue("ROF3", f_rule3);
+	xml.addValue("AVGFACES", f_avgFaces);
+	xml.addValue("FACEAREA", f_faceArea);
+	xml.addValue("SMILES", f_smiles);
+	xml.addValue("FGAREA", f_fgArea);
+	xml.addValue("FOCUSDIFF", f_focus_dif);
+	xml.addValue("LUMSTD", f_luminance_std);
+	xml.addValue("DIFFHUES", f_dif_hues);
+	xml.addValue("SALIENCY", f_static_saliency);
+	xml.addValue("CLRFM", f_cf1);
+	xml.addValue("CLRFS", f_cf2);
+	xml.addValue("OBJINDEX", f_ranksum);
+	xml.addValue("SHADOWS", f_shadow);
+	xml.addValue("AESTHETIC", f_predict);
+	xml.addValue("INTEREST", f_interest);
 
+	xml.addValue("LOUDNESS", fa1_average_loudness);
+	xml.addValue("COMPLEXITY", fa2_dynamic_complexity);
+	xml.addValue("BPM", fa3_bpm);
+	xml.addValue("DANCEABILITY", fa4_danceability);
+	xml.addValue("ONSET", fa5_onset_rate);
+	xml.addValue("CCR", fa6_chords_change_rate);
 
+	xml.addValue("VERTICAL", moreBP_v);
+	xml.addValue("HORIZONTAL", moreBP_h);
+	xml.addValue("RIGTH", moreBP_45);
+	xml.addValue("LEFT", moreBP_135);
 
 	if (!xml.save(xmlfilePath))
 	{
 		cout << " Error saving to xml: " << endl;
 	}
 
-	/*
-	
-		f_redRatioP = 0;
-		f_greenRatioP = 0;
-		f_blueRatioP = 0;
-		f_entropy = 0;
-		f_luminaceP = 0;
-		f_sharpness = 0;
-		f_abruptness = 1;
-		f_motion = 0;
-		f_shake = 1;
-		f_humanFace = false;
-		f_rule3 = 0;
-		f_avgFaces = 0;
-		f_faceArea = 0;
-		f_smiles = 0;
-		f_fgArea = 0;
-		f_focus_dif = 0;
-		f_luminance_std = 0;
-		f_dif_hues = 0;
-		f_static_saliency = 0;
-
-		f_cf1 = 0;
-		f_cf2 = 0;
-
-		f_ranksum = 0;
-		f_shadow = 0;
-		f_predict = false;
-		f_interest = false;
-		f_semantic = false;
-
-		fa1_average_loudness = 0;
-		fa2_dynamic_complexity = 0,
-		fa3_bpm = 0,
-		fa4_danceability = 0,
-		fa5_onset_rate = 0,
-		fa6_chords_change_rate = 0;
-
-		moreBP_v = false;
-		moreBP_h = false;
-		moreBP_45 = false;
-		moreBP_135 = false;
-
-		moreBP_g1 = false;
-		moreBP_g2 = false;
-		moreBP_g3 = false;
-		
-	
-	*/
 }
+
+
+void filtersPanel::loadFromXML(string xmlfilePath)
+{
+	ofXml* xml = new ofXml(xmlfilePath);
+	if (xml->load(xmlfilePath)) {
+		f_redRatioP = xml->getValue<double>("//RED_RATIO");
+		f_greenRatioP = xml->getValue<double>("//GREEN_RATIO");
+		f_blueRatioP = xml->getValue<double>("//BLUE_RATIO");
+		f_entropy = xml->getValue<double>("//ENTROPY");
+		f_luminaceP = xml->getValue<double>("//LUMINANCE");
+		f_sharpness = xml->getValue<double>("//SHARPNESS");
+		f_abruptness = xml->getValue<double>("//ABRUPTNESS");
+		f_motion = xml->getValue<double>("//MOTION");
+
+		f_shake = xml->getValue<double>("//SHAKE");
+		f_humanFace = xml->getValue<bool>("//FACES");
+		f_rule3 = xml->getValue<double>("//ROF3");
+		f_avgFaces = xml->getValue<double>("//AVGFACES");
+		f_faceArea = xml->getValue<double>("//FACEAREA");
+		f_smiles = xml->getValue<double>("//SMILES");
+		f_fgArea = xml->getValue<double>("//FGAREA");
+		f_focus_dif = xml->getValue<double>("//FOCUSDIFF");
+		f_luminance_std = xml->getValue<double>("//LUMSTD");
+		f_dif_hues = xml->getValue<double>("//DIFFHUES");
+		f_static_saliency = xml->getValue<double>("//SALIENCY");
+
+		f_cf1 = xml->getValue<double>("//CLRFM");
+		f_cf2 = xml->getValue<double>("//CLRFS");
+		f_ranksum = xml->getValue<double>("//OBJINDEX");
+		f_shadow = xml->getValue<double>("//SHADOWS");
+		f_predict = xml->getValue<bool>("//AESTHETIC");
+		f_interest = xml->getValue<bool>("//INTEREST");
+
+		fa1_average_loudness = xml->getValue<double>("//LOUDNESS");
+		fa2_dynamic_complexity = xml->getValue<double>("//COMPLEXITY");
+		fa3_bpm = xml->getValue<double>("//BPM");
+		fa4_danceability = xml->getValue<double>("//DANCEABILITY");
+		fa5_onset_rate = xml->getValue<double>("//ONSET");
+		fa6_chords_change_rate = xml->getValue<double>("//CCR");
+
+		moreBP_v = xml->getValue<bool>("//VERTICAL");
+		moreBP_h = xml->getValue<bool>("//HORIZONTAL");
+		moreBP_45 = xml->getValue<bool>("//RIGTH");
+		moreBP_135 = xml->getValue<bool>("//LEFT");
+
+	}
+	else { cout << "error" << endl; }
+
+}
+

@@ -12,7 +12,7 @@ ListItem::ListItem(string theTitle){
 	rely = 0;
 	
 	w = (w<100) ? 100 : w;
-	h = 18;
+	h = 16;
 	
 	selected = false;
 	over = false;

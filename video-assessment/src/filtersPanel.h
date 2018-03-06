@@ -13,7 +13,7 @@ public:
 	~filtersPanel();
 
 	void draw();							                            //Draw gui window
-	void filter(VideoFile files[], int length, vector <vector <int> > cheaterSortData, int choosenFileIndex);	//Filters array 
+	void filter(VideoFile files[], int length, int choosenFileIndex);	//Filters array 
 	void setup();
 	//Check if similarity title or value was clicked
 	bool isModifyClicked(int x, int y);
@@ -155,16 +155,17 @@ private:
 	bool lockSemanticRemove;
 	bool unionIntersect;
 	bool saveXML, loadXML;
+	void saveToXML(string xmlfilePath);
+	void loadFromXML(string xmlfilePath);
 
 
 	bool haveKey(VideoFile file, string keywords, bool ui);
 	bool haveNotKey(VideoFile file, string keywords);
 	vector<int> split(const string &s, char delim);
-	void saveToXML(string xmlfilePath);
 	vector<VideoFile> sortVector;		//Vector of ranked files
 	size_t numberOfSortedFiles;		//Number of ranked files
 
-	void ranking(vector<VideoFile> &files, vector <vector <int> > &cheaterSortData);		//Rank array (sort)
+	void ranking(vector<VideoFile> &files);		//Rank array (sort)
 	void sortFiles(vector<VideoFile> &files);	//Sort 
 	//Show only n top ranked files
 	void hideUnrankedFiles(vector<VideoFile> rankedFiles, VideoFile allFiles[], int allLenght);

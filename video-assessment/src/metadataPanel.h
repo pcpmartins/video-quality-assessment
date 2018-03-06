@@ -22,6 +22,7 @@ private:
 
 	//string createCommonString(const File* f);//Get all common features for image and video 
 	string metadataString;		//Text to display
+	string audioMetadataString;		//Text to display
 	ofxFontStash font;			//Displaying object
 	ofRectangle bboxMultiline;	//Frame
 	ofRectangle title;	//Frame
