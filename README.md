@@ -208,7 +208,7 @@ We extract the top-5 semantic concepts present on each video. Further details in
 
 We extracted several audio descriptors using the [Essentia](http://essentia.upf.edu/documentation/) open-source C++ library for audio description and music analysis. More details are available in the [Audio analysis section](#audio-analysis).
 
-### LOWLEVEL
+### Low Level
 
 * Average_loudness -  Dynamic range descriptor. It rescales average loudness, computed on 2sec windows with 1 sec overlap, into the [0,1] interval. The value of 0 corresponds to signals with large dynamic range, 1 corresponds to signal with little dynamic range. This algorithm computes the loudness of an audio signal defined by Steven's power law. It computes loudness as the energy of the signal raised to the power of 0.67. Algorithms: [Loudness](http://essentia.upf.edu/documentation/reference/streaming_Loudness.html).
 	
@@ -216,7 +216,7 @@ We extracted several audio descriptors using the [Essentia](http://essentia.upf.
 	
 * MFCC - The first 13 melodic frequency cepstrum coefficients. As there is no standard implementation, the MFCC-FB40 is used by default. See algorithm: [MFCC](http://essentia.upf.edu/documentation/reference/streaming_MFCC.html)
 
-### RHYTHM
+### Rhythm
 
 * Beats_count - Number of detected beats
 
@@ -226,7 +226,7 @@ We extracted several audio descriptors using the [Essentia](http://essentia.upf.
 
 * Onset_rate - This algorithm computes the number of onsets per second and their position in time for an audio signal. Onset detection functions are computed using both high frequency content and complex-domain methods. Algorithms: [OnsetRate](http://essentia.upf.edu/documentation/reference/streaming_OnsetRate.html)
 
-### TONAL
+### Tonal
 
 Algorithms: [ChordsDetection](http://essentia.upf.edu/documentation/reference/streaming_ChordsDetection.html), [ChordsDescriptors](http://essentia.upf.edu/documentation/reference/streaming_ChordsDescriptors.html).
 
