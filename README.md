@@ -83,9 +83,11 @@ Detailed instructions on how to use the GUI and on how to load a new video repos
 * Visual Studio community edition 2015
 * openFrameworks 0.9.8
 * OpenCV 3.2.0 + contrib modules
-* ffmpeg
+* ffmpeg (optional)
+* vlc (optional)
 
-In this project github repository there is a Visual Studio 2015 Project. One can either compile it from source (make sure to read [this](install_requirements.md) before) or just copy and paste the binaries folder. The available binaries should run on any Windows 8-10. x64 machine.
+
+In this project github repository there is a Visual Studio 2015 Project. One can either compile it from source (make sure to read [the install requirements](install_requirements.md) before) or just clone/copy the binaries folder (/bin) and run video-assessment.exe or va.bat. The available binaries should run on any Windows 8-10. x64 machine.
 
 
 ## Visual features extraction

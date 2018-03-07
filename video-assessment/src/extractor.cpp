@@ -286,8 +286,8 @@ void extractor::extract(int frameCount) {
 	SAT2 = runstatSaturation.StandardDeviation() / 255;
 	BRI1 = runstatBrightness.Mean() / 255;
 	BRI2 = runstatBrightness.StandardDeviation() / 255;
-	CF1 = (runstatColofull.Mean()-29)/(135); //x-min/max-min
-	CF2 = (runstatColofull.StandardDeviation()-0.1)/(35);
+	CF1 = (runstatColofull.Mean() - 29) / (135); //x-min/max-min
+	CF2 = (runstatColofull.StandardDeviation() - 0.1) / (35);
 
 
 	//cout << "\n [C] colorfullness: " << RG1 << " " << YB1 << " " << RG2 << " " << YB2 << " " << endl;
@@ -451,10 +451,10 @@ void extractor::extractFromVideo(string filePath, int nv) {
 				Mat thumbnailImage;
 				double tempHeigth = 0.0;
 				double tempWidth = 0.0;
-				
+
 
 				if (widthVec > heightVec) {
-					tempHeigth = (double)(thumbnailWidth / (double)widthVec )*heightVec;
+					tempHeigth = (double)(thumbnailWidth / (double)widthVec)*heightVec;
 					tempWidth = thumbnailWidth;
 				}
 				else {
@@ -462,9 +462,9 @@ void extractor::extractFromVideo(string filePath, int nv) {
 					tempWidth = (double)(thumbnailHeight / (double)heightVec)*widthVec;
 				}
 
-					cout <<" "<< widthVec << " " << heightVec << " " <<tempHeigth<<" "<< thumbnailWidth << endl;
+				cout << " " << widthVec << " " << heightVec << " " << tempHeigth << " " << thumbnailWidth << endl;
 				resize(frame, thumbnailImage, Size(tempWidth, tempHeigth), 0, 0, INTER_NEAREST);
-				
+
 				imwrite(path, thumbnailImage);
 				onceTwice = true;
 			}
@@ -639,8 +639,6 @@ void extractor::extractFromVideo(string filePath, int nv) {
 				runstatHues.Push(scalartemp[0]);
 				runstatSaturation.Push(scalartemp[1]);
 				runstatBrightness.Push(scalartemp[2]);
-				//cout << " "<<scalartemp[0] << " " << scalartemp[1] << " " << scalartemp[2] << endl;
-				//cout << " "<< scalartemp[1] << endl;
 			}
 
 			processColors(frame);
@@ -651,9 +649,7 @@ void extractor::extractFromVideo(string filePath, int nv) {
 				// Establish the number of bins
 				int histSize = 256;
 				hist = pp.myEntropy(src, histSize);
-				//cout << "hist " << hist << endl;
 				float entropy = pp.entropy(hist, src.size(), histSize);
-				//frame_entropy_distribution.push_back(entropy);
 				runstatEntropy.Push(entropy);
 			}
 
@@ -847,7 +843,7 @@ void extractor::extractFromVideo(string filePath, int nv) {
 
 			}
 			else { report = " no audio!"; }
-			
+
 			audioMap = audioTemp;
 			cout << " [A] Audio status: " << status << report << endl;
 		}

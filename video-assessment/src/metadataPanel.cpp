@@ -69,6 +69,7 @@ void metadataPanel::getData(const VideoFile * vid)
 	audioMetadataString += "Bpm:                  " + std::to_string(vid->a3_bpm * 200).substr(0, 6) + "\n";
 	audioMetadataString += "Onset:                " + std::to_string(vid->a5_onset_rate).substr(0, 6) + "\n";
 	audioMetadataString += "CCR:                  " + std::to_string(vid->a6_chords_change_rate).substr(0, 6) + "\n";
+	audioMetadataString += "Danceability:      " + std::to_string(vid->a4_danceability).substr(0, 6) + "\n";
 
 	color1 = getColor1(vid);
 	color2 = getColor2(vid);

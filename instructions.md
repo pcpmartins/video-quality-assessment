@@ -31,7 +31,7 @@ The available tool menus are:
 
  When extracting new datasets, the video files should have no spaces or strange characters in the file names, it is advisable to follow the same naming convention used on the demo(e.g: 0001.mp4, 0002.mp4, etc).
 
- After extraction 3feature vectors are generated in CSV format:
+ After extraction, feature vectors are generated in CSV format:
  * bin/data/audio/audio_result.csv for audio features
  * bin/data/output/output.csv for visual features
  * bin/data/output/semantic_data.csv for semantic features

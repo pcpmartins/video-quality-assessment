@@ -1,4 +1,4 @@
-﻿# Installing requirements and setting up visual studio project configuration.
+﻿# Install requirements and visual studio project configuration.
 
 ## Install openFrameworks, Visual Studio Community 2015 and openFrameworks plugin for Visual Studio
 
@@ -11,7 +11,7 @@ This project uses two OF addons,ofxGUI and ofxmlSettings they come with the rele
 
 ## Install FFmpeg
 
-FFmpeg is optional, its only used during the audio extraction process. 
+FFmpeg is optional, its only used for audio extraction or for the stripRotate utility.
 
 * Follow [Install-FFmpeg-on-Windows](https://www.wikihow.com/Install-FFmpeg-on-Windows)
 
@@ -19,7 +19,7 @@ FFmpeg is optional, its only used during the audio extraction process.
 
 * Follow [this instructions](https://www.learnopencv.com/install-opencv3-on-windows/)
 
-We ended up with this structure:
+Will end up with this structure:
 
 C:\opencv-3.2.0\source\opencv
 C:\opencv-3.2.0\source\opencv_contrib
@@ -85,8 +85,11 @@ opencv_videoio320d.lib
 opencv_dnn320d.lib
 opencv_photo320d.lib
 
-##vlc for windows
+## vlc for windows
 
 To be able to preview with an external aplication the currently selected video when cliking on the preview, both instaling vlc and setting the PATH environment variable to the location of vlc.exe(e.g:C:\Program Files (x86)\VideoLAN\VLC) are required.
 
 https://get.videolan.org/vlc/3.0.1/win32/vlc-3.0.1-win32.exe
+
+There is a batch file in the /bin folder: va.bat
+this batch file sets up a session PATH environment variable that includes the default path to vlc.exe (e.g:C:\Program Files (x86)\VideoLAN\VLC)

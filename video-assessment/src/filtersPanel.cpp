@@ -1,5 +1,4 @@
 #include "filtersPanel.h"
-#include "ofxDatGui.h"
 
 
 using namespace std;

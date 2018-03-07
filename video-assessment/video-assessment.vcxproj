@@ -97,13 +97,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\..\addons\ofxCv\libs\ofxCv\include;..\..\..\..\addons\ofxCv\libs\CLD\include\CLD;..\..\..\..\addons\ofxCv\src;..\..\..\..\addons\ofxGui\src;..\..\..\..\addons\ofxOpenCv\libs;..\..\..\..\addons\ofxOpenCv\libs\opencv;..\..\..\..\addons\ofxOpenCv\libs\opencv\include;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\calib3d;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\contrib;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\core;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\features2d;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\flann;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu\device;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu\device\detail;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\highgui;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\imgproc;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\legacy;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ml;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\nonfree;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\objdetect;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\photo;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\stitching;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\stitching\detail;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\superres;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ts;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\videostab;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\emscripten;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\Win32;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\Win32\Debug;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\Win32\Release;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\x64;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\x64\Debug;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\x64\Release;..\..\..\..\addons\ofxOpenCv\libs\opencv\license;..\..\..\..\addons\ofxOpenCv\src;..\..\..\..\addons\ofxXmlSettings\libs;..\..\..\..\addons\ofxXmlSettings\src;C:\of_v0.9.3_vs_release\addons\ofxSaliencyMap\src;
-C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src;
-C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src\components;
-C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src\core;
-C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src\libs;
-C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src\libs\ofxSmartFont;
-C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src\themes</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\..\addons\ofxCv\libs\ofxCv\include;..\..\..\..\addons\ofxCv\libs\CLD\include\CLD;..\..\..\..\addons\ofxCv\src;..\..\..\..\addons\ofxGui\src;..\..\..\..\addons\ofxOpenCv\libs;..\..\..\..\addons\ofxOpenCv\libs\opencv;..\..\..\..\addons\ofxOpenCv\libs\opencv\include;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\calib3d;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\contrib;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\core;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\features2d;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\flann;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu\device;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu\device\detail;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\highgui;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\imgproc;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\legacy;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ml;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\nonfree;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\objdetect;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\photo;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\stitching;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\stitching\detail;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\superres;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ts;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\videostab;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\emscripten;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\Win32;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\Win32\Debug;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\Win32\Release;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\x64;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\x64\Debug;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\x64\Release;..\..\..\..\addons\ofxOpenCv\libs\opencv\license;..\..\..\..\addons\ofxOpenCv\src;..\..\..\..\addons\ofxXmlSettings\libs;..\..\..\..\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -122,13 +116,7 @@ C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src\themes</AdditionalIncludeDirect
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\..\addons\ofxGui\src;..\..\..\..\addons\ofxXmlSettings\libs;..\..\..\..\addons\ofxXmlSettings\src;C:\opencv-3.2.0\build\install\include\opencv2;C:\opencv-3.2.0\build\install\include\opencv;C:\opencv-3.2.0\build\install\include;
-C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src;
-C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src\components;
-C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src\core;
-C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src\libs;
-C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src\libs\ofxSmartFont;
-C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src\themes</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\..\addons\ofxGui\src;..\..\..\..\addons\ofxXmlSettings\libs;..\..\..\..\addons\ofxXmlSettings\src;C:\opencv-3.2.0\build\install\include\opencv2;C:\opencv-3.2.0\build\install\include\opencv;C:\opencv-3.2.0\build\install\include</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnablePREfast>true</EnablePREfast>
@@ -148,13 +136,7 @@ C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src\themes</AdditionalIncludeDirect
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\..\addons\ofxCv\libs\ofxCv\include;..\..\..\..\addons\ofxCv\libs\CLD\include\CLD;..\..\..\..\addons\ofxCv\src;..\..\..\..\addons\ofxGui\src;..\..\..\..\addons\ofxOpenCv\libs;..\..\..\..\addons\ofxOpenCv\libs\opencv;..\..\..\..\addons\ofxOpenCv\libs\opencv\include;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\calib3d;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\contrib;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\core;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\features2d;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\flann;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu\device;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu\device\detail;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\highgui;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\imgproc;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\legacy;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ml;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\nonfree;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\objdetect;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\photo;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\stitching;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\stitching\detail;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\superres;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ts;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\videostab;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\emscripten;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\Win32;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\Win32\Debug;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\Win32\Release;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\x64;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\x64\Debug;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\x64\Release;..\..\..\..\addons\ofxOpenCv\libs\opencv\license;..\..\..\..\addons\ofxOpenCv\src;..\..\..\..\addons\ofxXmlSettings\libs;..\..\..\..\addons\ofxXmlSettings\src;C:\of_v0.9.3_vs_release\addons\ofxSaliencyMap\src;
-C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src;
-C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src\components;
-C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src\core;
-C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src\libs;
-C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src\libs\ofxSmartFont;
-C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src\themes</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\..\addons\ofxCv\libs\ofxCv\include;..\..\..\..\addons\ofxCv\libs\CLD\include\CLD;..\..\..\..\addons\ofxCv\src;..\..\..\..\addons\ofxGui\src;..\..\..\..\addons\ofxOpenCv\libs;..\..\..\..\addons\ofxOpenCv\libs\opencv;..\..\..\..\addons\ofxOpenCv\libs\opencv\include;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\calib3d;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\contrib;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\core;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\features2d;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\flann;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu\device;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu\device\detail;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\highgui;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\imgproc;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\legacy;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ml;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\nonfree;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\objdetect;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\photo;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\stitching;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\stitching\detail;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\superres;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ts;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video;..\..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\videostab;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\emscripten;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\Win32;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\Win32\Debug;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\Win32\Release;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\x64;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\x64\Debug;..\..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs\x64\Release;..\..\..\..\addons\ofxOpenCv\libs\opencv\license;..\..\..\..\addons\ofxOpenCv\src;..\..\..\..\addons\ofxXmlSettings\libs;..\..\..\..\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -176,13 +158,7 @@ C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src\themes</AdditionalIncludeDirect
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\..\addons\ofxGui\src;..\..\..\..\addons\ofxXmlSettings\libs;..\..\..\..\addons\ofxXmlSettings\src;C:\opencv-3.2.0\build\install\include\opencv2;C:\opencv-3.2.0\build\install\include\opencv;C:\opencv-3.2.0\build\install\include;
-C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src;
-C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src\components;
-C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src\core;
-C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src\libs;
-C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src\libs\ofxSmartFont;
-C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src\themes</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\..\addons\ofxGui\src;..\..\..\..\addons\ofxXmlSettings\libs;..\..\..\..\addons\ofxXmlSettings\src;C:\opencv-3.2.0\build\install\include\opencv2;C:\opencv-3.2.0\build\install\include\opencv;C:\opencv-3.2.0\build\install\include</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -199,9 +175,6 @@ C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src\themes</AdditionalIncludeDirect
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\addons\ofxDatGui-dev\src\core\ofxDatGuiComponent.cpp" />
-    <ClCompile Include="..\..\..\..\addons\ofxDatGui-dev\src\libs\ofxSmartFont\ofxSmartFont.cpp" />
-    <ClCompile Include="..\..\..\..\addons\ofxDatGui-dev\src\ofxDatGui.cpp" />
     <ClCompile Include="src\extractor.cpp">
       <ShowIncludes Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ShowIncludes>
       <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4267;%(DisableSpecificWarnings)</DisableSpecificWarnings>
@@ -243,27 +216,6 @@ C:\of_v0.9.8_vs_release\addons\ofxDatGui-dev\src\themes</AdditionalIncludeDirect
     <ClCompile Include="src\utility.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\addons\ofxDatGui-dev\src\components\ofxDatGui2dPad.h" />
-    <ClInclude Include="..\..\..\..\addons\ofxDatGui-dev\src\components\ofxDatGuiButton.h" />
-    <ClInclude Include="..\..\..\..\addons\ofxDatGui-dev\src\components\ofxDatGuiColorPicker.h" />
-    <ClInclude Include="..\..\..\..\addons\ofxDatGui-dev\src\components\ofxDatGuiControls.h" />
-    <ClInclude Include="..\..\..\..\addons\ofxDatGui-dev\src\components\ofxDatGuiFRM.h" />
-    <ClInclude Include="..\..\..\..\addons\ofxDatGui-dev\src\components\ofxDatGuiGroups.h" />
-    <ClInclude Include="..\..\..\..\addons\ofxDatGui-dev\src\components\ofxDatGuiLabel.h" />
-    <ClInclude Include="..\..\..\..\addons\ofxDatGui-dev\src\components\ofxDatGuiMatrix.h" />
-    <ClInclude Include="..\..\..\..\addons\ofxDatGui-dev\src\components\ofxDatGuiScrollView.h" />
-    <ClInclude Include="..\..\..\..\addons\ofxDatGui-dev\src\components\ofxDatGuiSlider.h" />
-    <ClInclude Include="..\..\..\..\addons\ofxDatGui-dev\src\components\ofxDatGuiTextInput.h" />
-    <ClInclude Include="..\..\..\..\addons\ofxDatGui-dev\src\components\ofxDatGuiTextInputField.h" />
-    <ClInclude Include="..\..\..\..\addons\ofxDatGui-dev\src\components\ofxDatGuiTimeGraph.h" />
-    <ClInclude Include="..\..\..\..\addons\ofxDatGui-dev\src\core\ofxDatGuiComponent.h" />
-    <ClInclude Include="..\..\..\..\addons\ofxDatGui-dev\src\core\ofxDatGuiConstants.h" />
-    <ClInclude Include="..\..\..\..\addons\ofxDatGui-dev\src\core\ofxDatGuiEvents.h" />
-    <ClInclude Include="..\..\..\..\addons\ofxDatGui-dev\src\core\ofxDatGuiIntObject.h" />
-    <ClInclude Include="..\..\..\..\addons\ofxDatGui-dev\src\libs\ofxSmartFont\ofxSmartFont.h" />
-    <ClInclude Include="..\..\..\..\addons\ofxDatGui-dev\src\ofxDatGui.h" />
-    <ClInclude Include="..\..\..\..\addons\ofxDatGui-dev\src\themes\ofxDatGuiTheme.h" />
-    <ClInclude Include="..\..\..\..\addons\ofxDatGui-dev\src\themes\ofxDatGuiThemes.h" />
     <ClInclude Include="src\extractor.h" />
     <ClInclude Include="src\json.hpp" />
     <ClInclude Include="src\mlclass.h" />

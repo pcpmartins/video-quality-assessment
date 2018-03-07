@@ -45,14 +45,10 @@ void Gallery::setup()
 		else extractVideoThumbnails();
 
 		parseCsvFeatureVector();
-		//savePreSortProcessing(parseCsvFeatureVector());
 		parseSemanticVector();
 		parseAudioVector();
 		lock();
 	}
-
-	//loadPreSort();
-	
 
 	if (!loadFiles())
 	{
@@ -99,10 +95,8 @@ void Gallery::setup()
 	playerText = new ofTrueTypeFont();
 	playerText->load("arial.ttf", 11);
 
-	//ofBackground(127);
 	//Initialize filters
 	filtersPanel.setup();
-	//fileSpace = spaceForFileDisplay();		//Calcute avaiable space for file to display
 	videoPlay = false;
 	cout << "------------------------------------------------------------------" << endl;
 }
@@ -302,21 +296,21 @@ void Gallery::draw()
 
 				if (allFiles[i].rate == 1) {
 
-					ofSetColor(0, 255, 0);  // Set the drawing color to yellow							
+					ofSetColor(0, 255, 0);  // Set the drawing color to green						
 					ofDrawRectangle(r.x - 3, r.y - 3, thumbnailsWidth + 6, thumbnailsHeight + 16); 	// Draw white rectangle
 					ofSetColor(0);
 
 				}
 				if (allFiles[i].rate == 2) {
 
-					ofSetColor(0, 0, 255);  // Set the drawing color to yellow							
+					ofSetColor(0, 0, 255);  // Set the drawing color to blue						
 					ofDrawRectangle(r.x - 3, r.y - 3, thumbnailsWidth + 6, thumbnailsHeight + 16); 	// Draw white rectangle
 					ofSetColor(0);
 
 				}
 				if (allFiles[i].rate == 3) {
 
-					ofSetColor(255, 0, 0);  // Set the drawing color to yellow							
+					ofSetColor(255, 0, 0);  // Set the drawing color to red						
 					ofDrawRectangle(r.x - 3, r.y - 3, thumbnailsWidth + 6, thumbnailsHeight + 16); 	// Draw white rectangle
 					ofSetColor(0);
 

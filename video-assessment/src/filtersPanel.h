@@ -2,7 +2,6 @@
 #include "File.h"
 #include "VideoFile.h"
 #include "ofxButtons.h"
-#include "ofxDatGui.h"
 
 #define NUMBER_OF_RANKED_FILES 1000
 
@@ -34,7 +33,6 @@ public:
 
 private:
 
-	ofxDatGui* gui;
 
 	ButtonManager buttons;		        //Toolbar
 
