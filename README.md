@@ -70,7 +70,7 @@ The OpenCV library of algorithms was used to compute visual features focused mai
 
 In a nutshell, we perform an intuition based feature engineering process to select an initial feature extraction setup, relevant according to different concepts, followed by automatic supervisioned feature selection, where a optimal attribute set is selected for each concept classification. Together, the combined result of classification with feature tresholding over visual, semantic and audio data are used to create specific event models.
 
-<!--We populated this release with the UGC videos from the [CERTH-ITI-VAQ700](http://mklab.iti.gr/project/certh-iti-vaq700-dataset), a dataset composed by 700 YouTube videos licensed under Creative Commons Attribution. The duration of each of these videos ranges from 1 to 6 minutes. Because of the large size of the dataset(25.3GB) we only used 1 second of each video. To have the full dataset available, one can download it from the dataset homepage to the bin/data/files folder.-->
+We populated this release with the UGC videos from the [CERTH-ITI-VAQ700](http://mklab.iti.gr/project/certh-iti-vaq700-dataset), a dataset composed by 700 YouTube videos licensed under Creative Commons Attribution. The duration of each of these videos ranges from 1 to 6 minutes. Because of the large size of the dataset(25.3GB) we only used 1 second of each video. To have the full dataset available, one can download it from the dataset homepage to the bin/data/files folder.
 
 ![figure 2](/images/0.png)
 *figure 2 - Graphical interface* 
@@ -86,13 +86,13 @@ Detailed instructions on how to use the GUI and on how to load a new video repos
 * ffmpeg (optional)
 * vlc (optional)
 
-
-In this project github repository there is a Visual Studio 2015 Project. One can either compile it from source (make sure to read [the install requirements](install_requirements.md) before) or just clone/copy the binaries folder (/bin) and run video-assessment.exe or va.bat. The available binaries should run on any Windows 8-10. x64 machine.
+## How to run
+In this project github repository there is a Visual Studio 2015 Project. One can either compile it from source (make sure to read [the install requirements](install_requirements.md) before) or just clone/copy the binaries folder (/bin) and run va.bat, these binaries should run on any Windows 8-10. x64 machine.
 
 
 ## Visual features extraction
 
-We start from an initial basic set of basic measurements, from video data (metadata, raw 3 channel frame pixel values and their change along time), and some derived values. In this section we enumerate the main features, for each one we explain its relevancy, from our point of view. We can see in [figure 3](/images/feature_groups.png) a snapshot of the current visual features taxonomy. The features can be computed by groups. For each one it is possible to compute several statistical measures including the mean, variance, standard deviation, skewness and kurtosis.
+We start from an initial basic set of  measurements from video data (raw 3 channel frame pixel values and their change along time), and some other derived values. In this section we enumerate the main features, for each one we explain its relevancy, from our point of view. We can see in [figure 3](/images/feature_groups.png) a snapshot of the current visual features taxonomy. The features can be computed by groups. For each one it is possible to compute several statistical measures including the mean, variance, standard deviation, skewness and kurtosis. Overall the features are placed in two broad categories: Aesthetic and attention related features.
 
 ![figure 3](/images/feature_groups.png)
 *figure 3 - Feature extraction groups*
@@ -119,10 +119,9 @@ Edges may indicate the boundaries of objects in the scene. Detecting sharp chang
 
 It was implemented a simplified version of the method presented in ["Efficient Use of Local Edge Histogram Descriptor"](https://www.dcc.fc.up.pt/~mcoimbra/lectures/VC_1415/VC_1415_P8_LEH.pdf) where edge histograms MPEG-7 compliant features are extracted. We use a global and a local representation for edges, for the local one a support tool was used to split each frame by a 4x4 grid, resulting in 16 sub-images. Each one of this sub-image was convolved with 5 different oriented kernels (0-zero, 1-vertical, 2-horizontal, 3-45º, 4-135º, 5-non-directional) this process results in 16 local features representing the orientation of each sub-image. A global edge value is also computed alongside with the detected edges strength.
 
-
 #### Colour diversity
 
-Colour diversity is a property related to visual aesthetics. We count different groups of hues. On the hue histogram (computed from the H channel of HSV) we count any variation of hue bigger than a certain threshold.
+Colour diversity is a property related to visual aesthetics. We count different groups of hues. On the hue histogram (computed from the H channel of HSV) we count any variation of hue bigger than a certain threshold. Practicaly, high scores from this feature points to videos with smooth gradients.
 
 #### Colourfulness
 
